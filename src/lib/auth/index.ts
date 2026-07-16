@@ -20,8 +20,11 @@ const authOptions: NextAuthConfig = {
           return null;
         }
 
-        // Will be implemented in Phase 3 (Authentication & Security)
-        // with bcrypt verification against the database
+        // PLACEHOLDER — FASE 3 (Autenticación y Seguridad)
+        // La verificación real con bcrypt y consulta a la base de datos
+        // será implementada durante la Fase 3.
+        // El comportamiento actual (retornar null = rechazar acceso)
+        // es intencional y esperado en esta etapa del proyecto.
         return null;
       },
     }),

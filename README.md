@@ -69,9 +69,12 @@ Cada decisión será tomada priorizando:
 
 # Estado del Proyecto
 
-Actualmente el proyecto se encuentra en fase de documentación y arquitectura.
+- **FASE 0 — Documentación y Arquitectura**: Completada
+- **FASE 1 — Inicialización e Infraestructura**: Completada
 
-Aún no inicia el desarrollo del código.
+El proyecto ya cuenta con Next.js 16, TypeScript, Tailwind CSS, shadcn/ui, Drizzle ORM, Auth.js y toda la infraestructura base configurada y funcionando.
+
+La siguiente etapa será la **FASE 2 — Modelo de Datos** (esquema completo, migraciones, seeds).
 
 ---
 
