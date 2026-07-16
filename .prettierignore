@@ -1,0 +1,12 @@
+node_modules
+.next
+public
+build
+out
+coverage
+.env
+.env.local
+.env.development
+.env.production
+*.min.js
+*.min.css
