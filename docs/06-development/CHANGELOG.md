@@ -145,13 +145,41 @@ Desarrollo
 
 \---
 
+\# v0.2.1
+
+\## Fecha
+
+2026-07-21
+
+\## Estado
+
+Desarrollo
+
+\### Agregado
+
+- Seeds iniciales (FASE 2.3): roles (5), permisos (22), role-permissions (64).
+- Usuario administrador con bcrypt hash (`admin@centrocristianoberea.org`).
+- Settings base: `site\_name`, `site\_description`.
+- Menús de navegación: `main-menu` (10 ítems), `footer` (vacío).
+- Páginas placeholder (14) — `Inicio` en `published`, resto en `draft`.
+- Script `npm run db:seed` con soporte idempotente y limpieza automática de role-permissions obsoletas.
+- Variables de entorno de seed en `.env.example` (`SEED\_ADMIN\_EMAIL`, `SEED\_ADMIN\_PASSWORD`, `SEED\_ADMIN\_NAME`).
+- Documentados mapeos de roles en DECISIONS.md (DEC-018).
+
+\### Modificado
+
+- Eliminado `content.publish` del rol `Editor` — alineado con workflow editorial de `AUTHORIZATION.md`.
+- `.env.example`: contraseña por defecto alineada con política de 12 caracteres mínimos.
+
+---
+
 \# Próximas Versiones
 
-\## v0.2.0
+\## v0.2.1
 
 Previsto
 
-Configuración inicial del proyecto.
+FASE 2.3 — Seeds iniciales con roles, permisos, admin, settings, navegación y páginas.
 
 \---
 
@@ -159,7 +187,7 @@ Configuración inicial del proyecto.
 
 Previsto
 
-Base de datos y autenticación.
+FASE 3 — Autenticación y Seguridad (Auth.js, Login, RBAC).
 
 \---
 

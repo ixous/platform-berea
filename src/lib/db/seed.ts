@@ -209,7 +209,6 @@ async function seedRolePermissions() {
       "redirects.manage",
       "seo.manage",
       "navigation.manage",
-      "content.publish",
     ],
     "Ministry Leader": [
       "ministries.manage",
@@ -221,6 +220,36 @@ async function seedRolePermissions() {
   };
 
   let created = 0;
+  let removed = 0;
+
+  const expectedPairs = new Set<string>();
+  for (const [roleName, permSlugs] of Object.entries(rolePermissionMap)) {
+    const roleId = roleMap.get(roleName);
+    if (!roleId) continue;
+
+    for (const permSlug of permSlugs) {
+      const permId = permMap.get(permSlug);
+      if (!permId) continue;
+      expectedPairs.add(`${roleId}:${permId}`);
+    }
+  }
+
+  const existingRolePerms = await db.select().from(schema.rolePermissions);
+  for (const rp of existingRolePerms) {
+    const key = `${rp.roleId}:${rp.permissionId}`;
+    if (!expectedPairs.has(key)) {
+      await db
+        .delete(schema.rolePermissions)
+        .where(
+          and(
+            eq(schema.rolePermissions.roleId, rp.roleId),
+            eq(schema.rolePermissions.permissionId, rp.permissionId)
+          )
+        );
+      removed++;
+    }
+  }
+
   for (const [roleName, permSlugs] of Object.entries(rolePermissionMap)) {
     const roleId = roleMap.get(roleName);
     if (!roleId) continue;
@@ -247,7 +276,7 @@ async function seedRolePermissions() {
     }
   }
 
-  return created;
+  return { created, removed };
 }
 
 async function seedAdminUser() {
@@ -461,7 +490,9 @@ async function main() {
   console.log(`  Permisos: ${permissions.length} creados (${permissions.length} nuevos)`);
 
   const rolePerms = await seedRolePermissions();
-  console.log(`  Role-Permissions: ${rolePerms} asignaciones creadas`);
+  const rpMsg = [`${rolePerms.created} asignaciones creadas`];
+  if (rolePerms.removed > 0) rpMsg.push(`${rolePerms.removed} obsoletas eliminadas`);
+  console.log(`  Role-Permissions: ${rpMsg.join(", ")}`);
 
   const admin = await seedAdminUser();
   console.log(`  Admin user: ${admin || "ninguno creado"}`);

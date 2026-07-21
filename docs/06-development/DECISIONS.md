@@ -475,6 +475,88 @@ Se establece la siguiente política para SQL custom dentro de migraciones:
 
 \---
 
+\## DEC-018
+
+\### Fecha
+
+2026-07-21
+
+\### Estado
+
+Aprobada
+
+\### Tema
+
+Nombres de Roles en Seeds vs Documentación de Autorización
+
+\### Contexto
+
+Durante la FASE 2.3 (Seeds Iniciales) se sembraron 5 roles en la base de datos. La documentación `AUTHORIZATION.md` define roles con nombres diferentes y en español. Durante la auditoría de la FASE 2.3 se identificó esta divergencia y se evaluó si renombrar los roles ya sembrados o mantenerlos.
+
+\### Decisión
+
+Se mantienen los nombres de roles sembrados y se documenta el mapeo con `AUTHORIZATION.md`. Los nombres sembrados son versiones normalizadas (en inglés, slug-ready) pensadas para el middleware RBAC y la UI del CMS. La documentación de autorización (`AUTHORIZATION.md`) representa la capa conceptual en español, mientras que los nombres en base de datos representan la capa de implementación.
+
+\### Mapeo Oficial
+
+| Rol en BD (seeds)     | Rol en AUTHORIZATION.md | Notas                                              |
+| --------------------- | ----------------------- | -------------------------------------------------- |
+| `Super Administrator` | Administrador General   | Acceso total                                       |
+| `Administrator`       | Pastor                  | Administración de contenido, sin roles             |
+| `Editor`              | Editor                  | Sin permiso de publicación                         |
+| `Ministry Leader`     | Multimedia              | Gestión de ministerios, media y publicación propia |
+| `Viewer`              | Revisor / Invitado CMS  | Solo lectura                                       |
+
+\### Justificación
+
+- Renombrar roles requeriría re-sembrar o migrar datos adicionales, lo cual excede el alcance de la FASE 2.3.
+- Los nombres en inglés son consistentes con slugs de permisos (`users.manage`, `roles.manage`) y facilitan la integración con middleware RBAC.
+- El mapeo está documentado y será la referencia para implementar autorización en la FASE 3 y FASE 4.
+- `AUTHORIZATION.md` podrá actualizarse durante la FASE 3 para reflejar los nombres reales de implementación.
+
+\### Consecuencias
+
+- Al implementar RBAC en FASE 3/4, los desarrolladores deberán consultar este mapeo.
+- La matriz de autorización en `AUTHORIZATION.md` deberá actualizarse durante la FASE 3 para usar los nombres reales de roles.
+- La documentación conceptual (`AUTHORIZATION.md`) sigue siendo la fuente de verdad sobre qué permisos corresponden a cada nivel de acceso.
+
+---
+
+\## DEC-019
+
+\### Fecha
+
+2026-07-21
+
+\### Estado
+
+Aprobada
+
+\### Tema
+
+Footer de Navegación Vacío en Seeds
+
+\### Contexto
+
+La FASE 2.3 sembró 2 menús de navegación: `main-menu` (con 10 ítems) y `footer` (sin ítems). La documentación `PAGES.md` y `UI_UX.md` define que todas las páginas comparten Header y Footer, pero no especifica ítems concretos para el footer. Durante la auditoría se cuestionó si el footer debe tener elementos iniciales.
+
+\### Decisión
+
+El footer se mantiene vacío en seeds. Los ítems del footer se sembrarán durante la FASE 13 (Sitio Público) o cuando se defina el contenido específico del pie de página (enlaces legales, redes sociales, etc.).
+
+\### Justificación
+
+- Ni `PAGES.md` ni `UI_UX.md` definen ítems concretos para el footer.
+- El footer típicamente contiene enlaces dinámicos (redes sociales, Copyright, enlaces legales) que se configuran desde el CMS, no desde seeds.
+- Sembrar ítems sin definición documental previa violaría el principio "no desarrollar sin documentación previa" (DOCUMENTATION_INDEX.md).
+
+\### Consecuencias
+
+- El menú `footer` existe en BD pero no renderizará ítems hasta que se configure desde el CMS.
+- La FASE 13 deberá incluir la definición de ítems por defecto para el footer en `PAGES.md` o `UI_UX.md`.
+
+---
+
 \# Futuras Decisiones
 
 Las siguientes decisiones permanecen pendientes.
