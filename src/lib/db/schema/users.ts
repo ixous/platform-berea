@@ -10,7 +10,7 @@ export const users = pgTable(
     password: varchar("password", { length: 255 }).notNull(),
     roleId: uuid("role_id")
       .notNull()
-      .references(() => roles.id),
+      .references(() => roles.id, { onDelete: "restrict" }),
     status: varchar("status", { length: 20 }).notNull().default("active"),
     lastLoginAt: timestamp("last_login_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

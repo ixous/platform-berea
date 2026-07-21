@@ -9,10 +9,11 @@ import { events } from "./events";
 import { media } from "./media";
 import { mediaAttachments } from "./media-attachments";
 import { gallery } from "./gallery";
-import { galleryMedia } from "./gallery-media";
 import { navigation } from "./navigation";
 import { navigationItems } from "./navigation-items";
 import { contentVersions } from "./content-versions";
+import { redirects } from "./redirects";
+import { pages } from "./pages";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   role: one(roles, {
@@ -73,7 +74,6 @@ export const mediaRelations = relations(media, ({ one, many }) => ({
     references: [users.id],
   }),
   attachments: many(mediaAttachments),
-  galleryMedia: many(galleryMedia),
 }));
 
 export const mediaAttachmentsRelations = relations(mediaAttachments, ({ one }) => ({
@@ -84,18 +84,7 @@ export const mediaAttachmentsRelations = relations(mediaAttachments, ({ one }) =
 }));
 
 export const galleryRelations = relations(gallery, ({ many }) => ({
-  galleryMedia: many(galleryMedia),
-}));
-
-export const galleryMediaRelations = relations(galleryMedia, ({ one }) => ({
-  gallery: one(gallery, {
-    fields: [galleryMedia.galleryId],
-    references: [gallery.id],
-  }),
-  media: one(media, {
-    fields: [galleryMedia.mediaId],
-    references: [media.id],
-  }),
+  media: many(mediaAttachments),
 }));
 
 export const navigationRelations = relations(navigation, ({ many }) => ({
@@ -119,4 +108,15 @@ export const contentVersionsRelations = relations(contentVersions, ({ one }) => 
     fields: [contentVersions.userId],
     references: [users.id],
   }),
+}));
+
+export const redirectsRelations = relations(redirects, ({ one }) => ({
+  page: one(pages, {
+    fields: [redirects.pageId],
+    references: [pages.id],
+  }),
+}));
+
+export const pagesRelations = relations(pages, ({ many }) => ({
+  redirects: many(redirects),
 }));

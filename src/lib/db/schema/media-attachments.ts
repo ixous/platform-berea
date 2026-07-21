@@ -7,7 +7,7 @@ export const mediaAttachments = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     mediaId: uuid("media_id")
       .notNull()
-      .references(() => media.id),
+      .references(() => media.id, { onDelete: "cascade" }),
     entityType: varchar("entity_type", { length: 50 }).notNull(),
     entityId: uuid("entity_id").notNull(),
     relationType: varchar("relation_type", { length: 50 }).notNull().default("gallery"),

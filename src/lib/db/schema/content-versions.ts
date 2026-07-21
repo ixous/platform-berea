@@ -19,7 +19,7 @@ export const contentVersions = pgTable(
     versionNumber: integer("version_number").notNull(),
     userId: uuid("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "restrict" }),
     content: jsonb("content").notNull(),
     comment: text("comment"),
     status: varchar("status", { length: 20 }).notNull().default("draft"),

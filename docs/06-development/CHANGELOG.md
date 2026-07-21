@@ -108,6 +108,43 @@ Desarrollo
 
 \---
 
+\# v0.2.0
+
+\## Fecha
+
+2026-07-20
+
+\## Estado
+
+Desarrollo
+
+\### Agregado
+
+\- Modelo de datos completo (FASE 2.1) con 26 tablas en Drizzle ORM.
+\- Esquema de seguridad: users, roles, permissions, role\_permissions, audit\_logs.
+\- Esquema de contenido CMS: pages, devotionals, events, ministries, service\_ministries, biblical\_programs, cells, annual\_vision, auditorium, donations, contact.
+\- Esquema multimedia: media, media\_attachments, gallery.
+\- Esquema SEO y navegación: seo\_metadata, redirects, navigation, navigation\_items.
+\- Esquema de configuración: settings (key-value), content\_versions.
+\- Relaciones ORM completas para todas las entidades.
+\- 30+ índices incluyendo índices compuestos y únicos.
+\- Índices Full Text Search (GIN + to\_tsvector) para pages, devotionals, events, ministries y biblical\_programs.
+\- Políticas onDelete explícitas en todas las Foreign Keys (cascade, set null, restrict).
+\- Soft Delete implementado en 13 entidades según ERD.
+
+\### Corregido
+
+\- Eliminada tabla gallery\_media en favor de media\_attachments (auditoría FASE 2.1).
+\- Eliminados metaTitle y metaDescription de pages; SEO centralizado en seo\_metadata (auditoría FASE 2.1).
+\- Agregada relación redirects → pages con pageId FK (auditoría FASE 2.1).
+\- Documentada decisión de Settings como key-value en DECISIONS.md (DEC-016).
+
+\### Modificado
+
+\- Todas las Foreign Keys ahora definen onDelete explícito.
+
+\---
+
 \# Próximas Versiones
 
 \## v0.2.0

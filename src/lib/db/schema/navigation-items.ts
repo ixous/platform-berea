@@ -15,8 +15,10 @@ export const navigationItems = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     navigationId: uuid("navigation_id")
       .notNull()
-      .references(() => navigation.id),
-    parentId: uuid("parent_id").references((): AnyPgColumn => navigationItems.id),
+      .references(() => navigation.id, { onDelete: "cascade" }),
+    parentId: uuid("parent_id").references((): AnyPgColumn => navigationItems.id, {
+      onDelete: "set null",
+    }),
     title: varchar("title", { length: 255 }).notNull(),
     url: varchar("url", { length: 500 }),
     linkType: varchar("link_type", { length: 50 }).notNull().default("internal"),

@@ -10,8 +10,6 @@ export const pages = pgTable(
     excerpt: text("excerpt"),
     status: varchar("status", { length: 20 }).notNull().default("draft"),
     publishedAt: timestamp("published_at", { withTimezone: true }),
-    metaTitle: varchar("meta_title", { length: 255 }),
-    metaDescription: text("meta_description"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },

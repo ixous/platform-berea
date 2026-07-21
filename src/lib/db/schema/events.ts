@@ -24,7 +24,9 @@ export const events = pgTable(
     eventType: varchar("event_type", { length: 50 }),
     status: varchar("status", { length: 20 }).notNull().default("draft"),
     featured: boolean("featured").default(false),
-    organizerId: uuid("organizer_id").references(() => users.id),
+    organizerId: uuid("organizer_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
     cost: varchar("cost", { length: 100 }),
     capacity: integer("capacity"),
     additionalInfo: text("additional_info"),

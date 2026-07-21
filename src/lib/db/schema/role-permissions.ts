@@ -7,10 +7,10 @@ export const rolePermissions = pgTable(
   {
     roleId: uuid("role_id")
       .notNull()
-      .references(() => roles.id),
+      .references(() => roles.id, { onDelete: "cascade" }),
     permissionId: uuid("permission_id")
       .notNull()
-      .references(() => permissions.id),
+      .references(() => permissions.id, { onDelete: "cascade" }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [primaryKey({ columns: [table.roleId, table.permissionId] })]

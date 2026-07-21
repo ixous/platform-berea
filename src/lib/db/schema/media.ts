@@ -15,7 +15,9 @@ export const media = pgTable(
     height: integer("height"),
     altText: varchar("alt_text", { length: 500 }),
     mediaType: varchar("media_type", { length: 50 }).notNull().default("image"),
-    uploadedBy: uuid("uploaded_by").references(() => users.id),
+    uploadedBy: uuid("uploaded_by").references(() => users.id, {
+      onDelete: "set null",
+    }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp("deleted_at", { withTimezone: true }),

@@ -5,7 +5,9 @@ export const auditLogs = pgTable(
   "audit_logs",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    userId: uuid("user_id").references(() => users.id),
+    userId: uuid("user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
     action: varchar("action", { length: 100 }).notNull(),
     resource: varchar("resource", { length: 100 }).notNull(),
     resourceId: uuid("resource_id"),

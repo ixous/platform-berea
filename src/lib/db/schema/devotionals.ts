@@ -12,7 +12,7 @@ export const devotionals = pgTable(
     excerpt: text("excerpt"),
     authorId: uuid("author_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "restrict" }),
     status: varchar("status", { length: 20 }).notNull().default("draft"),
     publishedAt: timestamp("published_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

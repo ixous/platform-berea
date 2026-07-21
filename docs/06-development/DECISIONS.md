@@ -384,6 +384,44 @@ Nunca desarrollar funcionalidades sin una arquitectura previamente definida.
 
 \---
 
+\## DEC-016
+
+\### Fecha
+
+2026-07-20
+
+\### Estado
+
+Aprobada
+
+\### Tema
+
+Modelo de Settings como Key-Value
+
+\### Contexto
+
+El ERD describe Settings como "un único registro activo". Durante la implementación de la FASE 2.1 se evaluó si modelarlo como tabla de registro único con columnas fijas o como tabla key-value con múltiples filas.
+
+\### Decisión
+
+Se implementa Settings como tabla key-value (`key` unique, `value` jsonb). Cada clave de configuración es una fila independiente con su propio `id`, `created_at`, `updated_at` y `deleted_at`.
+
+\### Justificación
+
+\- Extensibilidad: agregar nuevas configuraciones no requiere cambios de schema.
+\- Versionado compatible: `content_versions` puede versionar cada clave individualmente.
+\- CMS intuitivo: cada setting puede tener su propio formulario y validación.
+\- Soft Delete por clave: permite desactivar configuraciones específicas sin afectar otras.
+\- PostgreSQL jsonb permite almacenar valores complejos (objetos, arrays, strings).
+
+\### Consecuencias
+
+\- Cada configuración se versiona de forma independiente.
+\- El concepto "único registro activo" se interpreta como "conjunto activo de claves", no como un registro físico.
+\- Las claves deben mantenerse únicas y documentadas como parte del contrato de la API de Settings.
+
+\---
+
 \# Futuras Decisiones
 
 Las siguientes decisiones permanecen pendientes.
