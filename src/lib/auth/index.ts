@@ -1,6 +1,10 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { compare } from "bcryptjs";
+import { eq } from "drizzle-orm";
 import type { NextAuthConfig } from "next-auth";
+import { db } from "@/lib/db";
+import { users } from "@/lib/db/schema";
 
 const authOptions: NextAuthConfig = {
   providers: [
@@ -20,17 +24,46 @@ const authOptions: NextAuthConfig = {
           return null;
         }
 
-        // PLACEHOLDER — FASE 3 (Autenticación y Seguridad)
-        // La verificación real con bcrypt y consulta a la base de datos
-        // será implementada durante la Fase 3.
-        // El comportamiento actual (retornar null = rechazar acceso)
-        // es intencional y esperado en esta etapa del proyecto.
-        return null;
+        const normalizedEmail = email.toLowerCase().trim();
+
+        const [user] = await db
+          .select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+            password: users.password,
+            roleId: users.roleId,
+            status: users.status,
+          })
+          .from(users)
+          .where(eq(users.email, normalizedEmail))
+          .limit(1);
+
+        if (!user) {
+          return null;
+        }
+
+        if (user.status !== "active") {
+          return null;
+        }
+
+        const isValid = await compare(password, user.password);
+        if (!isValid) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          roleId: user.roleId,
+        };
       },
     }),
   ],
   session: {
     strategy: "jwt",
+    maxAge: 60 * 60, // 1 hora
   },
   pages: {
     signIn: "/admin/login",
@@ -39,9 +72,10 @@ const authOptions: NextAuthConfig = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.email = user.email;
-        token.name = user.name;
+        token.id = user.id as string;
+        token.email = user.email as string;
+        token.name = user.name as string;
+        token.roleId = (user as { roleId?: string }).roleId;
       }
       return token;
     },
@@ -50,6 +84,7 @@ const authOptions: NextAuthConfig = {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
         session.user.name = token.name as string;
+        session.user.roleId = token.roleId as string;
       }
       return session;
     },
