@@ -23,5 +23,4 @@ export * from "./navigation";
 export * from "./navigation-items";
 export * from "./settings";
 export * from "./content-versions";
-export * from "./custom-indexes";
 export * from "./relations";

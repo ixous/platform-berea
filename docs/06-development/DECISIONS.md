@@ -422,6 +422,59 @@ Se implementa Settings como tabla key-value (`key` unique, `value` jsonb). Cada 
 
 \---
 
+\## DEC-017
+
+\### Fecha
+
+2026-07-20
+
+\### Estado
+
+Aprobada
+
+\### Tema
+
+Política de SQL Custom en Migraciones Drizzle
+
+\### Contexto
+
+Drizzle Kit genera migraciones automáticamente a partir de definiciones `pgTable`. Sin embargo, ciertas características de PostgreSQL como índices GIN, índices parciales, extensiones (pg_trgm, postgis) o triggers no pueden declararse mediante la API nativa de Drizzle. Durante la FASE 2.2 se requirió agregar 5 índices Full Text Search (GIN + to\_tsvector) que Drizzle no pudo incluir en la migración generada.
+
+\### Decisión
+
+Se establece la siguiente política para SQL custom dentro de migraciones:
+
+1\. **Todo lo que Drizzle pueda generar nativamente, debe usar la API de Drizzle.** Esto incluye: tablas, columnas, constraints, foreign keys, índices btree/unique, defaults y composite keys.
+
+2\. **SQL custom solo se permite cuando Drizzle no ofrece una API equivalente.** Ejemplos: índices GIN, índices parciales con WHERE, triggers, extensiones PostgreSQL.
+
+3\. **El SQL custom se escribe directamente en el archivo de migración** generado por `drizzle-kit generate`, después de las sentencias generadas automáticamente y manteniendo el formato `--> statement-breakpoint`.
+
+4\. **Se mantiene un archivo de referencia** (`custom-indexes.ts` dentro del schema) que documenta cada sentencia SQL custom, pero **no se exporta desde el barrel index.ts del schema** para evitar confusión. Drizzle Kit no procesa estos exports.
+
+5\. **El snapshot de Drizzle** (`drizzle/meta/*_snapshot.json`) no incluirá estos índices custom. Esto es aceptable siempre que la migración sea la fuente de verdad para recrear la base de datos.
+
+6\. **Al regenerar migraciones desde cero**, el SQL custom deberá copiarse manualmente desde el archivo de referencia hacia la nueva migración.
+
+7\. **Nunca** modificar una migración ya aplicada en producción. Los cambios deben ir en nuevas migraciones.
+
+\### Justificación
+
+\- Drizzle v0.45.2 no soporta la creación de índices GIN mediante su API declarativa.
+\- Mantener el SQL custom dentro de las migraciones (no en el schema) evita falsas expectativas sobre la capacidad de Drizzle de gestionarlos.
+\- El archivo de referencia documental asegura que el conocimiento no se pierda.
+\- Esta política es compatible con el flujo de trabajo estándar de Drizzle (`generate → revisar → migrar`).
+
+\### Consecuencias
+
+\- Los índices GIN deben mantenerse manualmente si cambian las columnas indexadas.
+\- Las migraciones son la única fuente de verdad para recrear la base de datos.
+\- El archivo `custom-indexes.ts` es solo documental; nunca debe exportarse desde el barrel del schema.
+\- Futuros índices avanzados (partial, BRIN, extensiones) seguirán esta misma política.
+\- No hay drift entre schema y base de datos porque la migración es atómica y se aplica completa.
+
+\---
+
 \# Futuras Decisiones
 
 Las siguientes decisiones permanecen pendientes.
