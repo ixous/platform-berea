@@ -234,27 +234,31 @@ CMS operativo.
 
 \# FASE 5
 
-Biblioteca Multimedia
+Biblioteca Multimedia (Core)
 
 Estado:
 
+✅ Completada (solo lectura)
+
+Incluye:
+
+\- Listado con búsqueda y paginación.
+\- Vista detalle con preview por tipo.
+\- Componentes reutilizables.
+\- Soft delete, estado vacío, loading, error.
+
 Pendiente
 
-Objetivos
-
-\- Media Library.
-
-\- Subida.
-
-\- Optimización.
-
-\- Reutilización.
-
-\- Versionado.
+\- Subida de archivos.
+\- Cloudflare R2 / Stream.
+\- Optimización automática.
+\- Edición y eliminación.
+\- Galerías y Media Attachments.
+\- RBAC en media.
 
 Entregable
 
-Biblioteca multimedia funcional.
+Biblioteca multimedia funcional (fase core).
 
 \---
 

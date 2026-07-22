@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { media } from "@/lib/db/schema";
-import { ilike, count, isNull, and, or, type SQL } from "drizzle-orm";
+import { ilike, count, isNull, and, or, desc, type SQL } from "drizzle-orm";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { MediaCard } from "@/components/media/MediaCard";
@@ -24,8 +24,7 @@ async function MediaList({
 }) {
   const params = await searchParams;
   const query = params.q?.trim() || "";
-  const page = Math.max(1, parseInt(params.page || "1", 10) || 1);
-  const offset = (page - 1) * ITEMS_PER_PAGE;
+  const rawPage = Math.max(1, parseInt(params.page || "1", 10) || 1);
 
   const conditions: SQL[] = [isNull(media.deletedAt)];
 
@@ -36,22 +35,14 @@ async function MediaList({
     );
   }
 
-  const [items, [countResult]] = await Promise.all([
-    db
-      .select()
-      .from(media)
-      .where(and(...conditions))
-      .orderBy(media.createdAt)
-      .limit(ITEMS_PER_PAGE)
-      .offset(offset),
-    db
-      .select({ total: count() })
-      .from(media)
-      .where(and(...conditions)),
-  ]);
+  const [countResult] = await db
+    .select({ total: count() })
+    .from(media)
+    .where(and(...conditions));
 
   const totalItems = countResult?.total || 0;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const page = Math.min(rawPage, Math.max(1, totalPages));
 
   if (totalItems === 0) {
     return (
@@ -66,6 +57,14 @@ async function MediaList({
       />
     );
   }
+
+  const items = await db
+    .select()
+    .from(media)
+    .where(and(...conditions))
+    .orderBy(desc(media.createdAt))
+    .limit(ITEMS_PER_PAGE)
+    .offset((page - 1) * ITEMS_PER_PAGE);
 
   return (
     <div className="space-y-6">

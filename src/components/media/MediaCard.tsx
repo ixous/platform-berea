@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MediaPreview } from "./MediaPreview";
+import { formatFileSize } from "@/lib/utils";
 
 interface MediaCardProps {
   id: string;
@@ -9,12 +10,6 @@ interface MediaCardProps {
   url: string;
   thumbnailUrl?: string | null;
   size: number;
-}
-
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 export function MediaCard({
@@ -43,7 +38,7 @@ export function MediaCard({
       <div className="border-t p-3">
         <p className="truncate text-sm font-medium group-hover:text-primary">{filename}</p>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          {mediaType} &middot; {formatSize(size)}
+          {mediaType} &middot; {formatFileSize(size)}
         </p>
       </div>
     </Link>

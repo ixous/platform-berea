@@ -626,3 +626,40 @@ Se utilizará la siguiente infraestructura:
 Toda la estrategia multimedia del proyecto estará basada en el ecosistema de Cloudflare.
 
 Las futuras funcionalidades relacionadas con contenido multimedia deberán respetar esta decisión arquitectónica.
+
+---
+
+\## DEC-020
+
+\### Fecha
+
+2026-07-22
+
+\### Estado
+
+Aprobada
+
+\### Tema
+
+Uso temporal de `<img>` nativo en previews administrativas
+
+\### Contexto
+
+La FASE 5 (Media Library Core) implementa previews de imágenes en el CMS mediante el elemento `<img>` nativo de HTML. `next/image` genera advertencia de dominios no configurados cuando las URLs provienen de un proveedor externo (Cloudflare R2). Dado que R2 no está integrado todavía, configurar `next.config.ts` con `remotePatterns` para R2 sería prematuro.
+
+\### Decisión
+
+Se utilizará `<img>` nativo de HTML para las previews administrativas del CMS durante las fases iniciales de desarrollo. Cuando Cloudflare R2 esté integrado, se migrará a `next/image` con la configuración de `remotePatterns` correspondiente o a un custom loader.
+
+\### Justificación
+
+\- La FASE 5 es solo lectura; no hay impacto en SEO ni Core Web Vitals para rutas administrativas.
+\- Configurar `remotePatterns` sin tener R2 operativo agrega configuración muerta.
+\- El equipo de Multimedia verá previews dentro del CMS, no en el sitio público.
+\- La migración a `next/image` es trivial una vez que R2 esté configurado.
+
+\### Consecuencias
+
+\- ESLint genera 2 warnings (`@next/next/no-img-element`) que se aceptan como deuda técnica documentada.
+\- La FASE 5.2 (upload + R2) deberá migrar a `next/image` o justificar mantener `<img>` mediante supresión del rule.
+\- Ninguna imagen pública se sirve con `<img>` nativo; esta decisión aplica exclusivamente a previews del CMS.

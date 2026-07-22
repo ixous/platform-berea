@@ -150,21 +150,19 @@ Estados:
 
 \# FASE 5 — Biblioteca Multimedia
 
-\- ⬜ CRUD Media
-
+\- ✅ Listado con búsqueda y paginación
+\- ✅ Vista detalle con preview por tipo
+\- ✅ Componentes reutilizables (MediaCard, MediaGrid, MediaPreview, MediaDetails, MediaSearch, Pagination)
+\- ✅ Soft delete, estado vacío, loading, error
+\- ✅ Utilidad compartida formatFileSize
 \- ⬜ Subida de imágenes
-
+\- ⬜ Cloudflare R2 / Stream
 \- ⬜ Optimización automática
-
 \- ⬜ Conversión WebP / AVIF
-
-\- ⬜ Biblioteca Multimedia
-
+\- ⬜ Edición y eliminación
 \- ⬜ Relación con entidades
-
-\- ⬜ Versionado
-
 \- ⬜ Papelera
+\- ⬜ RBAC en media
 
 \---
 

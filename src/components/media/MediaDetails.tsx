@@ -1,3 +1,5 @@
+import { formatFileSize } from "@/lib/utils";
+
 interface MediaDetailsProps {
   filename: string;
   originalName: string;
@@ -9,12 +11,6 @@ interface MediaDetailsProps {
   altText?: string | null;
   createdAt: Date;
   updatedAt: Date;
-}
-
-function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function formatDate(date: Date): string {
@@ -59,7 +55,7 @@ export function MediaDetails({
       </div>
       <div>
         <dt className="text-xs font-medium text-muted-foreground">Tamaño</dt>
-        <dd className="text-sm">{formatSize(size)}</dd>
+        <dd className="text-sm">{formatFileSize(size)}</dd>
       </div>
       {width && height ? (
         <div>

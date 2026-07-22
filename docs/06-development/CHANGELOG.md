@@ -235,11 +235,30 @@ Desarrollo
 
 \## v0.5.0
 
-Previsto
+\## Fecha
 
-Biblioteca Multimedia.
+2026-07-22
 
-\---
+\## Estado
+
+Desarrollo
+
+\### Agregado
+
+- Biblioteca Multimedia (FASE 5): listado con búsqueda y paginación en `/admin/media`.
+- Vista detalle de archivos multimedia en `/admin/media/[id]`.
+- Componentes: `MediaCard`, `MediaGrid`, `MediaPreview`, `MediaDetails`, `MediaSearch`, `Pagination`.
+- Preview por tipo: imagen, video (con `<video>` en detalle), documento.
+- Soft delete (`deletedAt IS NULL`), estado vacío, loading y error boundaries.
+- Utilidad compartida `formatFileSize` en `src/lib/utils.ts`.
+
+\### Pendiente
+
+- Upload, Cloudflare R2 / Stream, edición, eliminación, galerías, media attachments.
+- RBAC y permisos específicos para media.
+- Optimización automática de imágenes.
+
+---
 
 \## v0.6.0
 
