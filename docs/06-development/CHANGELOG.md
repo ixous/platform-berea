@@ -196,22 +196,42 @@ Desarrollo
 
 \### Pendiente
 
-- Rate limiting en login (previsto para FASE 3.1 o FASE 4).
+- Rate limiting en login.
 - Auditoría de eventos de autenticación (login/logout/fallos).
 - Actualización de `lastLoginAt` en cada inicio de sesión.
 - Recuperación de contraseña.
 
 ---
 
+\# v0.4.0
+
+\## Fecha
+
+2026-07-22
+
+\## Estado
+
+Desarrollo
+
+\### Agregado
+
+- Shell CMS (FASE 4): layout administrativo con autenticación, sidebar, header, contenido y footer.
+- Sidebar con navegación dinámica desde base de datos (prioriza `admin-menu`, fallback a `main-menu`).
+- Toggle responsive del sidebar: drawer overlay en móvil, fijo en desktop.
+- Breadcrumb entre header y contenido.
+- Dashboard con información del usuario autenticado, rol (desde DB), fecha/hora y accesos rápidos.
+- Componentes base reutilizables: `PageHeader`, `SectionCard`, `EmptyState`, `LoadingSpinner`, `ErrorState`.
+- Manejo de errores: `loading.tsx`, `error.tsx`, `not-found.tsx` en área administrativa.
+- Server action `logout()` integrada en header.
+
+\### Pendiente
+
+- Menú `admin-menu` sin sembrar (temporalmente usa `main-menu` como fallback).
+- Breadcrumb por página (actualmente estático en layout).
+
+---
+
 \# Próximas Versiones
-
-\## v0.4.0
-
-Previsto
-
-CMS Core.
-
-\---
 
 \## v0.5.0
 

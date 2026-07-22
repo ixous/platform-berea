@@ -2,34 +2,54 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { navigation, navigationItems } from "@/lib/db/schema";
 import { eq, and, isNull } from "drizzle-orm";
+import { AdminSidebarShell } from "./AdminSidebarShell";
+import { SidebarNavLink } from "./SidebarNavLink";
+
+const CMS_MENU_SLUG = "admin-menu";
+const FALLBACK_MENU_SLUG = "main-menu";
 
 export async function AdminSidebar() {
-  const menus = await db.select().from(navigation).where(eq(navigation.slug, "main-menu")).limit(1);
+  let menu = await db.select().from(navigation).where(eq(navigation.slug, CMS_MENU_SLUG)).limit(1);
 
-  if (menus.length === 0) {
+  if (menu.length === 0) {
+    menu = await db
+      .select()
+      .from(navigation)
+      .where(eq(navigation.slug, FALLBACK_MENU_SLUG))
+      .limit(1);
+  }
+
+  if (menu.length === 0) {
     return (
-      <aside className="flex w-64 flex-col border-r bg-card p-4">
-        <p className="text-sm text-muted-foreground">Menú no configurado</p>
-      </aside>
+      <AdminSidebarShell>
+        <div className="flex h-14 items-center border-b px-4">
+          <span className="text-sm font-semibold">CCB Admin</span>
+        </div>
+        <div className="flex-1 p-4">
+          <p className="text-sm text-muted-foreground">Menú no configurado</p>
+        </div>
+      </AdminSidebarShell>
     );
   }
 
-  const mainMenu = menus[0];
+  const currentMenu = menu[0];
 
   const items = await db
     .select()
     .from(navigationItems)
     .where(
       and(
-        eq(navigationItems.navigationId, mainMenu.id),
+        eq(navigationItems.navigationId, currentMenu.id),
         eq(navigationItems.status, "active"),
         isNull(navigationItems.deletedAt)
       )
     )
     .orderBy(navigationItems.displayOrder);
 
+  const isFallback = currentMenu.slug === FALLBACK_MENU_SLUG;
+
   return (
-    <aside className="flex w-64 flex-col border-r bg-card">
+    <AdminSidebarShell>
       <div className="flex h-14 items-center border-b px-4">
         <Link href="/admin" className="text-sm font-semibold tracking-tight">
           CCB Admin
@@ -37,15 +57,17 @@ export async function AdminSidebar() {
       </div>
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         {items.map((item) => (
-          <Link
-            key={item.id}
-            href={item.url || "#"}
-            className="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
+          <SidebarNavLink key={item.id} href={item.url || "#"}>
             {item.title}
-          </Link>
+          </SidebarNavLink>
         ))}
       </nav>
-    </aside>
+      {isFallback && (
+        <div className="border-t px-4 py-2 text-xs text-muted-foreground">
+          Menú: {FALLBACK_MENU_SLUG} (fallback). Cambiar a &quot;{CMS_MENU_SLUG}&quot; al sembrar
+          menú administrativo.
+        </div>
+      )}
+    </AdminSidebarShell>
   );
 }
