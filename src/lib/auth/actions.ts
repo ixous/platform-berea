@@ -2,7 +2,7 @@
 
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
-import { signIn } from "@/lib/auth";
+import { signIn, signOut } from "@/lib/auth";
 
 export async function login(_prevState: { error: string }, formData: FormData) {
   try {
@@ -20,4 +20,8 @@ export async function login(_prevState: { error: string }, formData: FormData) {
 
   const callbackUrl = formData.get("callbackUrl") as string;
   redirect(callbackUrl || "/admin");
+}
+
+export async function logout() {
+  await signOut({ redirectTo: "/admin/login" });
 }
