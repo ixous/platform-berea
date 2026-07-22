@@ -173,23 +173,37 @@ Desarrollo
 
 ---
 
+\# v0.3.0
+
+\## Fecha
+
+2026-07-21
+
+\## Estado
+
+Desarrollo
+
+\### Agregado
+
+- Infraestructura de autenticación (FASE 3) con Auth.js v5 + Drizzle ORM + bcryptjs.
+- Credentials Provider con email/password. Normalización de email y validación de estado activo.
+- Estrategia JWT con `maxAge` 1 hora y `updateAge` 30 minutos (rolling sessions).
+- Página de login en `/admin/login` con formulario client-side y server action.
+- Middleware (proxy.ts) protegiendo rutas `/admin/:path*` con redirect a login.
+- Type augmentation: `Session.user` tipado con `id`, `roleId`, `status`.
+- Cookies de sesión configuradas explícitamente: httpOnly, secure (prod), sameSite=lax.
+- Variables `AUTH_SECRET` y `AUTH_URL` en `.env.example` y `.env.local`.
+
+\### Pendiente
+
+- Rate limiting en login (previsto para FASE 3.1 o FASE 4).
+- Auditoría de eventos de autenticación (login/logout/fallos).
+- Actualización de `lastLoginAt` en cada inicio de sesión.
+- Recuperación de contraseña.
+
+---
+
 \# Próximas Versiones
-
-\## v0.2.1
-
-Previsto
-
-FASE 2.3 — Seeds iniciales con roles, permisos, admin, settings, navegación y páginas.
-
-\---
-
-\## v0.3.0
-
-Previsto
-
-FASE 3 — Autenticación y Seguridad (Auth.js, Login, RBAC).
-
-\---
 
 \## v0.4.0
 

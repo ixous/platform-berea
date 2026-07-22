@@ -57,6 +57,7 @@ const authOptions: NextAuthConfig = {
           name: user.name,
           email: user.email,
           roleId: user.roleId,
+          status: user.status,
         };
       },
     }),
@@ -64,6 +65,17 @@ const authOptions: NextAuthConfig = {
   session: {
     strategy: "jwt",
     maxAge: 60 * 60, // 1 hora
+    updateAge: 60 * 30, // renovar cada 30 min
+  },
+  cookies: {
+    sessionToken: {
+      name: "authjs.session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
   },
   pages: {
     signIn: "/admin/login",
@@ -76,6 +88,7 @@ const authOptions: NextAuthConfig = {
         token.email = user.email as string;
         token.name = user.name as string;
         token.roleId = (user as { roleId?: string }).roleId;
+        token.status = (user as { status?: string }).status;
       }
       return token;
     },
@@ -85,6 +98,7 @@ const authOptions: NextAuthConfig = {
         session.user.email = token.email as string;
         session.user.name = token.name as string;
         session.user.roleId = token.roleId as string;
+        session.user.status = token.status as string;
       }
       return session;
     },
