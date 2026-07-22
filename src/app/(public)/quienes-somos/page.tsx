@@ -15,7 +15,21 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Quienes Somos",
     description:
       "Conoce la identidad, misi\u00f3n y visi\u00f3n de Centro Cristiano Berea en Mexicali, Baja California.",
+    openGraph: {
+      title: "Quienes Somos | Centro Cristiano Berea",
+      description:
+        "Conoce la identidad, misi\u00f3n y visi\u00f3n de Centro Cristiano Berea en Mexicali, Baja California.",
+    },
   };
+}
+
+function renderContent(content: string | null) {
+  if (!content) return null;
+  return content.split("\n").map((p, i) => (
+    <p key={i} className="leading-relaxed text-berea-muted">
+      {p}
+    </p>
+  ));
 }
 
 export default async function QuienesSomosPage() {
@@ -34,7 +48,7 @@ export default async function QuienesSomosPage() {
           <div className="prose prose-lg mx-auto">
             <h2 className="text-2xl font-bold text-berea-navy">Nuestra Identidad</h2>
             {page.content ? (
-              <div dangerouslySetInnerHTML={{ __html: page.content }} />
+              <div className="space-y-4">{renderContent(page.content)}</div>
             ) : (
               <div className="space-y-4 text-berea-muted">
                 <p>

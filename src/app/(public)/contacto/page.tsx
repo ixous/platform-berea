@@ -1,3 +1,5 @@
+import { db } from "@/lib/db";
+import { contact } from "@/lib/db/schema";
 import { PageBanner } from "@/components/public/PageBanner";
 import { MapPin, Clock, Phone, Mail, MessageCircle } from "lucide-react";
 import type { Metadata } from "next";
@@ -6,9 +8,31 @@ export const metadata: Metadata = {
   title: "Contacto",
   description:
     "Cont\u00e1ctanos. Informaci\u00f3n de contacto, ubicaci\u00f3n y horarios de Centro Cristiano Berea en Mexicali, Baja California.",
+  openGraph: {
+    title: "Contacto | Centro Cristiano Berea",
+    description:
+      "Cont\u00e1ctanos. Informaci\u00f3n de contacto, ubicaci\u00f3n y horarios de Centro Cristiano Berea en Mexicali, Baja California.",
+  },
 };
 
-export default function ContactoPage() {
+async function getContact() {
+  const [row] = await db.select().from(contact).limit(1);
+  return row;
+}
+
+type Schedules = { schedules?: { day?: string; time?: string }[] };
+
+export default async function ContactoPage() {
+  const info = await getContact();
+
+  const scheduleData: Schedules = (info?.schedules as Schedules) ?? {};
+  const schedules = scheduleData.schedules?.length
+    ? scheduleData.schedules
+    : [
+        { day: "Domingo", time: "10:00 AM y 12:30 PM" },
+        { day: "Mi\u00e9rcoles", time: "7:00 PM" },
+      ];
+
   return (
     <>
       <PageBanner title="Contacto" subtitle="Nos encantar\u00eda saber de ti." />
@@ -26,10 +50,7 @@ export default function ContactoPage() {
                   <div>
                     <p className="font-medium text-berea-navy">Direcci\u00f3n</p>
                     <p className="text-sm text-berea-muted">
-                      Mexicali, Baja California, M\u00e9xico
-                    </p>
-                    <p className="text-xs italic text-berea-muted">
-                      La direcci\u00f3n exacta ser\u00e1 administrada desde el CMS.
+                      {info?.address || "Mexicali, Baja California, M\u00e9xico"}
                     </p>
                   </div>
                 </div>
@@ -37,21 +58,27 @@ export default function ContactoPage() {
                   <Phone className="mt-0.5 h-5 w-5 shrink-0 text-berea-gold" />
                   <div>
                     <p className="font-medium text-berea-navy">Tel\u00e9fono</p>
-                    <p className="text-sm text-berea-muted">[Pendiente de configuraci\u00f3n]</p>
+                    <p className="text-sm text-berea-muted">
+                      {info?.phone || "[Pendiente de configuraci\u00f3n]"}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Mail className="mt-0.5 h-5 w-5 shrink-0 text-berea-gold" />
                   <div>
                     <p className="font-medium text-berea-navy">Correo electr\u00f3nico</p>
-                    <p className="text-sm text-berea-muted">[Pendiente de configuraci\u00f3n]</p>
+                    <p className="text-sm text-berea-muted">
+                      {info?.email || "[Pendiente de configuraci\u00f3n]"}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <MessageCircle className="mt-0.5 h-5 w-5 shrink-0 text-berea-gold" />
                   <div>
                     <p className="font-medium text-berea-navy">WhatsApp</p>
-                    <p className="text-sm text-berea-muted">[Pendiente de configuraci\u00f3n]</p>
+                    <p className="text-sm text-berea-muted">
+                      {info?.whatsapp || "[Pendiente de configuraci\u00f3n]"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -60,20 +87,15 @@ export default function ContactoPage() {
             <div>
               <h2 className="text-2xl font-bold tracking-tight text-berea-navy">Horarios</h2>
               <div className="mt-8 space-y-4">
-                {[
-                  { day: "Domingo", times: "10:00 AM y 12:30 PM", type: "Servicios" },
-                  { day: "Mi\u00e9rcoles", times: "7:00 PM", type: "Servicio General" },
-                ].map((h) => (
+                {schedules.map((h, i) => (
                   <div
-                    key={h.day}
+                    key={i}
                     className="flex items-center gap-3 rounded-lg border border-berea-border bg-white p-4"
                   >
                     <Clock className="h-5 w-5 shrink-0 text-berea-gold" />
                     <div>
                       <p className="font-medium text-berea-navy">{h.day}</p>
-                      <p className="text-sm text-berea-muted">
-                        {h.times} &middot; {h.type}
-                      </p>
+                      <p className="text-sm text-berea-muted">{h.time}</p>
                     </div>
                   </div>
                 ))}

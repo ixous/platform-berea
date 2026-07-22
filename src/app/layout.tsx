@@ -18,12 +18,25 @@ export const metadata: Metadata = {
     default: "Centro Cristiano Berea | Mexicali, Baja California",
   },
   description:
-    "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios, ubicada en Mexicali, Baja California, México.",
+    "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios, ubicada en Mexicali, Baja California, M\u00e9xico.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   openGraph: {
     type: "website",
     locale: "es_MX",
     siteName: "Centro Cristiano Berea",
+    title: "Centro Cristiano Berea | Mexicali, Baja California",
+    description:
+      "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Centro Cristiano Berea | Mexicali, Baja California",
+    description:
+      "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios.",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

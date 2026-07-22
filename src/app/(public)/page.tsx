@@ -6,6 +6,18 @@ import { HeroSection } from "@/components/public/HeroSection";
 import { SectionHeading } from "@/components/public/SectionHeading";
 import { EmptySection } from "@/components/public/EmptySection";
 import { ArrowRight, CalendarDays, BookOpen, Church, Clock } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Inicio",
+  description:
+    "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios, ubicada en Mexicali, Baja California, M\u00e9xico.",
+  openGraph: {
+    title: "Centro Cristiano Berea | Mexicali, Baja California",
+    description:
+      "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios.",
+  },
+};
 
 async function getSiteName() {
   const [setting] = await db

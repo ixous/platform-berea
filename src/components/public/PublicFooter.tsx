@@ -25,7 +25,7 @@ export function PublicFooter() {
               <Link href="/quienes-somos" className="text-sm text-white/70 transition-colors hover:text-white">
                 Quienes Somos
               </Link>
-              <Link href="/ministros-activos" className="text-sm text-white/70 transition-colors hover:text-white">
+              <Link href="/ministerios-activos" className="text-sm text-white/70 transition-colors hover:text-white">
                 Ministerios Activos
               </Link>
               <Link href="/devocionales" className="text-sm text-white/70 transition-colors hover:text-white">
