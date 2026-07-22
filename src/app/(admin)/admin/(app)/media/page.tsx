@@ -6,6 +6,7 @@ import { MediaGrid } from "@/components/media/MediaGrid";
 import { MediaCard } from "@/components/media/MediaCard";
 import { MediaSearch } from "@/components/media/MediaSearch";
 import { Pagination } from "@/components/media/Pagination";
+import { UploadArea } from "@/components/media/UploadArea";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { ImageIcon } from "lucide-react";
 import { Suspense } from "react";
@@ -99,6 +100,7 @@ export default function MediaListPage({ searchParams }: MediaListPageProps) {
         title="Biblioteca Multimedia"
         description="Gestiona imágenes, videos y documentos."
       />
+      <UploadArea />
       <Suspense fallback={<LoadingSpinner />}>
         <MediaSearch />
       </Suspense>
