@@ -264,27 +264,27 @@ Biblioteca multimedia funcional (fase core).
 
 \# FASE 6
 
-Contenido Institucional
+Contenido Institucional (Sitio P\u00fablico)
 
 Estado:
 
-Pendiente
+✅ Completada
 
-Objetivos
+Incluye:
 
-\- Inicio.
+\- Layout p\u00fablico separado del admin.
+\- Header con navegaci\u00f3n din\u00e1mica desde DB.
+\- Footer institucional.
+\- 15 rutas p\u00fablicas completas.
+\- Componentes p\u00fablicos reutilizables.
+\- SEO por ruta.
+\- Estados vac\u00edos contextuales.
 
-\- Quiénes Somos.
+Pendiente:
 
-\- Liderazgo.
-
-\- Doctrina.
-
-\- Visión.
-
-Entregable
-
-Contenido institucional completo.
+\- Contenido real (fotograf\u00edas, historias, doctrina completa).
+\- Formulario de contacto funcional.
+\- Google Maps.
 
 \---
 

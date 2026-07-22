@@ -262,9 +262,65 @@ Desarrollo
 
 \## v0.6.0
 
-Previsto
+\## Fecha
 
-Contenido institucional.
+2026-07-22
+
+\## Estado
+
+Desarrollo
+
+\### Agregado
+
+- Upload de archivos con integraci\u00f3n Cloudflare R2 (FASE 6).
+- Server action `uploadMedia` con validaciones: tama\u00f1o m\u00e1x 20 MB, MIME whitelist, nombre, autenticaci\u00f3n.
+- Cliente S3 para R2 (`@aws-sdk/client-s3`) en `src/lib/storage/r2.ts`.
+- Componentes UI: `UploadButton`, `UploadDropzone`, `UploadProgress`, `UploadError`, `UploadArea`.
+- Detecci\u00f3n autom\u00e1tica de tipo (image/video/document) desde MIME.
+- Generaci\u00f3n de keys \u00fanicas por archivo (`uploads/YYYY/MM/UUID.ext`).
+- Refresh autom\u00e1tico del listado al completar una carga exitosa.
+- Variables R2 en `.env.local`.
+
+\### Pendiente
+
+- Edici\u00f3n, reemplazo y eliminaci\u00f3n de archivos.
+- Cloudflare Stream para video.
+- Optimizaci\u00f3n autom\u00e1tica de im\u00e1genes (Sharp).
+- Media Attachments y galer\u00edas.
+
+---
+
+\## v0.7.0
+
+\## Fecha
+
+2026-07-22
+
+\## Estado
+
+Desarrollo
+
+\### Agregado
+
+- Sitio p\u00fablico institucional multip\u00e1gina (FASE 7).
+- Layout p\u00fablico (`app/(public)/layout.tsx`) con Header, Footer y Container separados del admin.
+- Header institucional con navegaci\u00f3n din\u00e1mica desde DB (`main-menu`) y responsive (desktop + m\u00f3vil).
+- Footer institucional con enlaces, horarios, contacto y datos desde settings/seeds.
+- Paleta institucional: azul navy (#0F2747), dorado (#C9A227), blanco, gris claro.
+- Componentes p\u00fablicos reutilizables: `HeroSection`, `PageBanner`, `SectionHeading`, `EmptySection`.
+- P\u00e1gina de Inicio completa: Hero, bienvenida, servicios, eventos, ministerios, devocionales, CTA visitanos.
+- 14 rutas p\u00fablicas: /, /quienes-somos, /historia, /nuestra-doctrina, /liderazgo, /ministerios-activos, /ministerios-de-servicio, /formacion-biblica, /celulas, /devocionales (listado + detalle), /eventos (listado + detalle), /vision-anual, /auditorio, /donaciones, /contacto.
+- Cada p\u00e1gina con encabezado, contenido desde DB cuando existe, estado vac\u00edo contextual cuando no.
+- SEO: metadata por ruta con t\u00edtulos y descripciones en espa\u00f1ol.
+- HTML sem\u00e1ntico, jerarqu\u00eda de headings, navegaci\u00f3n accesible, responsive.
+
+\### Pendiente
+
+- Formulario de contacto funcional (backend).
+- Integraci\u00f3n Google Maps.
+- Contenido real (historia, doctrina completa, fotograf\u00edas de liderazgo, datos bancarios).
+- Sitemap, robots.txt.
+- Streaming de video en Auditorio.
 
 \---
 

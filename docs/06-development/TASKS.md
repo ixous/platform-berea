@@ -168,23 +168,31 @@ Estados:
 
 \# FASE 6 — Contenido Institucional
 
-\- ⬜ Inicio
-
-\- ⬜ Quiénes Somos
-
-\- ⬜ Historia
-
-\- ⬜ Misión
-
-\- ⬜ Visión
-
-\- ⬜ Liderazgo
-
-\- ⬜ Pastor Principal
-
-\- ⬜ Pastora
-
-\- ⬜ Doctrina
+\- ✅ Layout p\u00fablico con Header, Footer, Container
+\- ✅ P\u00e1gina de Inicio completa
+\- ✅ Ruta /quienes-somos
+\- ✅ Ruta /historia
+\- ✅ Ruta /nuestra-doctrina
+\- ✅ Ruta /liderazgo
+\- ✅ Ruta /ministerios-activos
+\- ✅ Ruta /ministerios-de-servicio
+\- ✅ Ruta /formacion-biblica
+\- ✅ Ruta /celulas
+\- ✅ Ruta /devocionales (listado + detalle)
+\- ✅ Ruta /eventos (listado + detalle)
+\- ✅ Ruta /vision-anual
+\- ✅ Ruta /auditorio
+\- ✅ Ruta /donaciones
+\- ✅ Ruta /contacto
+\- ✅ SEO y metadata por ruta
+\- ✅ Paleta institucional
+\- ✅ Componentes p\u00fablicos reutilizables
+\- ✅ Responsive y accesibilidad b\u00e1sica
+\- ⬜ Contenido hist\u00f3rico completo
+\- ⬜ Doctrina completa
+\- ⬜ Liderazgo con fotograf\u00edas y biograf\u00edas
+\- ⬜ Integraci\u00f3n Google Maps
+\- ⬜ Formulario de contacto funcional
 
 \---
 
