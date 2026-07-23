@@ -80,7 +80,7 @@ export function PublicFooter() {
             <div className="mt-5 space-y-4 text-sm text-white/60">
               <div className="flex items-start gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-berea-gold/60" />
-                <span>
+                <span className="break-words">
                   C. Tercera 109<br />
                   Zona Urbana Xochimilco<br />
                   Mexicali, Baja California<br />

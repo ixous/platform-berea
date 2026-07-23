@@ -8,7 +8,7 @@ interface PageBannerProps {
 
 export function PageBanner({ title, subtitle, backgroundImage }: PageBannerProps) {
   return (
-    <section className="relative flex min-h-[500px] items-center justify-center overflow-hidden bg-berea-navy">
+    <section className="relative flex min-h-[300px] items-center justify-center overflow-hidden bg-berea-navy sm:min-h-[400px] lg:min-h-[500px]">
       {backgroundImage ? (
         <>
           <BereaImage

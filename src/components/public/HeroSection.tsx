@@ -24,7 +24,7 @@ export function HeroSection({
   backgroundImage,
 }: HeroSectionProps) {
   return (
-    <section className="relative flex min-h-[620px] items-center justify-center overflow-hidden bg-berea-navy">
+    <section className="relative flex min-h-[420px] items-center justify-center overflow-hidden bg-berea-navy sm:min-h-[520px] lg:min-h-[620px]">
       {backgroundImage ? (
         <>
           <BereaImage

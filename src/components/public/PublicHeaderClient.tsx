@@ -101,7 +101,7 @@ export function PublicHeaderClient({
         <div
           id="mobile-menu"
           ref={menuRef}
-          className="border-b bg-white shadow-lg lg:hidden"
+          className="max-h-[80vh] overflow-y-auto border-b bg-white shadow-lg lg:hidden"
           role="dialog"
           aria-label="Menú de navegación"
         >
