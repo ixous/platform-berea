@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { BereaImage } from "./BereaImage";
+import { ParallaxLayer } from "./ParallaxLayer";
 
 interface HeroSectionProps {
   title: string;
@@ -27,12 +28,14 @@ export function HeroSection({
     <section className="relative flex min-h-[420px] items-center justify-center overflow-hidden bg-berea-navy sm:min-h-[520px] lg:min-h-[620px]">
       {backgroundImage ? (
         <>
-          <BereaImage
-            src={backgroundImage}
-            alt="Centro Cristiano Berea"
-            fill
-            priority
-          />
+          <ParallaxLayer speed={0.05} className="absolute inset-0">
+            <BereaImage
+              src={backgroundImage}
+              alt="Centro Cristiano Berea"
+              fill
+              priority
+            />
+          </ParallaxLayer>
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40" />
         </>
       ) : (

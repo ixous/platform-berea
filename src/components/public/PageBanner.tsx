@@ -1,4 +1,5 @@
 import { BereaImage } from "./BereaImage";
+import { ParallaxLayer } from "./ParallaxLayer";
 
 interface PageBannerProps {
   title: string;
@@ -11,12 +12,14 @@ export function PageBanner({ title, subtitle, backgroundImage }: PageBannerProps
     <section className="relative flex min-h-[300px] items-center justify-center overflow-hidden bg-berea-navy sm:min-h-[400px] lg:min-h-[500px]">
       {backgroundImage ? (
         <>
-          <BereaImage
-            src={backgroundImage}
-            alt="Centro Cristiano Berea"
-            fill
-            priority
-          />
+          <ParallaxLayer speed={0.04} className="absolute inset-0">
+            <BereaImage
+              src={backgroundImage}
+              alt="Centro Cristiano Berea"
+              fill
+              priority
+            />
+          </ParallaxLayer>
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40" />
         </>
       ) : (

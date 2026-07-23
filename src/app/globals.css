@@ -230,4 +230,51 @@
   .animate-fade-in {
     animation: none;
   }
+  .reveal-fade-up,
+  .reveal-fade-down,
+  .reveal-fade-left,
+  .reveal-fade-right,
+  .reveal-fade-in,
+  .reveal-scale {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal-fade-up,
+.reveal-fade-down,
+.reveal-fade-left,
+.reveal-fade-right,
+.reveal-fade-in,
+.reveal-scale {
+  opacity: 0;
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-fade-up {
+  transform: translateY(24px);
+}
+
+.reveal-fade-down {
+  transform: translateY(-24px);
+}
+
+.reveal-fade-left {
+  transform: translateX(-24px);
+}
+
+.reveal-fade-right {
+  transform: translateX(24px);
+}
+
+.reveal-scale {
+  transform: scale(0.96);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: none;
 }
