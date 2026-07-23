@@ -10,7 +10,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Nuestra Doctrina",
   description:
-    "Conoce las bases doctrinales de Centro Cristiano Berea. Nuestra fe est\u00e1 fundamentada en la Palabra de Dios.",
+    "Conoce las bases doctrinales de Centro Cristiano Berea. Nuestra fe está fundamentada en la Palabra de Dios.",
 };
 
 async function getPage() {
@@ -21,23 +21,23 @@ async function getPage() {
 const doctrinalPoints = [
   {
     title: "La Biblia",
-    desc: "Creemos que la Biblia es la Palabra de Dios, inspirada, infalible y nuestra \u00fanica regla de fe y conducta.",
+    desc: "Creemos que la Biblia es la Palabra de Dios, inspirada, infalible y nuestra única regla de fe y conducta.",
   },
   {
     title: "Dios",
-    desc: "Creemos en un solo Dios, eterno, omnipotente, omnisciente y omnipresente, que existe en tres personas: Padre, Hijo y Esp\u00edritu Santo.",
+    desc: "Creemos en un solo Dios, eterno, omnipotente, omnisciente y omnipresente, que existe en tres personas: Padre, Hijo y Espíritu Santo.",
   },
   {
     title: "Jesucristo",
-    desc: "Creemos en la deidad de Jesucristo, su nacimiento virginal, su vida sin pecado, su muerte expiatoria, su resurrecci\u00f3n corporal y su Segunda Venida.",
+    desc: "Creemos en la deidad de Jesucristo, su nacimiento virginal, su vida sin pecado, su muerte expiatoria, su resurrección corporal y su Segunda Venida.",
   },
   {
-    title: "El Esp\u00edritu Santo",
-    desc: "Creemos en la persona y obra del Esp\u00edritu Santo, quien convence, regenera, santifica y capacita al creyente.",
+    title: "El Espíritu Santo",
+    desc: "Creemos en la persona y obra del Espíritu Santo, quien convence, regenera, santifica y capacita al creyente.",
   },
   {
-    title: "La Salvaci\u00f3n",
-    desc: "Creemos que la salvaci\u00f3n es por gracia mediante la fe en Jesucristo, no por obras.",
+    title: "La Salvación",
+    desc: "Creemos que la salvación es por gracia mediante la fe en Jesucristo, no por obras.",
   },
   {
     title: "La Iglesia",
@@ -51,7 +51,11 @@ export default async function DoctrinaPage() {
 
   return (
     <>
-      <PageBanner title="Nuestra Doctrina" subtitle="Los fundamentos de nuestra fe." />
+      <PageBanner
+        title="Nuestra Doctrina"
+        subtitle="Los fundamentos de nuestra fe."
+        backgroundImage="/images/Banner%20Doctrina.png"
+      />
 
       <ContentBlock>
         <div className="mx-auto max-w-4xl">

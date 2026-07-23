@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Devocionales",
   description:
-    "Reflexiones b\u00edblicas para tu crecimiento espiritual. Devocionales de Centro Cristiano Berea.",
+    "Reflexiones bíblicas para tu crecimiento espiritual. Devocionales de Centro Cristiano Berea.",
 };
 
 async function getDevotionals() {
@@ -28,7 +28,11 @@ export default async function DevocionalesPage() {
 
   return (
     <>
-      <PageBanner title="Devocionales" subtitle="Reflexiones b\u00edblicas para tu crecimiento." />
+      <PageBanner
+        title="Devocionales"
+        subtitle="Reflexiones bíblicas para tu crecimiento."
+        backgroundImage="/images/Banner%20Devocionales.png"
+      />
 
       {items.length > 0 ? (
         <ContentBlock>
@@ -63,7 +67,7 @@ export default async function DevocionalesPage() {
       ) : (
         <EmptySection
           title="Devocionales"
-          message="Pr\u00f3ximamente publicaremos devocionales para tu crecimiento espiritual."
+          message="Próximamente publicaremos devocionales para tu crecimiento espiritual."
           icon={BookOpen}
         />
       )}

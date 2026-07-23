@@ -13,7 +13,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Inicio",
   description:
-    "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios, ubicada en Mexicali, Baja California, M\u00e9xico.",
+    "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios, ubicada en Mexicali, Baja California, México.",
   openGraph: {
     title: "Centro Cristiano Berea | Mexicali, Baja California",
     description:
@@ -66,8 +66,8 @@ export default async function HomePage() {
       <HeroSection
         tagline="BIENVENIDOS"
         title="Centro Cristiano Berea"
-        subtitle="Un lugar para conocer a Cristo, crecer en Su Palabra y servir con prop\u00f3sito."
-        ctaText="Con\u00f3cenos"
+        subtitle="Un lugar para conocer a Cristo, crecer en Su Palabra y servir con propósito."
+        ctaText="Conócenos"
         ctaHref="/quienes-somos"
         secondaryCtaText="Horarios de Servicio"
         secondaryCtaHref="/contacto"
@@ -83,10 +83,9 @@ export default async function HomePage() {
             Una familia que vive para Cristo
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-berea-muted">
-            En Centro Cristiano Berea creemos que cada persona puede encontrar esperanza,
-            prop\u00f3sito y una familia espiritual en Cristo. Nuestra misi\u00f3n es ense\u00f1ar
-            fielmente la Palabra de Dios, formar disc\u00edpulos y servir a nuestra comunidad con
-            amor.
+            En Centro Cristiano Berea creemos que cada persona puede encontrar esperanza, propósito
+            y una familia espiritual en Cristo. Nuestra misión es enseñar fielmente la Palabra de
+            Dios, formar discípulos y servir a nuestra comunidad con amor.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
@@ -100,7 +99,7 @@ export default async function HomePage() {
               href="/contacto"
               className="inline-flex items-center gap-2 rounded-lg border border-berea-border bg-white px-6 py-3 text-sm font-semibold text-berea-navy shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
             >
-              Ubicaci\u00f3n y contacto
+              Ubicación y contacto
             </Link>
           </div>
         </div>
@@ -113,7 +112,7 @@ export default async function HomePage() {
               {
                 icon: Church,
                 title: "Servicios",
-                desc: "Domingo 11:00 AM · Mi\u00e9rcoles Escuela de L\u00edderes 8:00 PM · Jueves Escuela de Ministerios 8:00 PM",
+                desc: "Domingo 11:00 AM · Miércoles Escuela de Líderes 8:00 PM · Jueves Escuela de Ministerios 8:00 PM",
               },
               {
                 icon: CalendarDays,
@@ -123,7 +122,7 @@ export default async function HomePage() {
               {
                 icon: BookOpen,
                 title: "Devocionales",
-                desc: "Reflexiones b\u00edblicas semanales para tu crecimiento espiritual.",
+                desc: "Reflexiones bíblicas semanales para tu crecimiento espiritual.",
               },
               {
                 icon: Clock,
@@ -145,8 +144,8 @@ export default async function HomePage() {
 
       <ContentBlock>
         <SectionHeading
-          title="Pr\u00f3ximos Eventos"
-          subtitle="Mantente al d\u00eda con nuestras actividades y servicios especiales."
+          title="Próximos Eventos"
+          subtitle="Mantente al día con nuestras actividades y servicios especiales."
         />
         {upcomingEvents.length > 0 ? (
           <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -182,8 +181,8 @@ export default async function HomePage() {
           </div>
         ) : (
           <EmptySection
-            title="Pr\u00f3ximos Eventos"
-            message="Pr\u00f3ximamente podr\u00e1s consultar aqu\u00ed los eventos y actividades de la iglesia."
+            title="Próximos Eventos"
+            message="Próximamente podrás consultar aquí los eventos y actividades de la iglesia."
             icon={CalendarDays}
           />
         )}
@@ -193,7 +192,7 @@ export default async function HomePage() {
         <ContentBlock>
           <SectionHeading
             title="Ministerios"
-            subtitle="Descubre las diferentes \u00e1reas donde puedes servir y crecer."
+            subtitle="Descubre las diferentes áreas donde puedes servir y crecer."
           />
           {activeMinistries.length > 0 ? (
             <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -216,7 +215,7 @@ export default async function HomePage() {
           ) : (
             <EmptySection
               title="Ministerios"
-              message="Pr\u00f3ximamente podr\u00e1s consultar aqu\u00ed los ministerios activos de la iglesia."
+              message="Próximamente podrás consultar aquí los ministerios activos de la iglesia."
               icon={Church}
             />
           )}
@@ -226,7 +225,7 @@ export default async function HomePage() {
       <ContentBlock>
         <SectionHeading
           title="Devocionales"
-          subtitle="Reflexiones b\u00edblicas para edificar tu vida espiritual."
+          subtitle="Reflexiones bíblicas para edificar tu vida espiritual."
         />
         {recentDevotionals.length > 0 ? (
           <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -248,7 +247,7 @@ export default async function HomePage() {
         ) : (
           <EmptySection
             title="Devocionales"
-            message="Pr\u00f3ximamente publicaremos devocionales para tu crecimiento espiritual."
+            message="Próximamente publicaremos devocionales para tu crecimiento espiritual."
             icon={BookOpen}
           />
         )}
@@ -263,18 +262,18 @@ export default async function HomePage() {
               <Heart className="h-8 w-8 text-berea-gold" />
             </div>
             <h2 className="mt-6 text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Vis\u00edtanos
+              Visítanos
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-pretty text-lg text-white/70">
-              Nos encantar\u00eda recibirte en nuestra iglesia. Ven tal como eres y descubre una
-              comunidad que te amar\u00e1 y te apoyar\u00e1 en tu caminar con Cristo.
+              Nos encantaría recibirte en nuestra iglesia. Ven tal como eres y descubre una
+              comunidad que te amará y te apoyará en tu caminar con Cristo.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
                 href="/contacto"
                 className="inline-flex items-center gap-2 rounded-lg bg-berea-gold px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-berea-gold/25 transition-all duration-300 hover:bg-berea-gold/90 hover:-translate-y-0.5 hover:shadow-xl"
               >
-                Ubicaci\u00f3n y horarios
+                Ubicación y horarios
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

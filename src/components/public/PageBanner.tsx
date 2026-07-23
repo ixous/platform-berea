@@ -13,11 +13,11 @@ export function PageBanner({ title, subtitle, backgroundImage }: PageBannerProps
         <>
           <BereaImage
             src={backgroundImage}
-            alt=""
+            alt="Centro Cristiano Berea"
             fill
-            className="brightness-[0.3] saturate-50"
+            priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-berea-navy/80 to-berea-navy/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60" />
         </>
       ) : (
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.08),transparent_50%)]" />

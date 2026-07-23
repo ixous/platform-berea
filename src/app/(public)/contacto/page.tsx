@@ -37,7 +37,11 @@ export default async function ContactoPage() {
 
   return (
     <>
-      <PageBanner title="Contacto" subtitle="Nos encantaría saber de ti." />
+      <PageBanner
+        title="Contacto"
+        subtitle="Nos encantaría saber de ti."
+        backgroundImage="/images/Banner%20Contacto.png"
+      />
 
       <ContentBlock>
         <div className="mx-auto max-w-5xl">

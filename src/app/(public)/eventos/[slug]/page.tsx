@@ -129,7 +129,7 @@ export default async function EventoDetallePage({ params }: Props) {
 
       {item.additionalInfo && (
         <div className="mt-10 rounded-xl border border-berea-border bg-berea-light p-8">
-          <h2 className="text-lg font-bold text-berea-navy">Informaci\u00f3n adicional</h2>
+          <h2 className="text-lg font-bold text-berea-navy">Información adicional</h2>
           <div className="mt-2 h-0.5 w-8 rounded-full bg-berea-gold/30" />
           <p className="mt-4 text-sm leading-relaxed text-berea-muted">{item.additionalInfo}</p>
         </div>

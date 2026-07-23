@@ -8,11 +8,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Nuestra Historia",
   description:
-    "Conoce la historia de Centro Cristiano Berea y c\u00f3mo Dios ha guiado a nuestra iglesia desde sus inicios.",
+    "Conoce la historia de Centro Cristiano Berea y cómo Dios ha guiado a nuestra iglesia desde sus inicios.",
   openGraph: {
     title: "Nuestra Historia | Centro Cristiano Berea",
     description:
-      "Conoce la historia de Centro Cristiano Berea y c\u00f3mo Dios ha guiado a nuestra iglesia desde sus inicios.",
+      "Conoce la historia de Centro Cristiano Berea y cómo Dios ha guiado a nuestra iglesia desde sus inicios.",
   },
 };
 
@@ -37,7 +37,7 @@ export default async function HistoriaPage() {
     <>
       <PageBanner
         title="Nuestra Historia"
-        subtitle="Conoce c\u00f3mo Dios ha guiado a nuestra iglesia."
+        subtitle="Conoce cómo Dios ha guiado a nuestra iglesia."
       />
 
       <ContentBlock>
@@ -54,21 +54,20 @@ export default async function HistoriaPage() {
                 comunidad de fe vibrante en Mexicali, Baja California.
               </p>
               <p>
-                Fundada con la visi\u00f3n de ser una iglesia centrada en la Palabra, Berea ha sido
-                un faro de esperanza para miles de personas que han encontrado en sus servicios un
+                Fundada con la visión de ser una iglesia centrada en la Palabra, Berea ha sido un
+                faro de esperanza para miles de personas que han encontrado en sus servicios un
                 lugar de encuentro con Dios.
               </p>
               <p>
-                A lo largo de los a\u00f1os, la iglesia ha experimentado un crecimiento constante,
+                A lo largo de los años, la iglesia ha experimentado un crecimiento constante,
                 expandiendo sus instalaciones, ministerios y alcance comunitario.
               </p>
             </div>
           )}
           <div className="mt-12 rounded-xl border border-berea-border bg-berea-light p-8">
             <p className="text-sm text-berea-muted">
-              Esta secci\u00f3n es administrable desde el CMS. Una vez que el equipo de Centro
-              Cristiano Berea proporcione el contenido hist\u00f3rico oficial, se actualizar\u00e1
-              autom\u00e1ticamente.
+              Esta sección es administrable desde el CMS. Una vez que el equipo de Centro Cristiano
+              Berea proporcione el contenido histórico oficial, se actualizará automáticamente.
             </p>
           </div>
         </ContentNarrow>

@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Liderazgo",
   description:
-    "Conoce a los pastores y l\u00edderes que gu\u00edan a Centro Cristiano Berea en Mexicali, Baja California.",
+    "Conoce a los pastores y líderes que guían a Centro Cristiano Berea en Mexicali, Baja California.",
 };
 
 async function getLeaders() {
@@ -27,7 +27,7 @@ export default async function LiderazgoPage() {
 
   return (
     <>
-      <PageBanner title="Liderazgo" subtitle="Conoce a quienes gu\u00edan nuestra iglesia." />
+      <PageBanner title="Liderazgo" subtitle="Conoce a quienes guían nuestra iglesia." />
 
       {leaders.length > 0 ? (
         <ContentBlock>
@@ -44,7 +44,7 @@ export default async function LiderazgoPage() {
                     </span>
                   </div>
                   <h3 className="mt-5 text-lg font-bold text-berea-navy">{leader.name}</h3>
-                  <p className="mt-1 text-sm text-berea-muted">L\u00edder</p>
+                  <p className="mt-1 text-sm text-berea-muted">Líder</p>
                 </Card>
               ))}
             </div>
@@ -53,7 +53,7 @@ export default async function LiderazgoPage() {
       ) : (
         <EmptySection
           title="Liderazgo"
-          message="Pr\u00f3ximamente podr\u00e1s conocer a los pastores y l\u00edderes de nuestra iglesia."
+          message="Próximamente podrás conocer a los pastores y líderes de nuestra iglesia."
           icon={Users}
         />
       )}

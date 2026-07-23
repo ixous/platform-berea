@@ -10,7 +10,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Ministerios de Servicio",
   description:
-    "Conoce los ministerios de servicio de Centro Cristiano Berea. \u00c1reas donde puedes poner tus dones al servicio de Dios.",
+    "Conoce los ministerios de servicio de Centro Cristiano Berea. Áreas donde puedes poner tus dones al servicio de Dios.",
 };
 
 async function getServiceMinistries() {
@@ -23,16 +23,16 @@ async function getServiceMinistries() {
 
 const knownServiceMinistries = [
   "Alabanza",
-  "Ni\u00f1os",
+  "Niños",
   "Varones",
   "Danza",
   "Multimedia",
   "Sonido",
   "Teatro",
   "Ujieres",
-  "Intercesi\u00f3n",
+  "Intercesión",
   "Seguridad",
-  "Maestras de Ni\u00f1os",
+  "Maestras de Niños",
 ];
 
 export default async function MinisteriosServicioPage() {
@@ -90,8 +90,8 @@ export default async function MinisteriosServicioPage() {
               ))}
             </div>
             <p className="mt-10 text-center text-sm text-berea-muted">
-              Cada ministerio ser\u00e1 completamente administrable desde el CMS, donde se
-              podr\u00e1 a\u00f1adir descripci\u00f3n, l\u00edder, horario y fotograf\u00edas.
+              Cada ministerio será completamente administrable desde el CMS, donde se podrá añadir
+              descripción, líder, horario y fotografías.
             </p>
           </div>
         </ContentBlock>

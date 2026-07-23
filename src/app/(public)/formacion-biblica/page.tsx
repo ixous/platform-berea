@@ -8,9 +8,8 @@ import { GraduationCap, Clock, User, Layers } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Formaci\u00f3n B\u00edblica",
-  description:
-    "Programas de formaci\u00f3n y capacitaci\u00f3n ministerial de Centro Cristiano Berea.",
+  title: "Formación Bíblica",
+  description: "Programas de formación y capacitación ministerial de Centro Cristiano Berea.",
 };
 
 async function getPrograms() {
@@ -23,20 +22,20 @@ async function getPrograms() {
 
 const programOverview = [
   {
-    name: "Escuela de L\u00edderes",
-    desc: "Programa dise\u00f1ado para formar l\u00edderes con car\u00e1cter cristiano, fundamento b\u00edblico y visi\u00f3n ministerial.",
+    name: "Escuela de Líderes",
+    desc: "Programa diseñado para formar líderes con carácter cristiano, fundamento bíblico y visión ministerial.",
   },
   {
     name: "Escuela de Ministerios",
-    desc: "Capacitaci\u00f3n especializada para quienes desean servir en ministerios espec\u00edficos dentro de la iglesia.",
+    desc: "Capacitación especializada para quienes desean servir en ministerios específicos dentro de la iglesia.",
   },
   {
-    name: "Universidad de Teolog\u00eda Holmes",
-    desc: "Formaci\u00f3n teol\u00f3gica de nivel profesional, avalada por una instituci\u00f3n reconocida internacionalmente.",
+    name: "Universidad de Teología Holmes",
+    desc: "Formación teológica de nivel profesional, avalada por una institución reconocida internacionalmente.",
   },
   {
-    name: "Maestr\u00eda",
-    desc: "Estudios avanzados para profundizar en el conocimiento teol\u00f3gico y la aplicaci\u00f3n ministerial.",
+    name: "Maestría",
+    desc: "Estudios avanzados para profundizar en el conocimiento teológico y la aplicación ministerial.",
   },
 ];
 
@@ -46,8 +45,9 @@ export default async function FormacionBiblicaPage() {
   return (
     <>
       <PageBanner
-        title="Formaci\u00f3n B\u00edblica"
+        title="Formación Bíblica"
         subtitle="Crece en el conocimiento de la Palabra."
+        backgroundImage="/images/Banner%20Formacion%20biblica.png"
       />
 
       {programs.length > 0 ? (
@@ -107,8 +107,8 @@ export default async function FormacionBiblicaPage() {
               ))}
             </div>
             <p className="mt-10 text-center text-sm text-berea-muted">
-              Cada programa ser\u00e1 completamente administrable desde el CMS, con informaci\u00f3n
-              detallada de instructores, fechas, requisitos y modalidad.
+              Cada programa será completamente administrable desde el CMS, con información detallada
+              de instructores, fechas, requisitos y modalidad.
             </p>
           </div>
         </ContentBlock>

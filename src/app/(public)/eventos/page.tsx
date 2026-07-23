@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Eventos",
   description:
-    "Pr\u00f3ximos eventos y actividades de Centro Cristiano Berea en Mexicali, Baja California.",
+    "Próximos eventos y actividades de Centro Cristiano Berea en Mexicali, Baja California.",
 };
 
 async function getUpcomingEvents() {
@@ -34,7 +34,11 @@ export default async function EventosPage() {
 
   return (
     <>
-      <PageBanner title="Eventos" subtitle="Mantente al d\u00eda con nuestras actividades." />
+      <PageBanner
+        title="Eventos"
+        subtitle="Mantente al día con nuestras actividades."
+        backgroundImage="/images/Banner%20Eventos.png"
+      />
 
       {items.length > 0 ? (
         <ContentBlock>
@@ -83,7 +87,7 @@ export default async function EventosPage() {
       ) : (
         <EmptySection
           title="Eventos"
-          message="Pr\u00f3ximamente podr\u00e1s consultar aqu\u00ed los eventos y actividades de la iglesia."
+          message="Próximamente podrás consultar aquí los eventos y actividades de la iglesia."
           icon={CalendarDays}
         />
       )}

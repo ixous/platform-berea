@@ -11,11 +11,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Donaciones",
   description:
-    "Apoya econ\u00f3micamente la obra de Centro Cristiano Berea. Tu ofrenda hace una diferencia.",
+    "Apoya económicamente la obra de Centro Cristiano Berea. Tu ofrenda hace una diferencia.",
   openGraph: {
     title: "Donaciones | Centro Cristiano Berea",
     description:
-      "Apoya econ\u00f3micamente la obra de Centro Cristiano Berea. Tu ofrenda hace una diferencia.",
+      "Apoya económicamente la obra de Centro Cristiano Berea. Tu ofrenda hace una diferencia.",
   },
 };
 
@@ -32,7 +32,11 @@ export default async function DonacionesPage() {
 
   return (
     <>
-      <PageBanner title="Donaciones" subtitle="Tu generosidad ayuda a extender el Reino de Dios." />
+      <PageBanner
+        title="Donaciones"
+        subtitle="Tu generosidad ayuda a extender el Reino de Dios."
+        backgroundImage="/images/Banner%20Donaciones.png"
+      />
 
       <ContentBlock>
         <div className="mx-auto max-w-4xl">
@@ -41,11 +45,11 @@ export default async function DonacionesPage() {
               <Heart className="h-10 w-10 text-berea-gold" />
             </div>
             <h2 className="mt-6 text-balance text-2xl font-bold tracking-tight text-berea-navy sm:text-3xl">
-              {info?.title || "Ofrenda con un coraz\u00f3n generoso"}
+              {info?.title || "Ofrenda con un corazón generoso"}
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-berea-muted">
               {info?.description ||
-                "Cada aportaci\u00f3n contribuye a la obra de Dios, permitiendo que el Evangelio siga siendo predicado."}
+                "Cada aportación contribuye a la obra de Dios, permitiendo que el Evangelio siga siendo predicado."}
             </p>
           </div>
 
@@ -72,14 +76,13 @@ export default async function DonacionesPage() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white">
                 <Banknote className="h-8 w-8 text-berea-muted/40" />
               </div>
-              <h3 className="mt-6 text-lg font-bold text-berea-navy">Informaci\u00f3n pendiente</h3>
+              <h3 className="mt-6 text-lg font-bold text-berea-navy">Información pendiente</h3>
               <p className="mx-auto mt-3 max-w-md text-sm text-berea-muted">
-                Los datos bancarios, cuentas y m\u00e9todos de donaci\u00f3n se configurar\u00e1n
-                desde el CMS cuando el equipo de Centro Cristiano Berea proporcione la
-                informaci\u00f3n oficial.
+                Los datos bancarios, cuentas y métodos de donación se configurarán desde el CMS
+                cuando el equipo de Centro Cristiano Berea proporcione la información oficial.
               </p>
               <p className="mt-2 text-sm text-berea-muted">
-                En el futuro se integrar\u00e1 Stripe para facilitar donaciones en l\u00ednea.
+                En el futuro se integrará Stripe para facilitar donaciones en línea.
               </p>
             </div>
           )}
@@ -89,7 +92,7 @@ export default async function DonacionesPage() {
               href="/contacto"
               className="inline-flex items-center gap-2 rounded-lg bg-berea-navy px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
             >
-              Cont\u00e1ctanos
+              Contáctanos
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

@@ -27,7 +27,11 @@ export default async function MinisteriosActivosPage() {
 
   return (
     <>
-      <PageBanner title="Ministerios Activos" subtitle="Descubre tu lugar para servir." />
+      <PageBanner
+        title="Ministerios Activos"
+        subtitle="Descubre tu lugar para servir."
+        backgroundImage="/images/Banner%20Ministerios.png"
+      />
 
       {items.length > 0 ? (
         <ContentBlock>
@@ -71,7 +75,7 @@ export default async function MinisteriosActivosPage() {
       ) : (
         <EmptySection
           title="Ministerios Activos"
-          message="Pr\u00f3ximamente podr\u00e1s consultar aqu\u00ed los ministerios activos de la iglesia."
+          message="Próximamente podrás consultar aquí los ministerios activos de la iglesia."
           icon={Church}
         />
       )}

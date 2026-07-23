@@ -8,9 +8,9 @@ import { MapPin, Clock, User } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "C\u00e9lulas",
+  title: "Células",
   description:
-    "Encuentra una c\u00e9lula cercana en Centro Cristiano Berea. Grupos peque\u00f1os para crecer en comunidad.",
+    "Encuentra una célula cercana en Centro Cristiano Berea. Grupos pequeños para crecer en comunidad.",
 };
 
 async function getCells() {
@@ -22,9 +22,9 @@ async function getCells() {
 }
 
 const cellTypes = [
-  { name: "Mixtas", desc: "Grupos para hombres y mujeres que se re\u00fanen semanalmente." },
-  { name: "Mujeres", desc: "C\u00e9lulas enfocadas en el crecimiento espiritual de las mujeres." },
-  { name: "Varones", desc: "Grupos dise\u00f1ados para fortalecer la fe de los varones." },
+  { name: "Mixtas", desc: "Grupos para hombres y mujeres que se reúnen semanalmente." },
+  { name: "Mujeres", desc: "Células enfocadas en el crecimiento espiritual de las mujeres." },
+  { name: "Varones", desc: "Grupos diseñados para fortalecer la fe de los varones." },
 ];
 
 export default async function CelulasPage() {
@@ -33,8 +33,9 @@ export default async function CelulasPage() {
   return (
     <>
       <PageBanner
-        title="C\u00e9lulas"
-        subtitle="Encuentra una c\u00e9lula cercana y crece en comunidad."
+        title="Células"
+        subtitle="Encuentra una célula cercana y crece en comunidad."
+        backgroundImage="/images/Banner%20Celulas.png"
       />
 
       {items.length > 0 ? (
@@ -95,8 +96,8 @@ export default async function CelulasPage() {
               ))}
             </div>
             <p className="text-center text-sm text-berea-muted">
-              Pr\u00f3ximamente se mostrar\u00e1 aqu\u00ed el listado completo de c\u00e9lulas
-              activas con su ubicaci\u00f3n, horario e informaci\u00f3n de contacto.
+              Próximamente se mostrará aquí el listado completo de células activas con su ubicación,
+              horario e información de contacto.
             </p>
           </div>
         </ContentBlock>
