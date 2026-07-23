@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -49,10 +50,14 @@ export function PublicHeaderClient({
   return (
     <header className="sticky top-0 z-50 border-b border-berea-border bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2" onClick={closeMobile}>
-          <div className="flex h-9 w-9 items-center justify-center rounded-md bg-berea-navy">
-            <span className="text-sm font-bold text-white">CCB</span>
-          </div>
+        <Link href="/" className="flex items-center gap-3" onClick={closeMobile}>
+          <Image
+            src="/images/logo.png"
+            alt="Centro Cristiano Berea"
+            width={52}
+            height={52}
+            className="h-11 w-11 rounded-full object-contain lg:h-[52px] lg:w-[52px]"
+          />
           <span className="text-lg font-bold tracking-tight text-berea-navy">
             Centro Cristiano Berea
           </span>
@@ -65,7 +70,7 @@ export function PublicHeaderClient({
               <Link
                 key={item.id}
                 href={item.url || "#"}
-                className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                className={`rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
                   active
                     ? "bg-berea-navy/10 text-berea-navy"
                     : "text-berea-navy hover:bg-berea-light"
@@ -79,13 +84,6 @@ export function PublicHeaderClient({
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/contacto"
-            className="hidden rounded-md bg-berea-gold px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 lg:inline-flex"
-          >
-            Contacto
-          </Link>
-
           <button
             type="button"
             onClick={() => setMobileOpen((v) => !v)}

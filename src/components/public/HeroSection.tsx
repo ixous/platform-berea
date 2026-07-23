@@ -5,6 +5,7 @@ import { BereaImage } from "./BereaImage";
 interface HeroSectionProps {
   title: string;
   subtitle?: string;
+  tagline?: string;
   ctaText?: string;
   ctaHref?: string;
   secondaryCtaText?: string;
@@ -15,6 +16,7 @@ interface HeroSectionProps {
 export function HeroSection({
   title,
   subtitle,
+  tagline,
   ctaText,
   ctaHref,
   secondaryCtaText,
@@ -27,12 +29,11 @@ export function HeroSection({
         <>
           <BereaImage
             src={backgroundImage}
-            alt=""
+            alt="Centro Cristiano Berea"
             fill
             priority
-            className="brightness-[0.35] saturate-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-berea-navy/60 via-berea-navy/40 to-berea-navy" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60" />
         </>
       ) : (
         <>
@@ -41,15 +42,18 @@ export function HeroSection({
         </>
       )}
 
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30" />
-
       <div className="relative z-10 mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 lg:px-8">
         <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
-          <h1 className="text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+          {tagline && (
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-berea-gold">
+              {tagline}
+            </p>
+          )}
+          <h1 className="mt-6 text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
             {title}
           </h1>
           {subtitle && (
-            <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-white/75 sm:text-xl">
+            <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-white/80 sm:text-xl">
               {subtitle}
             </p>
           )}

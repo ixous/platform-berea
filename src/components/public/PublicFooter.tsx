@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Phone, Mail, MapPin } from "lucide-react";
 
 export function PublicFooter() {
@@ -7,12 +8,19 @@ export function PublicFooter() {
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
-                <span className="text-sm font-bold text-berea-gold">CCB</span>
-              </div>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/images/logo.png"
+                alt="Centro Cristiano Berea"
+                width={52}
+                height={52}
+                className="h-11 w-11 rounded-full object-contain lg:h-[52px] lg:w-[52px]"
+              />
               <h3 className="text-lg font-bold">Centro Cristiano Berea</h3>
             </div>
+            <p className="mt-5 text-sm leading-relaxed text-white/60">
+              Pastores C&eacute;sar y Claudia Villanueva
+            </p>
             <p className="mt-5 text-sm leading-relaxed text-white/60">
               &ldquo;Y todo lo que hagan, h&aacute;ganlo de coraz&oacute;n, como para el
               Se&ntilde;or y no para los hombres.&rdquo;
@@ -52,14 +60,15 @@ export function PublicFooter() {
             <div className="mt-2 h-0.5 w-8 rounded-full bg-berea-gold/30" />
             <div className="mt-5 space-y-3 text-sm text-white/60">
               <p>
-                <span className="font-medium text-white">Domingo:</span> 10:00 AM y 12:30 PM
+                <span className="font-medium text-white">Domingo:</span> 11:00 AM a 1:00 PM
               </p>
               <p>
-                <span className="font-medium text-white">Mi&eacute;rcoles:</span> 7:00 PM
+                <span className="font-medium text-white">Mi&eacute;rcoles:</span> Escuela de L&iacute;deres 8:00 PM
               </p>
-              <p className="mt-4 text-xs italic text-white/40">
-                Los horarios ser&aacute;n administrables desde el CMS.
+              <p>
+                <span className="font-medium text-white">Jueves:</span> Escuela de Ministerios 8:00 PM
               </p>
+              <p className="text-xs italic text-white/40">Duraci&oacute;n aproximada: 2 horas</p>
             </div>
           </div>
 
@@ -71,15 +80,27 @@ export function PublicFooter() {
             <div className="mt-5 space-y-4 text-sm text-white/60">
               <div className="flex items-start gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-berea-gold/60" />
-                <span>Mexicali, Baja California, M&eacute;xico</span>
+                <span>
+                  C. Tercera 109<br />
+                  Zona Urbana Xochimilco<br />
+                  Mexicali, Baja California<br />
+                  C.P. 21380
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-berea-gold/60" />
-                <span>[Tel&eacute;fono pendiente]</span>
+                <a href="tel:+526865556149" className="transition-colors hover:text-white">
+                  686 555 6149
+                </a>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="h-4 w-4 shrink-0 text-berea-gold/60" />
-                <span>[Correo pendiente]</span>
+                <a
+                  href="mailto:centrocristianobereamxli@gmail.com"
+                  className="break-all transition-colors hover:text-white"
+                >
+                  centrocristianobereamxli@gmail.com
+                </a>
               </div>
             </div>
           </div>

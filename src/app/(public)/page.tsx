@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { events, devotionals, ministries, settings, media } from "@/lib/db/schema";
+import { events, devotionals, ministries } from "@/lib/db/schema";
 import { eq, and, isNull, gte, desc } from "drizzle-orm";
 import Link from "next/link";
 import { HeroSection } from "@/components/public/HeroSection";
@@ -20,28 +20,6 @@ export const metadata: Metadata = {
       "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios.",
   },
 };
-
-async function getSiteName() {
-  const [setting] = await db
-    .select()
-    .from(settings)
-    .where(and(eq(settings.key, "site_name"), isNull(settings.deletedAt)))
-    .limit(1);
-
-  if (!setting) return "Centro Cristiano Berea";
-
-  const value = setting.value as Record<string, string>;
-  return value?.es || "Centro Cristiano Berea";
-}
-
-async function getHeroImage() {
-  const [item] = await db
-    .select({ url: media.url })
-    .from(media)
-    .where(and(eq(media.mediaType, "image"), isNull(media.deletedAt)))
-    .limit(1);
-  return item?.url ?? null;
-}
 
 async function getUpcomingEvents() {
   return db
@@ -77,8 +55,6 @@ async function getActiveMinistries() {
 }
 
 export default async function HomePage() {
-  const siteName = await getSiteName();
-  const heroImage = await getHeroImage();
   const [upcomingEvents, recentDevotionals, activeMinistries] = await Promise.all([
     getUpcomingEvents(),
     getRecentDevotionals(),
@@ -88,13 +64,14 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection
-        title={siteName}
-        subtitle="Una iglesia comprometida con la Palabra de Dios, ubicada en Mexicali, Baja California, M\u00e9xico."
+        tagline="BIENVENIDOS"
+        title="Centro Cristiano Berea"
+        subtitle="Un lugar para conocer a Cristo, crecer en Su Palabra y servir con prop\u00f3sito."
         ctaText="Con\u00f3cenos"
         ctaHref="/quienes-somos"
-        secondaryCtaText="Ubicaci\u00f3n y horarios"
+        secondaryCtaText="Horarios de Servicio"
         secondaryCtaHref="/contacto"
-        backgroundImage={heroImage}
+        backgroundImage="/images/banner_berea.png"
       />
 
       <ContentBlock>
@@ -106,9 +83,10 @@ export default async function HomePage() {
             Una familia que vive para Cristo
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-berea-muted">
-            En Centro Cristiano Berea encontrar\u00e1s un lugar donde la Palabra de Dios es el
-            fundamento de todo lo que hacemos. Nuestra misi\u00f3n es formar disc\u00edpulos,
-            fortalecer familias y alcanzar a nuestra comunidad con el amor de Cristo.
+            En Centro Cristiano Berea creemos que cada persona puede encontrar esperanza,
+            prop\u00f3sito y una familia espiritual en Cristo. Nuestra misi\u00f3n es ense\u00f1ar
+            fielmente la Palabra de Dios, formar disc\u00edpulos y servir a nuestra comunidad con
+            amor.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
@@ -135,7 +113,7 @@ export default async function HomePage() {
               {
                 icon: Church,
                 title: "Servicios",
-                desc: "Domingo 10:00 AM y 12:30 PM · Mi\u00e9rcoles 7:00 PM",
+                desc: "Domingo 11:00 AM · Mi\u00e9rcoles Escuela de L\u00edderes 8:00 PM · Jueves Escuela de Ministerios 8:00 PM",
               },
               {
                 icon: CalendarDays,
