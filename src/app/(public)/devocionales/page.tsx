@@ -5,6 +5,7 @@ import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
 import { Card, CardCategory, CardTitle, CardDescription } from "@/components/public/Card";
+import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -35,34 +36,34 @@ export default async function DevocionalesPage() {
       />
 
       {items.length > 0 ? (
-        <ContentBlock variant="cream">
-          <div className="mx-auto max-w-4xl">
-            <div className="grid gap-8 sm:grid-cols-2">
-              {items.map((d, i) => (
-                <Card
-                  key={d.id}
-                  href={`/devocionales/${d.slug}`}
-                  className={`animate-fade-up animation-delay-${Math.min((i + 1) * 50, 950)}`}
-                >
-                  <CardCategory>Devocional</CardCategory>
-                  <CardTitle>{d.title}</CardTitle>
-                  {d.verse && (
-                    <p className="mt-3 text-sm italic text-berea-gold/70 line-clamp-2">{d.verse}</p>
-                  )}
-                  {d.excerpt && <CardDescription>{d.excerpt}</CardDescription>}
-                  {d.publishedAt && (
-                    <p className="mt-4 text-xs text-berea-muted">
-                      {new Date(d.publishedAt).toLocaleDateString("es-MX", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </p>
-                  )}
-                </Card>
-              ))}
+        <ContentBlock variant="gold-mist">
+          <ScrollReveal animation="fade-up">
+            <div className="mx-auto max-w-4xl">
+              <div className="grid gap-8 sm:grid-cols-2">
+                {items.map((d, i) => (
+                  <Card key={d.id} href={`/devocionales/${d.slug}`} className="">
+                    <CardCategory>Devocional</CardCategory>
+                    <CardTitle>{d.title}</CardTitle>
+                    {d.verse && (
+                      <p className="mt-3 text-sm italic text-berea-gold/70 line-clamp-2">
+                        {d.verse}
+                      </p>
+                    )}
+                    {d.excerpt && <CardDescription>{d.excerpt}</CardDescription>}
+                    {d.publishedAt && (
+                      <p className="mt-4 text-xs text-berea-muted">
+                        {new Date(d.publishedAt).toLocaleDateString("es-MX", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </p>
+                    )}
+                  </Card>
+                ))}
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </ContentBlock>
       ) : (
         <EmptySection

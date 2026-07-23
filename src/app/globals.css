@@ -139,70 +139,218 @@
   }
 }
 
-@layer utilities {
-  .animate-fade-up {
-    animation: fadeUp 0.6s ease-out both;
-  }
-  .animate-fade-in {
-    animation: fadeIn 0.4s ease-out both;
-  }
-  .animation-delay-50 {
-    animation-delay: 50ms;
-  }
-  .animation-delay-100 {
-    animation-delay: 100ms;
-  }
-  .animation-delay-150 {
-    animation-delay: 150ms;
-  }
-  .animation-delay-200 {
-    animation-delay: 200ms;
-  }
-  .animation-delay-250 {
-    animation-delay: 250ms;
-  }
-  .animation-delay-300 {
-    animation-delay: 300ms;
-  }
-  .animation-delay-350 {
-    animation-delay: 350ms;
-  }
-  .animation-delay-400 {
-    animation-delay: 400ms;
-  }
-  .animation-delay-450 {
-    animation-delay: 450ms;
-  }
-  .animation-delay-500 {
-    animation-delay: 500ms;
-  }
-  .animation-delay-550 {
-    animation-delay: 550ms;
-  }
-  .animation-delay-600 {
-    animation-delay: 600ms;
-  }
-  .animation-delay-650 {
-    animation-delay: 650ms;
-  }
-  .animation-delay-700 {
-    animation-delay: 700ms;
-  }
-  .animation-delay-750 {
-    animation-delay: 750ms;
-  }
-  .animation-delay-800 {
-    animation-delay: 800ms;
-  }
-  .animation-delay-850 {
-    animation-delay: 850ms;
-  }
-  .animation-delay-900 {
-    animation-delay: 900ms;
-  }
-  .animation-delay-950 {
-    animation-delay: 950ms;
-  }
+@utility animate-fade-up {
+  animation: fadeUp 0.6s ease-out both;
+}
+@utility animate-fade-in {
+  animation: fadeIn 0.4s ease-out both;
+}
+@utility animate-scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
+  background-size: 200% 100%;
+}
+@utility animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+@utility animate-glow-pulse {
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+@utility animation-delay-50 {
+  animation-delay: 50ms;
+}
+@utility animation-delay-100 {
+  animation-delay: 100ms;
+}
+@utility animation-delay-150 {
+  animation-delay: 150ms;
+}
+@utility animation-delay-200 {
+  animation-delay: 200ms;
+}
+@utility animation-delay-250 {
+  animation-delay: 250ms;
+}
+@utility animation-delay-300 {
+  animation-delay: 300ms;
+}
+@utility animation-delay-350 {
+  animation-delay: 350ms;
+}
+@utility animation-delay-400 {
+  animation-delay: 400ms;
+}
+@utility animation-delay-450 {
+  animation-delay: 450ms;
+}
+@utility animation-delay-500 {
+  animation-delay: 500ms;
+}
+@utility animation-delay-550 {
+  animation-delay: 550ms;
+}
+@utility animation-delay-600 {
+  animation-delay: 600ms;
+}
+@utility animation-delay-650 {
+  animation-delay: 650ms;
+}
+@utility animation-delay-700 {
+  animation-delay: 700ms;
+}
+@utility animation-delay-750 {
+  animation-delay: 750ms;
+}
+@utility animation-delay-800 {
+  animation-delay: 800ms;
+}
+@utility animation-delay-850 {
+  animation-delay: 850ms;
+}
+@utility animation-delay-900 {
+  animation-delay: 900ms;
+}
+@utility animation-delay-950 {
+  animation-delay: 950ms;
+}
+@utility animation-delay-1000 {
+  animation-delay: 1000ms;
+}
+@utility animation-delay-1100 {
+  animation-delay: 1100ms;
+}
+@utility animation-delay-1200 {
+  animation-delay: 1200ms;
+}
+
+@utility bg-texture-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+@utility bg-radial-gold {
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(201, 162, 39, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(201, 162, 39, 0.04) 0%, transparent 40%);
+}
+
+@utility bg-radial-gold-strong {
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(201, 162, 39, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(201, 162, 39, 0.06) 0%, transparent 40%);
+}
+
+@utility bg-radial-light {
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(255, 255, 255, 0.3) 0%, transparent 40%);
+}
+
+@utility bg-radial-navy {
+  background-image:
+    radial-gradient(ellipse at 50% 30%, rgba(201, 162, 39, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 40%);
+}
+
+@utility bg-mesh-warm {
+  background-image:
+    radial-gradient(ellipse at 15% 20%, rgba(201, 162, 39, 0.06) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 15%, rgba(201, 162, 39, 0.04) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 80%, rgba(15, 39, 71, 0.03) 0%, transparent 45%);
+}
+
+@utility bg-mesh-cream {
+  background-image:
+    radial-gradient(ellipse at 0% 50%, rgba(201, 162, 39, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 50%, rgba(201, 162, 39, 0.03) 0%, transparent 50%);
+}
+
+@utility bg-section-warm {
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(201, 162, 39, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(201, 162, 39, 0.04) 0%, transparent 40%),
+    linear-gradient(to bottom, #ffffff, #fafafa);
+}
+
+@utility bg-section-gold-mist {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(201, 162, 39, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(201, 162, 39, 0.05) 0%, transparent 40%),
+    linear-gradient(to bottom, #ffffff, #f8f6f0);
+}
+
+@utility bg-section-light {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.8) 0%, transparent 50%),
+    linear-gradient(to bottom, #f5f7fa, #eef1f5);
+}
+
+@utility bg-section-navy {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(201, 162, 39, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(255, 255, 255, 0.04) 0%, transparent 40%),
+    linear-gradient(to bottom, #0f2747, #0a1a30);
+}
+
+@utility bg-section-navy-warm {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(201, 162, 39, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(201, 162, 39, 0.06) 0%, transparent 40%),
+    linear-gradient(to bottom, #122d52, #0a1a30);
+}
+
+@utility text-gradient-gold {
+  background: linear-gradient(135deg, #c9a227, #d4b44f, #c9a227);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@utility glass-card-strong {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.section-divider-top::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201, 162, 39, 0.2), transparent);
+}
+
+.section-divider-bottom::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201, 162, 39, 0.15), transparent);
+}
+
+.decorative-dot::before {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(201, 162, 39, 0.3);
 }
 
 @keyframes fadeUp {
@@ -222,6 +370,69 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes revealStaggerItem {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes aurora {
+  0% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(50%) translateY(-10px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
   }
 }
 

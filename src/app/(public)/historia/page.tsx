@@ -3,6 +3,7 @@ import { pages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
+import { ScrollReveal } from "@/components/public/ScrollReveal";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -40,30 +41,32 @@ export default async function HistoriaPage() {
         subtitle="Conoce cómo Dios ha guiado a nuestra iglesia."
       />
 
-      <ContentBlock variant="cream">
+      <ContentBlock variant="warm">
         <ContentNarrow>
-          {page?.content ? (
-            <div className="space-y-8 text-berea-muted leading-relaxed">
-              {renderContent(page.content)}
-            </div>
-          ) : (
-            <div className="space-y-8 text-berea-muted leading-relaxed">
-              <p>
-                La historia de Centro Cristiano Berea es un testimonio de la fidelidad de Dios.
-                Desde sus humildes inicios, la iglesia ha crecido y se ha consolidado como una
-                comunidad de fe vibrante en Mexicali, Baja California.
-              </p>
-              <p>
-                Fundada con la visión de ser una iglesia centrada en la Palabra, Berea ha sido un
-                faro de esperanza para miles de personas que han encontrado en sus servicios un
-                lugar de encuentro con Dios.
-              </p>
-              <p>
-                A lo largo de los años, la iglesia ha experimentado un crecimiento constante,
-                expandiendo sus instalaciones, ministerios y alcance comunitario.
-              </p>
-            </div>
-          )}
+          <ScrollReveal animation="fade-up">
+            {page?.content ? (
+              <div className="space-y-8 leading-relaxed text-berea-muted">
+                {renderContent(page.content)}
+              </div>
+            ) : (
+              <div className="space-y-8 leading-relaxed text-berea-muted">
+                <p>
+                  La historia de Centro Cristiano Berea es un testimonio de la fidelidad de Dios.
+                  Desde sus humildes inicios, la iglesia ha crecido y se ha consolidado como una
+                  comunidad de fe vibrante en Mexicali, Baja California.
+                </p>
+                <p>
+                  Fundada con la visión de ser una iglesia centrada en la Palabra, Berea ha sido un
+                  faro de esperanza para miles de personas que han encontrado en sus servicios un
+                  lugar de encuentro con Dios.
+                </p>
+                <p>
+                  A lo largo de los años, la iglesia ha experimentado un crecimiento constante,
+                  expandiendo sus instalaciones, ministerios y alcance comunitario.
+                </p>
+              </div>
+            )}
+          </ScrollReveal>
         </ContentNarrow>
       </ContentBlock>
     </>

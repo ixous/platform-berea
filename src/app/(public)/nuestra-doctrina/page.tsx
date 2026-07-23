@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
 import { Card, CardTitle, CardDescription } from "@/components/public/Card";
+import { ScrollReveal } from "@/components/public/ScrollReveal";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -57,21 +58,20 @@ export default async function DoctrinaPage() {
         backgroundImage="/images/banner-doctrina.png"
       />
 
-      <ContentBlock variant="cream">
-        <div className="mx-auto max-w-4xl">
-          <div className="grid gap-8 sm:grid-cols-2">
-            {doctrinalPoints.map((p, i) => (
-              <Card
-                key={p.title}
-                className={`animate-fade-up p-8 animation-delay-${Math.min((i + 1) * 100, 950)}`}
-              >
-                <CardTitle className="mt-0">{p.title}</CardTitle>
-                <div className="mt-3 h-0.5 w-8 rounded-full bg-berea-gold/40" />
-                <CardDescription className="mt-4">{p.desc}</CardDescription>
-              </Card>
-            ))}
+      <ContentBlock variant="gold-mist">
+        <ScrollReveal animation="fade-up">
+          <div className="mx-auto max-w-4xl">
+            <div className="grid gap-8 sm:grid-cols-2">
+              {doctrinalPoints.map((p) => (
+                <Card key={p.title} className="p-8">
+                  <CardTitle className="mt-0">{p.title}</CardTitle>
+                  <div className="mt-3 h-0.5 w-8 rounded-full bg-berea-gold/40" />
+                  <CardDescription className="mt-4">{p.desc}</CardDescription>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </ContentBlock>
     </>
   );

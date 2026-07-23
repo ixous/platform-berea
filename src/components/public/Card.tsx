@@ -6,10 +6,22 @@ interface CardProps {
   href?: string;
   className?: string;
   padded?: boolean;
+  glass?: boolean;
 }
 
-export function Card({ children, href, className = "", padded = true }: CardProps) {
-  const classes = `rounded-2xl border border-berea-border/60 bg-white shadow-sm transition-all duration-300 motion-reduce:transition-none hover:shadow-md hover:-translate-y-1 motion-reduce:hover:translate-y-0 ${padded ? "p-6" : ""} ${className}`;
+export function Card({
+  children,
+  href,
+  className = "",
+  padded = true,
+  glass = false,
+}: CardProps) {
+  const base = glass ? "glass-card" : "bg-white";
+  const classes = `rounded-2xl border transition-all duration-300 motion-reduce:transition-none ${base} ${
+    glass
+      ? "border-white/20 hover:bg-white/80 hover:shadow-lg hover:-translate-y-1.5 motion-reduce:hover:translate-y-0"
+      : "border-berea-border/60 shadow-sm hover:shadow-lg hover:-translate-y-1.5 motion-reduce:hover:translate-y-0"
+  } ${padded ? "p-6" : ""} ${className}`;
 
   if (href) {
     return (
@@ -30,7 +42,9 @@ export function CardCategory({
   className?: string;
 }) {
   return (
-    <p className={`text-xs font-semibold uppercase tracking-widest text-berea-gold ${className}`}>
+    <p
+      className={`text-xs font-semibold uppercase tracking-widest text-berea-gold ${className}`}
+    >
       {children}
     </p>
   );
@@ -60,7 +74,11 @@ export function CardDescription({
   className?: string;
 }) {
   return (
-    <p className={`mt-2 text-sm leading-relaxed text-berea-muted ${className}`}>{children}</p>
+    <p
+      className={`mt-2 text-sm leading-relaxed text-berea-muted ${className}`}
+    >
+      {children}
+    </p>
   );
 }
 

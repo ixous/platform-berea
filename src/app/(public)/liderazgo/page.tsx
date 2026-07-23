@@ -5,6 +5,7 @@ import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
 import { Card } from "@/components/public/Card";
+import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { Users } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -30,25 +31,24 @@ export default async function LiderazgoPage() {
       <PageBanner title="Liderazgo" subtitle="Conoce a quienes guían nuestra iglesia." />
 
       {leaders.length > 0 ? (
-        <ContentBlock variant="cream">
-          <div className="mx-auto max-w-5xl">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {leaders.map((leader, i) => (
-                <Card
-                  key={leader.id}
-                  className={`animate-fade-up p-8 text-center animation-delay-${Math.min((i + 1) * 100, 950)}`}
-                >
-                  <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-berea-navy/10 to-berea-gold/10">
-                    <span className="text-4xl font-bold text-berea-navy/25">
-                      {leader.name?.charAt(0) || "?"}
-                    </span>
-                  </div>
-                  <h3 className="mt-5 text-lg font-bold text-berea-navy">{leader.name}</h3>
-                  <p className="mt-1 text-sm text-berea-muted">Líder</p>
-                </Card>
-              ))}
+        <ContentBlock variant="warm">
+          <ScrollReveal animation="fade-up">
+            <div className="mx-auto max-w-5xl">
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {leaders.map((leader) => (
+                  <Card key={leader.id} className="p-8 text-center">
+                    <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-berea-navy/10 to-berea-gold/10">
+                      <span className="text-4xl font-bold text-berea-navy/25">
+                        {leader.name?.charAt(0) || "?"}
+                      </span>
+                    </div>
+                    <h3 className="mt-5 text-lg font-bold text-berea-navy">{leader.name}</h3>
+                    <p className="mt-1 text-sm text-berea-muted">Líder</p>
+                  </Card>
+                ))}
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </ContentBlock>
       ) : (
         <EmptySection

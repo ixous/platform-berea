@@ -5,6 +5,7 @@ import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
 import { Card, CardDescription } from "@/components/public/Card";
+import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { Church, Users, MapPin, Clock } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -34,43 +35,42 @@ export default async function MinisteriosActivosPage() {
       />
 
       {items.length > 0 ? (
-        <ContentBlock variant="cream">
-          <div className="mx-auto max-w-5xl">
-            <div className="grid gap-8 sm:grid-cols-2">
-              {items.map((m, i) => (
-                <Card
-                  key={m.id}
-                  className={`animate-fade-up p-8 animation-delay-${Math.min((i + 1) * 100, 950)}`}
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
-                    <Church className="h-6 w-6 text-berea-gold/60" />
-                  </div>
-                  <h3 className="mt-4 text-xl font-bold text-berea-navy">{m.name}</h3>
-                  {m.description && <CardDescription>{m.description}</CardDescription>}
-                  <div className="mt-6 space-y-2 text-sm">
-                    {m.leader && (
-                      <p className="flex items-center gap-2 text-berea-navy">
-                        <Users className="h-4 w-4 text-berea-gold/60" />
-                        <strong>{m.leader}</strong>
-                      </p>
-                    )}
-                    {m.schedule && (
-                      <p className="flex items-center gap-2 text-berea-muted">
-                        <Clock className="h-4 w-4 text-berea-gold/40" />
-                        {m.schedule}
-                      </p>
-                    )}
-                    {m.location && (
-                      <p className="flex items-center gap-2 text-berea-muted">
-                        <MapPin className="h-4 w-4 text-berea-gold/40" />
-                        {m.location}
-                      </p>
-                    )}
-                  </div>
-                </Card>
-              ))}
+        <ContentBlock variant="gold-mist">
+          <ScrollReveal animation="fade-up">
+            <div className="mx-auto max-w-5xl">
+              <div className="grid gap-8 sm:grid-cols-2">
+                {items.map((m) => (
+                  <Card key={m.id} className="p-8">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
+                      <Church className="h-6 w-6 text-berea-gold/60" />
+                    </div>
+                    <h3 className="mt-4 text-xl font-bold text-berea-navy">{m.name}</h3>
+                    {m.description && <CardDescription>{m.description}</CardDescription>}
+                    <div className="mt-6 space-y-2 text-sm">
+                      {m.leader && (
+                        <p className="flex items-center gap-2 text-berea-navy">
+                          <Users className="h-4 w-4 text-berea-gold/60" />
+                          <strong>{m.leader}</strong>
+                        </p>
+                      )}
+                      {m.schedule && (
+                        <p className="flex items-center gap-2 text-berea-muted">
+                          <Clock className="h-4 w-4 text-berea-gold/40" />
+                          {m.schedule}
+                        </p>
+                      )}
+                      {m.location && (
+                        <p className="flex items-center gap-2 text-berea-muted">
+                          <MapPin className="h-4 w-4 text-berea-gold/40" />
+                          {m.location}
+                        </p>
+                      )}
+                    </div>
+                  </Card>
+                ))}
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </ContentBlock>
       ) : (
         <EmptySection
