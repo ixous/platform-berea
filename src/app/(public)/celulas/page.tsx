@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 import { cells } from "@/lib/db/schema";
 import { and, isNull, eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
+import { ContentBlock } from "@/components/public/ContentBlock";
+import { Card } from "@/components/public/Card";
 import { MapPin, Clock, User } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -36,56 +38,60 @@ export default async function CelulasPage() {
       />
 
       {items.length > 0 ? (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
+        <ContentBlock>
           <div className="mx-auto max-w-5xl">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((c) => (
-                <div key={c.id} className="rounded-lg border border-berea-border bg-white p-6">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((c, i) => (
+                <Card
+                  key={c.id}
+                  className={`animate-fade-up p-8 animation-delay-${Math.min((i + 1) * 100, 950)}`}
+                >
                   <h3 className="text-lg font-bold text-berea-navy">{c.name}</h3>
-                  <div className="mt-3 space-y-2 text-sm text-berea-muted">
+                  <div className="mt-4 space-y-3 text-sm text-berea-muted">
                     {c.type && (
-                      <p className="flex items-center gap-1.5">
-                        <span className="rounded bg-berea-light px-2 py-0.5 text-xs font-medium">
-                          {c.type}
-                        </span>
-                      </p>
+                      <span className="inline-block rounded-lg bg-berea-light px-3 py-1 text-xs font-medium text-berea-navy">
+                        {c.type}
+                      </span>
                     )}
                     {c.leader && (
-                      <p className="flex items-center gap-1.5">
-                        <User className="h-3.5 w-3.5" />
+                      <p className="flex items-center gap-2">
+                        <User className="h-4 w-4 text-berea-gold/60" />
                         {c.leader}
                       </p>
                     )}
                     {c.meetingDay && c.meetingTime && (
-                      <p className="flex items-center gap-1.5">
-                        <Clock className="h-3.5 w-3.5" />
+                      <p className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-berea-gold/40" />
                         {c.meetingDay} &middot; {c.meetingTime}
                       </p>
                     )}
                     {c.address && (
-                      <p className="flex items-center gap-1.5">
-                        <MapPin className="h-3.5 w-3.5" />
+                      <p className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-berea-gold/40" />
                         {c.address}
                       </p>
                     )}
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
           </div>
-        </section>
+        </ContentBlock>
       ) : (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
+        <ContentBlock>
           <div className="mx-auto max-w-4xl">
-            <div className="mb-12 grid gap-6 sm:grid-cols-3">
-              {cellTypes.map((t) => (
-                <div
+            <div className="mb-14 grid gap-8 sm:grid-cols-3">
+              {cellTypes.map((t, i) => (
+                <Card
                   key={t.name}
-                  className="rounded-lg border border-berea-border bg-white p-6 text-center"
+                  className={`animate-fade-up p-8 text-center animation-delay-${Math.min((i + 1) * 100, 950)}`}
                 >
-                  <h3 className="text-lg font-bold text-berea-navy">{t.name}</h3>
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
+                    <User className="h-6 w-6 text-berea-gold/60" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-bold text-berea-navy">{t.name}</h3>
                   <p className="mt-2 text-sm text-berea-muted">{t.desc}</p>
-                </div>
+                </Card>
               ))}
             </div>
             <p className="text-center text-sm text-berea-muted">
@@ -93,7 +99,7 @@ export default async function CelulasPage() {
               activas con su ubicaci\u00f3n, horario e informaci\u00f3n de contacto.
             </p>
           </div>
-        </section>
+        </ContentBlock>
       )}
     </>
   );

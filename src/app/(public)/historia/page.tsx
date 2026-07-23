@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { pages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
+import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -39,39 +40,39 @@ export default async function HistoriaPage() {
         subtitle="Conoce c\u00f3mo Dios ha guiado a nuestra iglesia."
       />
 
-      <section className="px-4 py-24 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl">
+      <ContentBlock>
+        <ContentNarrow>
           {page?.content ? (
-            <div className="space-y-6 text-berea-muted leading-relaxed">
+            <div className="space-y-8 text-berea-muted leading-relaxed">
               {renderContent(page.content)}
             </div>
           ) : (
-            <div className="space-y-6 text-berea-muted leading-relaxed">
+            <div className="space-y-8 text-berea-muted leading-relaxed">
               <p>
                 La historia de Centro Cristiano Berea es un testimonio de la fidelidad de Dios.
                 Desde sus humildes inicios, la iglesia ha crecido y se ha consolidado como una
                 comunidad de fe vibrante en Mexicali, Baja California.
               </p>
               <p>
-                Fundada con la visi&oacute;n de ser una iglesia centrada en la Palabra, Berea ha
-                sido un faro de esperanza para miles de personas que han encontrado en sus servicios
-                un lugar de encuentro con Dios.
+                Fundada con la visi\u00f3n de ser una iglesia centrada en la Palabra, Berea ha sido
+                un faro de esperanza para miles de personas que han encontrado en sus servicios un
+                lugar de encuentro con Dios.
               </p>
               <p>
-                A lo largo de los a&ntilde;os, la iglesia ha experimentado un crecimiento constante,
+                A lo largo de los a\u00f1os, la iglesia ha experimentado un crecimiento constante,
                 expandiendo sus instalaciones, ministerios y alcance comunitario.
               </p>
             </div>
           )}
-          <div className="mt-8 rounded-lg border border-berea-border bg-berea-light p-6">
+          <div className="mt-12 rounded-xl border border-berea-border bg-berea-light p-8">
             <p className="text-sm text-berea-muted">
-              Esta secci&oacute;n es administrable desde el CMS. Una vez que el equipo de Centro
-              Cristiano Berea proporcione el contenido hist&oacute;rico oficial, se
-              actualizar&aacute; autom&aacute;ticamente.
+              Esta secci\u00f3n es administrable desde el CMS. Una vez que el equipo de Centro
+              Cristiano Berea proporcione el contenido hist\u00f3rico oficial, se actualizar\u00e1
+              autom\u00e1ticamente.
             </p>
           </div>
-        </div>
-      </section>
+        </ContentNarrow>
+      </ContentBlock>
     </>
   );
 }

@@ -1,9 +1,10 @@
 import { db } from "@/lib/db";
 import { events } from "@/lib/db/schema";
 import { and, isNull, eq, gte } from "drizzle-orm";
-import Link from "next/link";
 import { PageBanner } from "@/components/public/PageBanner";
+import { ContentBlock } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
+import { Card, CardTitle, CardDescription } from "@/components/public/Card";
 import { CalendarDays, MapPin, Clock } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -36,28 +37,24 @@ export default async function EventosPage() {
       <PageBanner title="Eventos" subtitle="Mantente al d\u00eda con nuestras actividades." />
 
       {items.length > 0 ? (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
+        <ContentBlock>
           <div className="mx-auto max-w-4xl">
             <div className="space-y-6">
-              {items.map((e) => (
-                <Link
+              {items.map((e, i) => (
+                <Card
                   key={e.id}
                   href={`/eventos/${e.slug}`}
-                  className="group flex flex-col gap-4 rounded-lg border border-berea-border bg-white p-6 transition-shadow hover:shadow-md sm:flex-row sm:items-center"
+                  className={`animate-fade-up !flex flex-col gap-6 p-8 sm:flex-row sm:items-center animation-delay-${Math.min((i + 1) * 50, 950)}`}
                 >
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-berea-navy">
-                    <CalendarDays className="h-6 w-6 text-berea-gold" />
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-berea-navy/5">
+                    <CalendarDays className="h-7 w-7 text-berea-gold" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-lg font-bold text-berea-navy group-hover:text-berea-gold">
-                      {e.title}
-                    </h3>
-                    {e.description && (
-                      <p className="mt-1 text-sm text-berea-muted line-clamp-2">{e.description}</p>
-                    )}
-                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-berea-muted">
-                      <span className="flex items-center gap-1">
-                        <CalendarDays className="h-3 w-3" />
+                    <CardTitle className="mt-0">{e.title}</CardTitle>
+                    {e.description && <CardDescription>{e.description}</CardDescription>}
+                    <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-berea-muted">
+                      <span className="flex items-center gap-1.5">
+                        <CalendarDays className="h-3.5 w-3.5 text-berea-gold/60" />
                         {new Date(e.startDate).toLocaleDateString("es-MX", {
                           day: "numeric",
                           month: "long",
@@ -65,28 +62,29 @@ export default async function EventosPage() {
                         })}
                       </span>
                       {e.time && (
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="h-3.5 w-3.5 text-berea-gold/60" />
                           {e.time}
                         </span>
                       )}
                       {e.location && (
-                        <span className="flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
+                        <span className="flex items-center gap-1.5">
+                          <MapPin className="h-3.5 w-3.5 text-berea-gold/60" />
                           {e.location}
                         </span>
                       )}
                     </div>
                   </div>
-                </Link>
+                </Card>
               ))}
             </div>
           </div>
-        </section>
+        </ContentBlock>
       ) : (
         <EmptySection
           title="Eventos"
           message="Pr\u00f3ximamente podr\u00e1s consultar aqu\u00ed los eventos y actividades de la iglesia."
+          icon={CalendarDays}
         />
       )}
     </>

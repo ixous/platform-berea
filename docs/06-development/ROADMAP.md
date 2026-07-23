@@ -122,7 +122,7 @@ Fundación del Proyecto
 
 Estado:
 
-Pendiente
+✅ Completada
 
 Objetivos
 
@@ -154,7 +154,7 @@ Base de Datos
 
 Estado:
 
-Pendiente
+✅ Completada
 
 Objetivos
 
@@ -182,7 +182,7 @@ Autenticación y Seguridad
 
 Estado:
 
-Pendiente
+✅ Completada
 
 Objetivos
 
@@ -210,7 +210,7 @@ CMS Core
 
 Estado:
 
-Pendiente
+✅ Completada
 
 Objetivos
 
@@ -238,7 +238,7 @@ Biblioteca Multimedia (Core)
 
 Estado:
 
-✅ Completada (solo lectura)
+✅ Completada
 
 Incluye:
 
@@ -290,11 +290,11 @@ Pendiente:
 
 \# FASE 7
 
-Ministerios
+Refinamiento Visual y Design System
 
 Estado:
 
-Pendiente
+✅ Completada
 
 Objetivos
 
@@ -364,7 +364,70 @@ Mapa interactivo de células.
 
 \# FASE 10
 
-Devocionales
+Interacción Pública — Formulario de Contacto
+
+Estado:
+
+✅ Completada (FASE 10A)
+
+Incluye:
+
+\- Formulario de contacto funcional en /contacto.
+\- Validación Zod, Turnstile, rate limiting, sanitización.
+\- Confirmación visual y email automático al remitente.
+\- Notificación al administrador por email.
+\- Bandeja de entrada en /admin/contact.
+\- Respuesta desde el panel administrativo.
+\- Gestión de estados (pendiente/leído/respondido/archivado).
+\- Infraestructura de email transaccional reutilizable.
+\- Tablas: contact_submissions, notifications.
+\- Menú admin con acceso a Bandeja de Entrada.
+\- Permiso contact-submissions.manage.
+
+Completado
+
+\- Registro a eventos (FASE 10B).
+
+Pendiente
+
+\- Solicitudes de ministerios y células (FASE 10C).
+
+\---
+
+\# FASE 10B
+
+Registro a Eventos
+
+Estado:
+
+Completado
+
+Objetivos
+
+\- Registro público a eventos con capacidad.
+\- Confirmación por email.
+\- Panel de gestión de registros en admin.
+\- Exportación de datos.
+
+Logros
+
+\- Tabla event_registrations con UNIQUE(eventId, email), índices y FK a events.
+\- Formulario público modal con Turnstile, validación Zod, rate limiting.
+\- Control de capacidad con SUM(guests) y verificación en servidor.
+\- Prevención de duplicados (UNIQUE constraint + check pre-insert).
+\- Dos templates de email reutilizando infraestructura FASE 10A.
+\- Panel admin con listado de eventos, búsqueda, filtros, paginación y acciones de estado.
+\- Exportación CSV vía API route con autenticación RBAC.
+\- Permiso event-registrations.manage asignado a Super Admin y Administrator.
+\- Migración 0003_soft_otto_octavius.sql generada.
+\- Audit log en cambios de estado y registro público.
+\- 0 errores lint, 0 errores tsc, 0 errores build.
+
+\---
+
+\# FASE 10C
+
+Solicitudes de Membresía
 
 Estado:
 
@@ -372,17 +435,9 @@ Pendiente
 
 Objetivos
 
-\- CRUD.
-
-\- Workflow.
-
-\- Versionado.
-
-\- SEO.
-
-Entregable
-
-Sistema de Devocionales.
+\- Botón "Quiero unirme" en ministerios, células y programas.
+\- Notificación al líder correspondiente.
+\- Panel de gestión en admin.
 
 \---
 

@@ -8,6 +8,27 @@
       "when": 1784594323927,
       "tag": "0000_regular_nehzno",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784760932475,
+      "tag": "0001_equal_shadowcat",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1784767114770,
+      "tag": "0002_cold_exiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1784768618404,
+      "tag": "0003_soft_otto_octavius",
+      "breakpoints": true
     }
   ]
 }

@@ -2,7 +2,9 @@ import { db } from "@/lib/db";
 import { annualVision } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
+import { ContentBlock } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
+import { Eye } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -32,34 +34,38 @@ export default async function VisionAnualPage() {
       />
 
       {vision ? (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="rounded-lg border border-berea-border bg-white p-10">
+        <ContentBlock>
+          <div className="mx-auto max-w-3xl">
+            <div className="rounded-2xl border border-berea-border bg-white p-12 text-center">
               {vision.year && (
-                <p className="text-sm font-semibold uppercase tracking-wider text-berea-gold">
+                <span className="inline-block rounded-full bg-berea-navy/5 px-4 py-1.5 text-sm font-semibold tracking-wider text-berea-gold">
                   Visi\u00f3n {vision.year}
-                </p>
+                </span>
               )}
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+              <h2 className="mt-6 text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
                 {vision.name}
               </h2>
               {vision.verse && (
-                <blockquote className="mx-auto mt-6 max-w-lg rounded-lg border-l-4 border-berea-gold bg-berea-light p-4 text-left italic text-berea-muted">
+                <blockquote className="mx-auto mt-8 max-w-lg rounded-xl border-l-4 border-berea-gold bg-berea-light p-6 text-left italic text-berea-muted">
                   {vision.verse}
                 </blockquote>
               )}
               {vision.description && (
-                <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-berea-muted">
+                <div className="mx-auto mt-8 h-0.5 w-20 rounded-full bg-berea-gold/30" />
+              )}
+              {vision.description && (
+                <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-berea-muted">
                   {vision.description}
                 </p>
               )}
             </div>
           </div>
-        </section>
+        </ContentBlock>
       ) : (
         <EmptySection
           title="Visi\u00f3n Anual"
           message="Pr\u00f3ximamente se publicar\u00e1 aqu\u00ed la visi\u00f3n anual de la iglesia."
+          icon={Eye}
         />
       )}
     </>

@@ -2,6 +2,9 @@ import { db } from "@/lib/db";
 import { biblicalPrograms } from "@/lib/db/schema";
 import { and, isNull, eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
+import { ContentBlock } from "@/components/public/ContentBlock";
+import { Card, CardDescription } from "@/components/public/Card";
+import { GraduationCap, Clock, User, Layers } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -48,54 +51,67 @@ export default async function FormacionBiblicaPage() {
       />
 
       {programs.length > 0 ? (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
+        <ContentBlock>
           <div className="mx-auto max-w-5xl">
             <div className="grid gap-8 sm:grid-cols-2">
-              {programs.map((p) => (
-                <div key={p.id} className="rounded-lg border border-berea-border bg-white p-6">
-                  <h3 className="text-xl font-bold text-berea-navy">{p.name}</h3>
-                  {p.description && (
-                    <p className="mt-3 text-sm leading-relaxed text-berea-muted">{p.description}</p>
-                  )}
-                  <div className="mt-4 space-y-1 text-sm">
+              {programs.map((p, i) => (
+                <Card
+                  key={p.id}
+                  className={`animate-fade-up p-8 animation-delay-${Math.min((i + 1) * 100, 950)}`}
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
+                    <GraduationCap className="h-6 w-6 text-berea-gold/60" />
+                  </div>
+                  <h3 className="mt-4 text-xl font-bold text-berea-navy">{p.name}</h3>
+                  {p.description && <CardDescription>{p.description}</CardDescription>}
+                  <div className="mt-5 space-y-2 text-sm">
                     {p.instructor && (
-                      <p className="text-berea-navy">
-                        <strong>Instructor:</strong> {p.instructor}
+                      <p className="flex items-center gap-2 text-berea-navy">
+                        <User className="h-4 w-4 text-berea-gold/60" />
+                        <strong>{p.instructor}</strong>
                       </p>
                     )}
                     {p.modality && (
-                      <p className="text-berea-muted">
-                        <strong>Modalidad:</strong> {p.modality}
+                      <p className="flex items-center gap-2 text-berea-muted">
+                        <Layers className="h-4 w-4 text-berea-gold/40" />
+                        {p.modality}
                       </p>
                     )}
                     {p.duration && (
-                      <p className="text-berea-muted">
-                        <strong>Duraci\u00f3n:</strong> {p.duration}
+                      <p className="flex items-center gap-2 text-berea-muted">
+                        <Clock className="h-4 w-4 text-berea-gold/40" />
+                        {p.duration}
                       </p>
                     )}
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
           </div>
-        </section>
+        </ContentBlock>
       ) : (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
+        <ContentBlock>
           <div className="mx-auto max-w-4xl">
-            <div className="grid gap-6 sm:grid-cols-2">
-              {programOverview.map((p) => (
-                <div key={p.name} className="rounded-lg border border-berea-border bg-white p-6">
-                  <h3 className="text-lg font-bold text-berea-navy">{p.name}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-berea-muted">{p.desc}</p>
-                </div>
+            <div className="grid gap-8 sm:grid-cols-2">
+              {programOverview.map((p, i) => (
+                <Card
+                  key={p.name}
+                  className={`animate-fade-up p-8 animation-delay-${Math.min((i + 1) * 100, 950)}`}
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
+                    <GraduationCap className="h-6 w-6 text-berea-gold/60" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-bold text-berea-navy">{p.name}</h3>
+                  <CardDescription>{p.desc}</CardDescription>
+                </Card>
               ))}
             </div>
-            <p className="mt-8 text-center text-sm text-berea-muted">
-              Cada programa ser&aacute; completamente administrable desde el CMS, con
-              informaci&oacute;n detallada de instructores, fechas, requisitos y modalidad.
+            <p className="mt-10 text-center text-sm text-berea-muted">
+              Cada programa ser\u00e1 completamente administrable desde el CMS, con informaci\u00f3n
+              detallada de instructores, fechas, requisitos y modalidad.
             </p>
           </div>
-        </section>
+        </ContentBlock>
       )}
     </>
   );

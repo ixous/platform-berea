@@ -1,9 +1,11 @@
 import { db } from "@/lib/db";
 import { devotionals } from "@/lib/db/schema";
 import { and, isNull, eq, desc } from "drizzle-orm";
-import Link from "next/link";
 import { PageBanner } from "@/components/public/PageBanner";
+import { ContentBlock } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
+import { Card, CardCategory, CardTitle, CardDescription } from "@/components/public/Card";
+import { BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -29,27 +31,23 @@ export default async function DevocionalesPage() {
       <PageBanner title="Devocionales" subtitle="Reflexiones b\u00edblicas para tu crecimiento." />
 
       {items.length > 0 ? (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
+        <ContentBlock>
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-8 sm:grid-cols-2">
-              {items.map((d) => (
-                <Link
+              {items.map((d, i) => (
+                <Card
                   key={d.id}
                   href={`/devocionales/${d.slug}`}
-                  className="group rounded-lg border border-berea-border bg-white p-6 transition-shadow hover:shadow-md"
+                  className={`animate-fade-up animation-delay-${Math.min((i + 1) * 50, 950)}`}
                 >
-                  <p className="text-xs font-semibold uppercase tracking-wider text-berea-gold">
-                    Devocional
-                  </p>
-                  <h3 className="mt-2 text-lg font-bold text-berea-navy group-hover:text-berea-gold">
-                    {d.title}
-                  </h3>
-                  {d.verse && <p className="mt-2 text-sm italic text-berea-muted">{d.verse}</p>}
-                  {d.excerpt && (
-                    <p className="mt-3 text-sm text-berea-muted line-clamp-3">{d.excerpt}</p>
+                  <CardCategory>Devocional</CardCategory>
+                  <CardTitle>{d.title}</CardTitle>
+                  {d.verse && (
+                    <p className="mt-3 text-sm italic text-berea-gold/70 line-clamp-2">{d.verse}</p>
                   )}
+                  {d.excerpt && <CardDescription>{d.excerpt}</CardDescription>}
                   {d.publishedAt && (
-                    <p className="mt-3 text-xs text-berea-muted">
+                    <p className="mt-4 text-xs text-berea-muted">
                       {new Date(d.publishedAt).toLocaleDateString("es-MX", {
                         day: "numeric",
                         month: "long",
@@ -57,15 +55,16 @@ export default async function DevocionalesPage() {
                       })}
                     </p>
                   )}
-                </Link>
+                </Card>
               ))}
             </div>
           </div>
-        </section>
+        </ContentBlock>
       ) : (
         <EmptySection
           title="Devocionales"
           message="Pr\u00f3ximamente publicaremos devocionales para tu crecimiento espiritual."
+          icon={BookOpen}
         />
       )}
     </>

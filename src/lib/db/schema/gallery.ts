@@ -13,5 +13,8 @@ export const gallery = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
   },
-  (table) => [index("idx_gallery_deleted_at").on(table.deletedAt)]
+  (table) => [
+    index("idx_gallery_deleted_at").on(table.deletedAt),
+    index("idx_gallery_entity").on(table.entityType, table.entityId),
+  ]
 );

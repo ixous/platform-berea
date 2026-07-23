@@ -316,35 +316,130 @@ Desarrollo
 
 \### Pendiente
 
-- Formulario de contacto funcional (backend).
 - Integraci\u00f3n Google Maps.
 - Contenido real (historia, doctrina completa, fotograf\u00edas de liderazgo, datos bancarios).
-- Sitemap, robots.txt.
 - Streaming de video en Auditorio.
 
 \---
 
-\## v0.7.0
+\## v0.8.5
 
-Previsto
+\## Fecha
 
-Ministerios.
+2026-07-22
+
+\## Estado
+
+Desarrollo
+
+\### Agregado
+
+- Middleware de autenticación (`src/proxy.ts`) con protección de rutas `/admin/:path*`.
+- Sistema RBAC (`src/lib/auth/rbac.ts`) con verificación de permisos en Server Actions.
+- Registro de auditoría (`src/lib/audit/index.ts`) instrumentado en login, logout y subida de archivos.
+- Rate limiting en login y subida de archivos (`src/lib/rate-limit.ts`).
+- Headers de seguridad: Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy.
+- Validación de inputs con Zod en `login` y `uploadMedia`.
+- Validación de archivos por extensión, tipo MIME y magic bytes.
+- Índices adicionales: `media.created_at`, `annual_vision(status, year)`, `gallery(entity_type, entity_id)`, `donations.status`.
+- Unique constraint en `content_versions(entity_type, entity_id, version_number)`.
+- Documentación sincronizada: README, ROADMAP, CHANGELOG actualizados al estado real.
+
+\### Modificado
+
+- `src/lib/auth/index.ts`: audit logs en authorize, actualización de `lastLoginAt`.
+- `src/lib/auth/actions.ts`: validación Zod, rate limiting, validación de callbackUrl.
+- `src/lib/media/actions.ts`: RBAC + rate limiting + validación de archivos mejorada.
+- `next.config.ts`: headers de seguridad, formatos de imagen.
 
 \---
 
-\## v0.8.0
+\## v0.10.0
 
-Previsto
+\## Fecha
 
-Formación Bíblica.
+2026-07-22
+
+\## Estado
+
+Desarrollo
+
+\### Agregado
+
+- Formulario de contacto funcional en /contacto (FASE 10A).
+- Validación cliente y servidor con Zod v4.
+- Protección contra spam con Cloudflare Turnstile.
+- Rate limiting por IP (5 solicitudes/minuto).
+- Sanitización de entrada con HTML tag stripping.
+- Confirmación visual inmediata tras envío exitoso.
+- Email de confirmación automático al remitente (Resend).
+- Email de notificación al administrador de nueva solicitud.
+- Bandeja de entrada administrativa en /admin/contact.
+- Vista detalle de solicitud con metadatos (IP, fecha, estado).
+- Respuesta desde el panel con envío de email automático.
+- Gestión de estados: pendiente, leído, respondido, archivado.
+- Búsqueda y filtrado de solicitudes.
+- Paginación en la bandeja de entrada.
+- Infraestructura de email transaccional reutilizable (Resend + templates HTML).
+- Tabla contact_submissions con índices y soft metadata.
+- Tabla notifications para tracking de envíos con reintentos.
+- Menú de navegación administrativa (admin-menu) con Dashboard, Contenido, Multimedia y Bandeja de Entrada.
+- Permiso contact-submissions.manage asignado a Super Admin y Admin.
+- CSP actualizado para permitir Cloudflare Turnstile.
+- Variables de entorno para Resend y Turnstile en .env.local.
+
+\### Modificado
+
+- Página /contacto reemplaza placeholder con formulario funcional.
+- Seed: agregado menú admin-menu con 4 items de navegación.
+- Seed: agregado permiso contact-submissions.manage.
+- next.config.ts: CSP actualizado para challenges.cloudflare.com.
+- README.md, ROADMAP.md, DOCUMENTATION_INDEX.md sincronizados.
 
 \---
 
-\## v0.9.0
+\## v0.11.0
 
-Previsto
+\## Fecha
 
-Células.
+2026-07-23
+
+\## Estado
+
+Completado
+
+\### Agregado
+
+- Registro público a eventos con control de capacidad (FASE 10B).
+- Formulario modal con Turnstile, validación Zod y rate limiting para /eventos/[slug].
+- Prevención de registros duplicados (UNIQUE(eventId, email) + check servidor).
+- Confirmación por email al asistente y notificación al administrador.
+- Panel admin de gestión de registros en /admin/registrations y /admin/events/[id]/registrations.
+- Búsqueda por nombre/email, filtro por estado, paginación en listado de asistentes.
+- Acciones de estado: confirmado, asistió, no asistió, cancelado, reconfirmar.
+- Exportación CSV de registros vía API route.
+- Permiso event-registrations.manage asignado a Super Admin y Administrator.
+- Tabla event_registrations con índices y FK a events.
+- Audit log en registro público y cambios de estado.
+- Menú admin con ítem "Registros a Eventos".
+
+\### Modificado
+
+- Seed: admin-menu idempotente (agrega items sin eliminar existentes).
+- Seed: agregado permiso event-registrations.manage.
+- src/actions/events.ts: nuevas Server Actions para registro y gestión.
+- Página /eventos/[slug]: integrado botón de registro y contador de asistentes.
+
+\### Corregido
+
+- Paginación de registros: totalCount ahora respeta filtros de búsqueda y estado.
+
+\### Técnico
+
+- Reutilización completa de infraestructura FASE 10A (email, Turnstile, rate limit, RBAC, audit).
+- Server Actions en src/actions/events.ts con patrón useActionState.
+- API route independiente para exportación CSV con autenticación RBAC.
+- 0 errores lint, 0 errores tsc, 0 errores build.
 
 \---
 

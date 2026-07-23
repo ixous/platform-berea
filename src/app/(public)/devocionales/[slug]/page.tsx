@@ -46,30 +46,30 @@ export default async function DevocionalDetallePage({ params }: Props) {
   if (!item) notFound();
 
   return (
-    <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
+    <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 animate-fade-up">
       <Link
         href="/devocionales"
-        className="inline-flex items-center gap-1 text-sm text-berea-muted transition-colors hover:text-berea-navy"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-berea-muted transition-colors hover:text-berea-navy"
       >
         <ArrowLeft className="h-4 w-4" />
         Todos los devocionales
       </Link>
 
-      <p className="mt-8 text-sm font-semibold uppercase tracking-wider text-berea-gold">
+      <p className="mt-10 text-sm font-semibold uppercase tracking-widest text-berea-gold">
         Devocional
       </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+      <h1 className="mt-3 text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
         {item.title}
       </h1>
 
       {item.verse && (
-        <blockquote className="mt-6 rounded-lg border-l-4 border-berea-gold bg-berea-light p-4 italic text-berea-muted">
+        <blockquote className="mt-8 rounded-xl border-l-4 border-berea-gold bg-berea-light p-6 italic leading-relaxed text-berea-muted">
           {item.verse}
         </blockquote>
       )}
 
       {item.publishedAt && (
-        <p className="mt-4 text-sm text-berea-muted">
+        <p className="mt-6 text-sm text-berea-muted">
           Publicado el{" "}
           {new Date(item.publishedAt).toLocaleDateString("es-MX", {
             day: "numeric",
@@ -79,11 +79,9 @@ export default async function DevocionalDetallePage({ params }: Props) {
         </p>
       )}
 
-      <div className="prose prose-lg mx-auto mt-8 max-w-none text-berea-navy/80">
+      <div className="mt-10 space-y-5 leading-relaxed text-berea-navy/80">
         {item.content.split("\n").map((p, i) => (
-          <p key={i} className="leading-relaxed">
-            {p}
-          </p>
+          <p key={i}>{p}</p>
         ))}
       </div>
     </article>

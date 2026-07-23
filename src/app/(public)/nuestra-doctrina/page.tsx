@@ -3,6 +3,8 @@ import { pages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { PageBanner } from "@/components/public/PageBanner";
+import { ContentBlock } from "@/components/public/ContentBlock";
+import { Card, CardTitle, CardDescription } from "@/components/public/Card";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -51,18 +53,22 @@ export default async function DoctrinaPage() {
     <>
       <PageBanner title="Nuestra Doctrina" subtitle="Los fundamentos de nuestra fe." />
 
-      <section className="px-4 py-24 sm:px-6 lg:px-8">
+      <ContentBlock>
         <div className="mx-auto max-w-4xl">
           <div className="grid gap-8 sm:grid-cols-2">
-            {doctrinalPoints.map((p) => (
-              <div key={p.title} className="rounded-lg border border-berea-border bg-white p-6">
-                <h3 className="text-lg font-bold text-berea-navy">{p.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-berea-muted">{p.desc}</p>
-              </div>
+            {doctrinalPoints.map((p, i) => (
+              <Card
+                key={p.title}
+                className={`animate-fade-up p-8 animation-delay-${Math.min((i + 1) * 100, 950)}`}
+              >
+                <CardTitle className="mt-0">{p.title}</CardTitle>
+                <div className="mt-3 h-0.5 w-8 rounded-full bg-berea-gold/40" />
+                <CardDescription className="mt-4">{p.desc}</CardDescription>
+              </Card>
             ))}
           </div>
         </div>
-      </section>
+      </ContentBlock>
     </>
   );
 }

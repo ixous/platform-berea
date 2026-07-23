@@ -2,6 +2,9 @@ import { db } from "@/lib/db";
 import { serviceMinistries } from "@/lib/db/schema";
 import { and, isNull, eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
+import { ContentBlock } from "@/components/public/ContentBlock";
+import { Card, CardDescription } from "@/components/public/Card";
+import { HandHeart, Users } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -43,27 +46,32 @@ export default async function MinisteriosServicioPage() {
       />
 
       {items.length > 0 ? (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
+        <ContentBlock>
           <div className="mx-auto max-w-5xl">
             <div className="grid gap-8 sm:grid-cols-2">
-              {items.map((m) => (
-                <div key={m.id} className="rounded-lg border border-berea-border bg-white p-6">
-                  <h3 className="text-xl font-bold text-berea-navy">{m.name}</h3>
-                  {m.description && (
-                    <p className="mt-3 text-sm leading-relaxed text-berea-muted">{m.description}</p>
-                  )}
+              {items.map((m, i) => (
+                <Card
+                  key={m.id}
+                  className={`animate-fade-up p-8 animation-delay-${Math.min((i + 1) * 100, 950)}`}
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
+                    <HandHeart className="h-6 w-6 text-berea-gold/60" />
+                  </div>
+                  <h3 className="mt-4 text-xl font-bold text-berea-navy">{m.name}</h3>
+                  {m.description && <CardDescription>{m.description}</CardDescription>}
                   {m.leader && (
-                    <p className="mt-3 text-sm text-berea-navy">
-                      <strong>L\u00edder:</strong> {m.leader}
+                    <p className="mt-4 flex items-center gap-2 text-sm font-medium text-berea-navy">
+                      <Users className="h-4 w-4 text-berea-gold/60" />
+                      {m.leader}
                     </p>
                   )}
-                </div>
+                </Card>
               ))}
             </div>
           </div>
-        </section>
+        </ContentBlock>
       ) : (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
+        <ContentBlock>
           <div className="mx-auto max-w-5xl">
             <div className="mb-12 text-center">
               <p className="text-berea-muted">
@@ -71,22 +79,22 @@ export default async function MinisteriosServicioPage() {
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {knownServiceMinistries.map((name) => (
-                <div
+              {knownServiceMinistries.map((name, i) => (
+                <Card
                   key={name}
-                  className="rounded-lg border border-berea-border bg-white px-5 py-4 text-center"
+                  className={`animate-fade-up px-6 py-5 text-center animation-delay-${Math.min((i + 1) * 50, 950)}`}
+                  padded={false}
                 >
                   <span className="text-sm font-semibold text-berea-navy">{name}</span>
-                </div>
+                </Card>
               ))}
             </div>
-            <p className="mt-8 text-center text-sm text-berea-muted">
-              Cada ministerio ser&aacute; completamente administrable desde el CMS, donde se
-              podr&aacute; a&ntilde;adir descripci&oacute;n, l&iacute;der, horario y
-              fotograf&iacute;as.
+            <p className="mt-10 text-center text-sm text-berea-muted">
+              Cada ministerio ser\u00e1 completamente administrable desde el CMS, donde se
+              podr\u00e1 a\u00f1adir descripci\u00f3n, l\u00edder, horario y fotograf\u00edas.
             </p>
           </div>
-        </section>
+        </ContentBlock>
       )}
     </>
   );

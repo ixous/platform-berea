@@ -7,6 +7,7 @@ import {
   jsonb,
   timestamp,
   index,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
@@ -29,5 +30,10 @@ export const contentVersions = pgTable(
     index("idx_content_versions_entity").on(table.entityType, table.entityId),
     index("idx_content_versions_user_id").on(table.userId),
     index("idx_content_versions_created_at").on(table.createdAt),
+    uniqueIndex("uq_content_versions_entity_version").on(
+      table.entityType,
+      table.entityId,
+      table.versionNumber
+    ),
   ]
 );

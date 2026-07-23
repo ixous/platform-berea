@@ -1,11 +1,13 @@
 import { db } from "@/lib/db";
-import { events, devotionals, ministries, settings } from "@/lib/db/schema";
+import { events, devotionals, ministries, settings, media } from "@/lib/db/schema";
 import { eq, and, isNull, gte, desc } from "drizzle-orm";
 import Link from "next/link";
 import { HeroSection } from "@/components/public/HeroSection";
 import { SectionHeading } from "@/components/public/SectionHeading";
+import { ContentBlock } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
-import { ArrowRight, CalendarDays, BookOpen, Church, Clock } from "lucide-react";
+import { Card, CardCategory, CardTitle, CardDescription, CardMeta } from "@/components/public/Card";
+import { ArrowRight, CalendarDays, BookOpen, Church, Clock, Heart } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -30,6 +32,15 @@ async function getSiteName() {
 
   const value = setting.value as Record<string, string>;
   return value?.es || "Centro Cristiano Berea";
+}
+
+async function getHeroImage() {
+  const [item] = await db
+    .select({ url: media.url })
+    .from(media)
+    .where(and(eq(media.mediaType, "image"), isNull(media.deletedAt)))
+    .limit(1);
+  return item?.url ?? null;
 }
 
 async function getUpcomingEvents() {
@@ -67,6 +78,7 @@ async function getActiveMinistries() {
 
 export default async function HomePage() {
   const siteName = await getSiteName();
+  const heroImage = await getHeroImage();
   const [upcomingEvents, recentDevotionals, activeMinistries] = await Promise.all([
     getUpcomingEvents(),
     getRecentDevotionals(),
@@ -77,206 +89,219 @@ export default async function HomePage() {
     <>
       <HeroSection
         title={siteName}
-        subtitle="Una iglesia comprometida con la Palabra de Dios, ubicada en Mexicali, Baja California, M&eacute;xico."
-        ctaText="Con&oacute;cenos"
+        subtitle="Una iglesia comprometida con la Palabra de Dios, ubicada en Mexicali, Baja California, M\u00e9xico."
+        ctaText="Con\u00f3cenos"
         ctaHref="/quienes-somos"
+        secondaryCtaText="Ubicaci\u00f3n y horarios"
+        secondaryCtaHref="/contacto"
+        backgroundImage={heroImage}
       />
 
-      <section className="px-4 py-24 sm:px-6 lg:px-8">
+      <ContentBlock>
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-wider text-berea-gold">
+          <p className="text-sm font-semibold uppercase tracking-widest text-berea-gold">
             Bienvenidos
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+          <h2 className="mt-4 text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
             Una familia que vive para Cristo
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-berea-muted">
-            En Centro Cristiano Berea encontrar&aacute;s un lugar donde la Palabra de Dios es el
-            fundamento de todo lo que hacemos. Nuestra misi&oacute;n es formar disc&iacute;pulos,
+          <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-berea-muted">
+            En Centro Cristiano Berea encontrar\u00e1s un lugar donde la Palabra de Dios es el
+            fundamento de todo lo que hacemos. Nuestra misi\u00f3n es formar disc\u00edpulos,
             fortalecer familias y alcanzar a nuestra comunidad con el amor de Cristo.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               href="/quienes-somos"
-              className="inline-flex items-center gap-2 rounded-md bg-berea-navy px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-lg bg-berea-navy px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
             >
               Quienes Somos
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/contacto"
-              className="inline-flex items-center gap-2 rounded-md border border-berea-border bg-white px-5 py-2.5 text-sm font-medium text-berea-navy transition-colors hover:bg-berea-light"
+              className="inline-flex items-center gap-2 rounded-lg border border-berea-border bg-white px-6 py-3 text-sm font-semibold text-berea-navy shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
             >
-              Ubicaci&oacute;n y contacto
+              Ubicaci\u00f3n y contacto
             </Link>
           </div>
         </div>
-      </section>
+      </ContentBlock>
 
-      <section className="border-y border-berea-border bg-white px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="border-y border-berea-border bg-white">
+        <ContentBlock>
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 icon: Church,
                 title: "Servicios",
-                desc: "Domingo 10:00 AM y 12:30 PM &middot; Mi&eacute;rcoles 7:00 PM",
+                desc: "Domingo 10:00 AM y 12:30 PM · Mi\u00e9rcoles 7:00 PM",
               },
               {
                 icon: CalendarDays,
                 title: "Eventos",
-                desc: "Conferencias, congresos y actividades especiales.",
+                desc: "Conferencias, congresos y actividades especiales para toda la familia.",
               },
               {
                 icon: BookOpen,
                 title: "Devocionales",
-                desc: "Reflexiones b&iacute;blicas para tu crecimiento espiritual.",
+                desc: "Reflexiones b\u00edblicas semanales para tu crecimiento espiritual.",
               },
               {
                 icon: Clock,
                 title: "Ministerios",
-                desc: "Encuentra tu lugar para servir y crecer en la fe.",
+                desc: "Encuentra tu lugar para servir y crecer en la fe junto a otros.",
               },
             ].map((item) => (
-              <div key={item.title} className="text-center">
-                <item.icon className="mx-auto h-8 w-8 text-berea-gold" />
-                <h3 className="mt-3 text-base font-semibold text-berea-navy">{item.title}</h3>
-                <p className="mt-2 text-sm text-berea-muted">{item.desc}</p>
+              <div key={item.title} className="text-center animate-fade-up">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-berea-navy/5">
+                  <item.icon className="h-7 w-7 text-berea-gold" />
+                </div>
+                <h3 className="mt-4 text-base font-bold text-berea-navy">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-berea-muted">{item.desc}</p>
               </div>
             ))}
           </div>
-        </div>
+        </ContentBlock>
       </section>
 
-      {upcomingEvents.length > 0 ? (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <SectionHeading
-              title="Pr&oacute;ximos Eventos"
-              subtitle="Mantente al d&iacute;a con nuestras actividades y servicios especiales."
-            />
-            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {upcomingEvents.map((event) => (
-                <Link
-                  key={event.id}
-                  href={`/eventos/${event.slug}`}
-                  className="group rounded-lg border border-berea-border bg-white p-6 transition-shadow hover:shadow-md"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-wider text-berea-gold">
-                    {event.eventType || "Evento"}
-                  </p>
-                  <h3 className="mt-2 text-lg font-bold text-berea-navy group-hover:text-berea-gold">
-                    {event.title}
-                  </h3>
-                  <p className="mt-1 text-sm text-berea-muted">
+      <ContentBlock>
+        <SectionHeading
+          title="Pr\u00f3ximos Eventos"
+          subtitle="Mantente al d\u00eda con nuestras actividades y servicios especiales."
+        />
+        {upcomingEvents.length > 0 ? (
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {upcomingEvents.map((event, i) => (
+              <Card
+                key={event.id}
+                href={`/eventos/${event.slug}`}
+                className={`animate-fade-up animation-delay-${Math.min((i + 1) * 100, 950)}`}
+              >
+                <CardCategory>{event.eventType || "Evento"}</CardCategory>
+                <CardTitle>{event.title}</CardTitle>
+                <CardMeta>
+                  <span className="flex items-center gap-1">
+                    <CalendarDays className="h-3.5 w-3.5 text-berea-gold" />
                     {new Date(event.startDate).toLocaleDateString("es-MX", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
                     })}
-                    {event.time && ` \u2022 ${event.time}`}
-                  </p>
-                  {event.location && (
-                    <p className="mt-1 text-sm text-berea-muted">{event.location}</p>
+                  </span>
+                  {event.time && (
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5 text-berea-gold" />
+                      {event.time}
+                    </span>
                   )}
-                </Link>
-              ))}
-            </div>
+                </CardMeta>
+                {event.location && (
+                  <p className="mt-1 text-xs text-berea-muted">{event.location}</p>
+                )}
+              </Card>
+            ))}
           </div>
-        </section>
-      ) : (
-        <EmptySection
-          title="Eventos"
-          message="Pr&oacute;ximamente podr&aacute;s consultar aqu&iacute; los eventos y actividades de la iglesia."
-        />
-      )}
+        ) : (
+          <EmptySection
+            title="Pr\u00f3ximos Eventos"
+            message="Pr\u00f3ximamente podr\u00e1s consultar aqu\u00ed los eventos y actividades de la iglesia."
+            icon={CalendarDays}
+          />
+        )}
+      </ContentBlock>
 
-      {activeMinistries.length > 0 ? (
-        <section className="bg-white px-4 py-24 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <SectionHeading
-              title="Ministerios"
-              subtitle="Descubre las diferentes &aacute;reas donde puedes servir y crecer."
-            />
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {activeMinistries.map((m) => (
-                <Link
+      <section className="bg-white">
+        <ContentBlock>
+          <SectionHeading
+            title="Ministerios"
+            subtitle="Descubre las diferentes \u00e1reas donde puedes servir y crecer."
+          />
+          {activeMinistries.length > 0 ? (
+            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {activeMinistries.map((m, i) => (
+                <Card
                   key={m.id}
                   href="/ministerios-activos"
-                  className="group rounded-lg border border-berea-border bg-berea-light p-6 text-center transition-shadow hover:shadow-md"
+                  className={`animate-fade-up animation-delay-${Math.min((i + 1) * 100, 950)}`}
                 >
-                  <h3 className="text-base font-semibold text-berea-navy group-hover:text-berea-gold">
-                    {m.name}
-                  </h3>
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
+                    <Church className="h-6 w-6 text-berea-gold/60" />
+                  </div>
+                  <CardTitle className="text-center">{m.name}</CardTitle>
                   {m.description && (
-                    <p className="mt-2 text-sm text-berea-muted line-clamp-2">{m.description}</p>
+                    <CardDescription className="text-center">{m.description}</CardDescription>
                   )}
-                </Link>
+                </Card>
               ))}
             </div>
-          </div>
-        </section>
-      ) : (
-        <EmptySection
-          title="Ministerios"
-          message="Pr&oacute;ximamente podr&aacute;s consultar aqu&iacute; los ministerios activos de la iglesia."
-        />
-      )}
-
-      {recentDevotionals.length > 0 ? (
-        <section className="px-4 py-24 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <SectionHeading
-              title="Devocionales"
-              subtitle="Reflexiones b&iacute;blicas para edificar tu vida espiritual."
+          ) : (
+            <EmptySection
+              title="Ministerios"
+              message="Pr\u00f3ximamente podr\u00e1s consultar aqu\u00ed los ministerios activos de la iglesia."
+              icon={Church}
             />
-            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {recentDevotionals.map((d) => (
-                <Link
-                  key={d.id}
-                  href={`/devocionales/${d.slug}`}
-                  className="group rounded-lg border border-berea-border bg-white p-6 transition-shadow hover:shadow-md"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-wider text-berea-gold">
-                    Devocional
-                  </p>
-                  <h3 className="mt-2 text-lg font-bold text-berea-navy group-hover:text-berea-gold">
-                    {d.title}
-                  </h3>
-                  {d.excerpt && (
-                    <p className="mt-2 text-sm text-berea-muted line-clamp-3">{d.excerpt}</p>
-                  )}
-                </Link>
-              ))}
+          )}
+        </ContentBlock>
+      </section>
+
+      <ContentBlock>
+        <SectionHeading
+          title="Devocionales"
+          subtitle="Reflexiones b\u00edblicas para edificar tu vida espiritual."
+        />
+        {recentDevotionals.length > 0 ? (
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {recentDevotionals.map((d, i) => (
+              <Card
+                key={d.id}
+                href={`/devocionales/${d.slug}`}
+                className={`animate-fade-up animation-delay-${Math.min((i + 1) * 100, 950)}`}
+              >
+                <CardCategory>Devocional</CardCategory>
+                <CardTitle>{d.title}</CardTitle>
+                {d.excerpt && <CardDescription>{d.excerpt}</CardDescription>}
+                {d.verse && (
+                  <p className="mt-3 text-xs italic text-berea-gold/70 line-clamp-2">{d.verse}</p>
+                )}
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <EmptySection
+            title="Devocionales"
+            message="Pr\u00f3ximamente publicaremos devocionales para tu crecimiento espiritual."
+            icon={BookOpen}
+          />
+        )}
+      </ContentBlock>
+
+      <section className="relative overflow-hidden bg-berea-navy">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.1),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
+        <ContentBlock className="relative">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10">
+              <Heart className="h-8 w-8 text-berea-gold" />
+            </div>
+            <h2 className="mt-6 text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Vis\u00edtanos
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-pretty text-lg text-white/70">
+              Nos encantar\u00eda recibirte en nuestra iglesia. Ven tal como eres y descubre una
+              comunidad que te amar\u00e1 y te apoyar\u00e1 en tu caminar con Cristo.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link
+                href="/contacto"
+                className="inline-flex items-center gap-2 rounded-lg bg-berea-gold px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-berea-gold/25 transition-all duration-300 hover:bg-berea-gold/90 hover:-translate-y-0.5 hover:shadow-xl"
+              >
+                Ubicaci\u00f3n y horarios
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
-        </section>
-      ) : (
-        <EmptySection
-          title="Devocionales"
-          message="Pr&oacute;ximamente publicaremos devocionales para tu crecimiento espiritual."
-        />
-      )}
-
-      <section className="bg-berea-navy px-4 py-24 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Vis&iacute;tanos
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-white/70">
-            Nos encantar&iacute;a recibirte en nuestra iglesia. Ven tal como eres y descubre una
-            comunidad que te amar&aacute; y te apoyar&aacute; en tu caminar con Cristo.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link
-              href="/contacto"
-              className="inline-flex items-center gap-2 rounded-md bg-berea-gold px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
-            >
-              Ubicaci&oacute;n y horarios
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
+        </ContentBlock>
       </section>
     </>
   );

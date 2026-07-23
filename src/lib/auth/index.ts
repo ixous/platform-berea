@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import type { NextAuthConfig } from "next-auth";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
+import { logAudit } from "@/lib/audit";
 
 const authOptions: NextAuthConfig = {
   providers: [
@@ -40,17 +41,43 @@ const authOptions: NextAuthConfig = {
           .limit(1);
 
         if (!user) {
+          await logAudit({
+            action: "LOGIN_FAILED",
+            resource: "auth",
+            details: `Intento fallido para email: ${normalizedEmail}`,
+          });
           return null;
         }
 
         if (user.status !== "active") {
+          await logAudit({
+            userId: user.id,
+            action: "LOGIN_BLOCKED",
+            resource: "auth",
+            details: `Usuario inactivo intentó ingresar: ${normalizedEmail}`,
+          });
           return null;
         }
 
         const isValid = await compare(password, user.password);
         if (!isValid) {
+          await logAudit({
+            userId: user.id,
+            action: "LOGIN_FAILED",
+            resource: "auth",
+            details: "Contraseña incorrecta.",
+          });
           return null;
         }
+
+        await db.update(users).set({ lastLoginAt: new Date() }).where(eq(users.id, user.id));
+
+        await logAudit({
+          userId: user.id,
+          action: "LOGIN",
+          resource: "auth",
+          details: "Inicio de sesión exitoso.",
+        });
 
         return {
           id: user.id,
@@ -64,8 +91,8 @@ const authOptions: NextAuthConfig = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60, // 1 hora
-    updateAge: 60 * 30, // renovar cada 30 min
+    maxAge: 60 * 60,
+    updateAge: 60 * 30,
   },
   cookies: {
     sessionToken: {

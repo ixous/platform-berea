@@ -134,6 +134,16 @@ async function seedPermissions() {
       description: "Editar información de contacto institucional.",
     },
     {
+      name: "Manage Contact Submissions",
+      slug: "contact-submissions.manage",
+      description: "Gestionar solicitudes de contacto recibidas.",
+    },
+    {
+      name: "Manage Event Registrations",
+      slug: "event-registrations.manage",
+      description: "Gestionar registros a eventos.",
+    },
+    {
       name: "Manage Media",
       slug: "media.manage",
       description: "Subir, editar, archivar y eliminar recursos multimedia.",
@@ -366,6 +376,11 @@ async function seedNavigation() {
       description: "Menú principal de navegación del sitio.",
     },
     { name: "Footer", slug: "footer", description: "Enlaces del pie de página." },
+    {
+      name: "Admin Menu",
+      slug: "admin-menu",
+      description: "Menú de navegación del panel administrativo.",
+    },
   ];
 
   const created: string[] = [];
@@ -480,6 +495,69 @@ async function seedPages() {
   return created;
 }
 
+async function seedAdminNavigationItems() {
+  const adminMenu = await db
+    .select()
+    .from(schema.navigation)
+    .where(eq(schema.navigation.slug, "admin-menu"))
+    .limit(1);
+
+  if (adminMenu.length === 0) return 0;
+
+  const items = [
+    { title: "Dashboard", url: "/admin", linkType: "internal" as const, displayOrder: 1 },
+    {
+      title: "Gestión de Contenido",
+      url: "/admin/content",
+      linkType: "internal" as const,
+      displayOrder: 2,
+    },
+    {
+      title: "Biblioteca Multimedia",
+      url: "/admin/media",
+      linkType: "internal" as const,
+      displayOrder: 3,
+    },
+    {
+      title: "Bandeja de Entrada",
+      url: "/admin/contact",
+      linkType: "internal" as const,
+      displayOrder: 4,
+    },
+    {
+      title: "Registros a Eventos",
+      url: "/admin/registrations",
+      linkType: "internal" as const,
+      displayOrder: 5,
+    },
+  ];
+
+  let created = 0;
+  for (const item of items) {
+    const existing = await db
+      .select()
+      .from(schema.navigationItems)
+      .where(
+        and(
+          eq(schema.navigationItems.navigationId, adminMenu[0].id),
+          eq(schema.navigationItems.title, item.title)
+        )
+      )
+      .limit(1);
+
+    if (existing.length === 0) {
+      await db.insert(schema.navigationItems).values({
+        ...item,
+        navigationId: adminMenu[0].id,
+        status: "active",
+      });
+      created++;
+    }
+  }
+
+  return created;
+}
+
 async function main() {
   console.log("🌱 Iniciando seeds...\n");
 
@@ -504,7 +582,10 @@ async function main() {
   console.log(`  Navigation: ${nav.length} menus creados (${nav.join(", ") || "ninguno nuevo"})`);
 
   const navItems = await seedNavigationItems();
-  console.log(`  Navigation Items: ${navItems} items creados`);
+  console.log(`  Navigation Items: ${navItems} items creados (main-menu)`);
+
+  const adminNavItems = await seedAdminNavigationItems();
+  console.log(`  Admin Navigation Items: ${adminNavItems} items creados (admin-menu)`);
 
   const pages = await seedPages();
   console.log(`  Pages: ${pages.length} paginas creadas (${pages.length} nuevas)`);
@@ -525,4 +606,5 @@ export {
   seedSettings,
   seedNavigation,
   seedPages,
+  seedAdminNavigationItems,
 };

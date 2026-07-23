@@ -71,10 +71,19 @@ Cada decisión será tomada priorizando:
 
 - **FASE 0 — Documentación y Arquitectura**: Completada
 - **FASE 1 — Inicialización e Infraestructura**: Completada
+- **FASE 2 — Modelo de Datos**: Completada (schema, migraciones, seeds)
+- **FASE 3 — Autenticación y Seguridad**: Completada (Auth.js, RBAC sembrado)
+- **FASE 4 — CMS Core**: Completada (dashboard, layout admin, navegación)
+- **FASE 5 — Media Library**: Completada (subida R2, listado, búsqueda, preview)
+- **FASE 6 — Sitio Público Institucional**: Completada (15 rutas, SEO, design system)
+- **FASE 7 — Refinamiento Visual y Design System**: Completada (Card, BereaImage, animaciones)
+- **FASE 8 — Hardening Arquitectónico y de Seguridad**: Completada (middleware, RBAC, rate limiting, auditoría, CSP)
+- **FASE 9 — CMS de Contenido**: Completada (CMS reutilizable con 13 tipos de contenido, media library, versionado)
+- **FASE 9.1 — Correcciones CMS**: Completada (revalidación, liderazgo, documentación)
+- **FASE 10A — Formulario de Contacto**: Completada (formulario funcional, Turnstile, email transaccional, bandeja de entrada admin)
+- **FASE 10B — Registro a Eventos**: Completada (registro público con capacidad, confirmación por email, panel admin de gestión, exportación CSV)
 
-El proyecto ya cuenta con Next.js 16, TypeScript, Tailwind CSS, shadcn/ui, Drizzle ORM, Auth.js y toda la infraestructura base configurada y funcionando.
-
-La siguiente etapa será la **FASE 2 — Modelo de Datos** (esquema completo, migraciones, seeds).
+El proyecto ya cuenta con Next.js 16, TypeScript, Tailwind CSS, shadcn/ui, Drizzle ORM, Auth.js, Resend, Cloudflare R2 + Turnstile y toda la infraestructura base configurada y funcionando.
 
 ---
 
