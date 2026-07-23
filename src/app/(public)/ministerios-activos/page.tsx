@@ -30,7 +30,7 @@ export default async function MinisteriosActivosPage() {
       <PageBanner
         title="Ministerios Activos"
         subtitle="Descubre tu lugar para servir."
-        backgroundImage="/images/Banner%20Ministerios.png"
+        backgroundImage="/images/banner-ministerios.png"
       />
 
       {items.length > 0 ? (

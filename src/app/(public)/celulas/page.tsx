@@ -35,7 +35,7 @@ export default async function CelulasPage() {
       <PageBanner
         title="Células"
         subtitle="Encuentra una célula cercana y crece en comunidad."
-        backgroundImage="/images/Banner%20Celulas.png"
+        backgroundImage="/images/banner-celulas.png"
       />
 
       {items.length > 0 ? (

@@ -47,7 +47,7 @@ export default async function FormacionBiblicaPage() {
       <PageBanner
         title="Formación Bíblica"
         subtitle="Crece en el conocimiento de la Palabra."
-        backgroundImage="/images/Banner%20Formacion%20biblica.png"
+        backgroundImage="/images/banner-formacion-biblica.png"
       />
 
       {programs.length > 0 ? (

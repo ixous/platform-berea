@@ -32,11 +32,7 @@ export default async function DonacionesPage() {
 
   return (
     <>
-      <PageBanner
-        title="Donaciones"
-        subtitle="Tu generosidad ayuda a extender el Reino de Dios."
-        backgroundImage="/images/Banner%20Donaciones.png"
-      />
+      <PageBanner title="Donaciones" subtitle="Apoya la obra del Señor con tus ofrendas." />
 
       <ContentBlock>
         <div className="mx-auto max-w-4xl">

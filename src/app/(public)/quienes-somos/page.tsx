@@ -42,7 +42,7 @@ export default async function QuienesSomosPage() {
       <PageBanner
         title="Quienes Somos"
         subtitle="Conoce nuestra identidad, misión y visión."
-        backgroundImage="/images/Banner%20Quienes%20somos.png"
+        backgroundImage="/images/banner-quienes-somos.png"
       />
 
       <ContentBlock>

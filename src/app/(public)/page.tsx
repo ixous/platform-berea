@@ -71,7 +71,7 @@ export default async function HomePage() {
         ctaHref="/quienes-somos"
         secondaryCtaText="Horarios de Servicio"
         secondaryCtaHref="/contacto"
-        backgroundImage="/images/banner_berea.png"
+        backgroundImage="/images/banner-berea.png"
       />
 
       <ContentBlock>

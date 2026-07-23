@@ -31,7 +31,7 @@ export default async function DevocionalesPage() {
       <PageBanner
         title="Devocionales"
         subtitle="Reflexiones bíblicas para tu crecimiento."
-        backgroundImage="/images/Banner%20Devocionales.png"
+        backgroundImage="/images/banner-devocionales.png"
       />
 
       {items.length > 0 ? (

@@ -58,7 +58,7 @@ export function PublicHeaderClient({
             height={52}
             className="h-11 w-11 rounded-full object-contain lg:h-[52px] lg:w-[52px]"
           />
-          <span className="text-lg font-bold tracking-tight text-berea-navy">
+          <span className="whitespace-nowrap text-lg font-bold tracking-tight text-berea-navy">
             Centro Cristiano Berea
           </span>
         </Link>

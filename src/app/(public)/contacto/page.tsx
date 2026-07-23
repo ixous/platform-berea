@@ -41,7 +41,7 @@ export default async function ContactoPage() {
       <PageBanner
         title="Contacto"
         subtitle="Nos encantaría saber de ti."
-        backgroundImage="/images/Banner%20Contacto.png"
+        backgroundImage="/images/banner-contacto.png"
       />
 
       <ContentBlock>

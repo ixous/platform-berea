@@ -37,7 +37,7 @@ export default async function EventosPage() {
       <PageBanner
         title="Eventos"
         subtitle="Mantente al día con nuestras actividades."
-        backgroundImage="/images/Banner%20Eventos.png"
+        backgroundImage="/images/banner-eventos.png"
       />
 
       {items.length > 0 ? (

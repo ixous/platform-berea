@@ -54,7 +54,7 @@ export default async function DoctrinaPage() {
       <PageBanner
         title="Nuestra Doctrina"
         subtitle="Los fundamentos de nuestra fe."
-        backgroundImage="/images/Banner%20Doctrina.png"
+        backgroundImage="/images/banner-doctrina.png"
       />
 
       <ContentBlock>
