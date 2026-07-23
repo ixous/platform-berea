@@ -18,7 +18,7 @@ export default function AuditorioPage() {
         subtitle="Un nuevo espacio para la gloria de Dios."
       />
 
-      <ContentBlock>
+      <ContentBlock variant="cream">
         <div className="mx-auto max-w-4xl">
           <div className="relative overflow-hidden rounded-2xl bg-berea-navy p-12 text-center">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.12),transparent_60%)]" />

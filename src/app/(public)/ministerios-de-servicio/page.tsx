@@ -46,7 +46,7 @@ export default async function MinisteriosServicioPage() {
       />
 
       {items.length > 0 ? (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-5xl">
             <div className="grid gap-8 sm:grid-cols-2">
               {items.map((m, i) => (
@@ -71,7 +71,7 @@ export default async function MinisteriosServicioPage() {
           </div>
         </ContentBlock>
       ) : (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-5xl">
             <div className="mb-12 text-center">
               <p className="text-berea-muted">

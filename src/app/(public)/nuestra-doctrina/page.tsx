@@ -57,7 +57,7 @@ export default async function DoctrinaPage() {
         backgroundImage="/images/banner-doctrina.png"
       />
 
-      <ContentBlock>
+      <ContentBlock variant="cream">
         <div className="mx-auto max-w-4xl">
           <div className="grid gap-8 sm:grid-cols-2">
             {doctrinalPoints.map((p, i) => (

@@ -45,7 +45,7 @@ export default async function QuienesSomosPage() {
         backgroundImage="/images/banner-quienes-somos.png"
       />
 
-      <ContentBlock>
+      <ContentBlock variant="cream">
         <ContentNarrow>
           <h2 className="text-2xl font-bold text-berea-navy">Nuestra Identidad</h2>
           <div className="mt-4 h-1 w-10 rounded-full bg-berea-gold" />

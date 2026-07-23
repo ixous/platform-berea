@@ -41,7 +41,7 @@ export default async function EventosPage() {
       />
 
       {items.length > 0 ? (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-4xl">
             <div className="space-y-6">
               {items.map((e, i) => (

@@ -35,7 +35,7 @@ export default async function DevocionalesPage() {
       />
 
       {items.length > 0 ? (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-8 sm:grid-cols-2">
               {items.map((d, i) => (

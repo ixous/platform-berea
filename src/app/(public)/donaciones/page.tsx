@@ -38,7 +38,7 @@ export default async function DonacionesPage() {
         backgroundImage="/images/banner-donaciones.png"
       />
 
-      <ContentBlock>
+      <ContentBlock variant="cream">
         <div className="mx-auto max-w-4xl">
           <div className="mb-20 text-center">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-berea-navy/5">

@@ -34,7 +34,7 @@ export default async function MinisteriosActivosPage() {
       />
 
       {items.length > 0 ? (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-5xl">
             <div className="grid gap-8 sm:grid-cols-2">
               {items.map((m, i) => (

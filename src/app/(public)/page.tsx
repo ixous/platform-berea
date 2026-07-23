@@ -7,7 +7,17 @@ import { SectionHeading } from "@/components/public/SectionHeading";
 import { ContentBlock } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
 import { Card, CardCategory, CardTitle, CardDescription, CardMeta } from "@/components/public/Card";
-import { ArrowRight, CalendarDays, BookOpen, Church, Clock, Heart } from "lucide-react";
+import { SectionSeparator } from "@/components/public/SectionSeparator";
+import {
+  ArrowRight,
+  CalendarDays,
+  BookOpen,
+  Church,
+  Clock,
+  Heart,
+  Users,
+  MapPin,
+} from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -74,9 +84,12 @@ export default async function HomePage() {
         backgroundImage="/images/banner-berea.png"
       />
 
-      <ContentBlock>
+      <ContentBlock variant="cream">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-berea-border/40 bg-white shadow-sm">
+            <Heart className="h-8 w-8 text-berea-gold" />
+          </div>
+          <h2 className="mt-6 text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
             Una familia que vive para Cristo
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-berea-muted">
@@ -84,60 +97,65 @@ export default async function HomePage() {
             y una familia espiritual en Cristo. Nuestra misión es enseñar fielmente la Palabra de
             Dios, formar discípulos y servir a nuestra comunidad con amor.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Link
               href="/quienes-somos"
-              className="inline-flex items-center gap-2 rounded-lg bg-berea-navy px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+              className="inline-flex items-center gap-2 rounded-xl bg-berea-navy px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
             >
+              <Users className="h-4 w-4" />
               Quienes Somos
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/contacto"
-              className="inline-flex items-center gap-2 rounded-lg border border-berea-border bg-white px-6 py-3 text-sm font-semibold text-berea-navy shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+              className="inline-flex items-center gap-2 rounded-xl border border-berea-border bg-white px-6 py-3 text-sm font-semibold text-berea-navy shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
             >
+              <MapPin className="h-4 w-4" />
               Ubicación y contacto
             </Link>
           </div>
         </div>
       </ContentBlock>
 
-      <section className="border-y border-berea-border bg-white">
-        <ContentBlock>
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                icon: Church,
-                title: "Servicios",
-                desc: "Domingo 11:00 AM · Miércoles Escuela de Líderes 8:00 PM · Jueves Escuela de Ministerios 8:00 PM",
-              },
-              {
-                icon: CalendarDays,
-                title: "Eventos",
-                desc: "Conferencias, congresos y actividades especiales para toda la familia.",
-              },
-              {
-                icon: BookOpen,
-                title: "Devocionales",
-                desc: "Reflexiones bíblicas semanales para tu crecimiento espiritual.",
-              },
-              {
-                icon: Clock,
-                title: "Ministerios",
-                desc: "Encuentra tu lugar para servir y crecer en la fe junto a otros.",
-              },
-            ].map((item) => (
-              <div key={item.title} className="text-center animate-fade-up">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-berea-navy/5">
-                  <item.icon className="h-7 w-7 text-berea-gold" />
-                </div>
-                <h3 className="mt-4 text-base font-bold text-berea-navy">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-berea-muted">{item.desc}</p>
+      <SectionSeparator />
+
+      <ContentBlock variant="gradient">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              icon: Church,
+              title: "Servicios",
+              desc: "Domingo 11:00 AM · Miércoles Escuela de Líderes 8:00 PM · Jueves Escuela de Ministerios 8:00 PM",
+            },
+            {
+              icon: CalendarDays,
+              title: "Eventos",
+              desc: "Conferencias, congresos y actividades especiales para toda la familia.",
+            },
+            {
+              icon: BookOpen,
+              title: "Devocionales",
+              desc: "Reflexiones bíblicas semanales para tu crecimiento espiritual.",
+            },
+            {
+              icon: Clock,
+              title: "Ministerios",
+              desc: "Encuentra tu lugar para servir y crecer en la fe junto a otros.",
+            },
+          ].map((item) => (
+            <div
+              key={item.title}
+              className="animate-fade-up rounded-2xl border border-berea-border/60 bg-white p-8 text-center shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1"
+            >
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-berea-gold/10 to-berea-gold/5">
+                <item.icon className="h-7 w-7 text-berea-gold" />
               </div>
-            ))}
-          </div>
-        </ContentBlock>
-      </section>
+              <h3 className="mt-5 text-base font-bold text-berea-navy">{item.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-berea-muted">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentBlock>
 
       {upcomingEvents.length > 0 ? (
         <ContentBlock>
@@ -145,7 +163,7 @@ export default async function HomePage() {
             title="Próximos Eventos"
             subtitle="Mantente al día con nuestras actividades y servicios especiales."
           />
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {upcomingEvents.map((event, i) => (
               <Card
                 key={event.id}
@@ -155,7 +173,7 @@ export default async function HomePage() {
                 <CardCategory>{event.eventType || "Evento"}</CardCategory>
                 <CardTitle>{event.title}</CardTitle>
                 <CardMeta>
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1.5">
                     <CalendarDays className="h-3.5 w-3.5 text-berea-gold" />
                     {new Date(event.startDate).toLocaleDateString("es-MX", {
                       day: "numeric",
@@ -164,14 +182,14 @@ export default async function HomePage() {
                     })}
                   </span>
                   {event.time && (
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center gap-1.5">
                       <Clock className="h-3.5 w-3.5 text-berea-gold" />
                       {event.time}
                     </span>
                   )}
                 </CardMeta>
                 {event.location && (
-                  <p className="mt-1 text-xs text-berea-muted">{event.location}</p>
+                  <p className="mt-2 text-xs text-berea-muted">{event.location}</p>
                 )}
               </Card>
             ))}
@@ -185,21 +203,23 @@ export default async function HomePage() {
         />
       )}
 
-      <section className="bg-white">
+      <SectionSeparator variant="curve" />
+
+      <section className="bg-gradient-to-b from-[#fcfcfc] to-[#f5f5f5]">
         {activeMinistries.length > 0 ? (
           <ContentBlock>
             <SectionHeading
               title="Ministerios"
               subtitle="Descubre las diferentes áreas donde puedes servir y crecer."
             />
-            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {activeMinistries.map((m, i) => (
                 <Card
                   key={m.id}
                   href="/ministerios-activos"
                   className={`animate-fade-up animation-delay-${Math.min((i + 1) * 100, 950)}`}
                 >
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-berea-gold/10 to-berea-gold/5">
                     <Church className="h-6 w-6 text-berea-gold/60" />
                   </div>
                   <CardTitle className="text-center">{m.name}</CardTitle>
@@ -225,7 +245,7 @@ export default async function HomePage() {
             title="Devocionales"
             subtitle="Reflexiones bíblicas para edificar tu vida espiritual."
           />
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {recentDevotionals.map((d, i) => (
               <Card
                 key={d.id}
@@ -236,7 +256,7 @@ export default async function HomePage() {
                 <CardTitle>{d.title}</CardTitle>
                 {d.excerpt && <CardDescription>{d.excerpt}</CardDescription>}
                 {d.verse && (
-                  <p className="mt-3 text-xs italic text-berea-gold/70 line-clamp-2">{d.verse}</p>
+                  <p className="mt-4 text-xs italic text-berea-gold/70 line-clamp-2">{d.verse}</p>
                 )}
               </Card>
             ))}
@@ -251,11 +271,11 @@ export default async function HomePage() {
       )}
 
       <section className="relative overflow-hidden bg-berea-navy">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.1),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.12),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(201,162,39,0.06),transparent_50%)]" />
         <ContentBlock className="relative">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-lg">
               <Heart className="h-8 w-8 text-berea-gold" />
             </div>
             <h2 className="mt-6 text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -265,11 +285,12 @@ export default async function HomePage() {
               Nos encantaría recibirte en nuestra iglesia. Ven tal como eres y descubre una
               comunidad que te amará y te apoyará en tu caminar con Cristo.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link
                 href="/contacto"
-                className="inline-flex items-center gap-2 rounded-lg bg-berea-gold px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-berea-gold/25 transition-all duration-300 hover:bg-berea-gold/90 hover:-translate-y-0.5 hover:shadow-xl"
+                className="inline-flex items-center gap-2 rounded-xl bg-berea-gold px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-berea-gold/25 transition-all duration-300 hover:bg-berea-gold/90 hover:-translate-y-0.5 hover:shadow-xl"
               >
+                <MapPin className="h-4 w-4" />
                 Ubicación y horarios
                 <ArrowRight className="h-4 w-4" />
               </Link>

@@ -39,7 +39,7 @@ export default async function CelulasPage() {
       />
 
       {items.length > 0 ? (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-5xl">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((c, i) => (
@@ -79,7 +79,7 @@ export default async function CelulasPage() {
           </div>
         </ContentBlock>
       ) : (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-4xl">
             <div className="mb-14 grid gap-8 sm:grid-cols-3">
               {cellTypes.map((t, i) => (

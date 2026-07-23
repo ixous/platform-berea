@@ -9,7 +9,7 @@ interface CardProps {
 }
 
 export function Card({ children, href, className = "", padded = true }: CardProps) {
-  const classes = `rounded-xl border border-berea-border bg-white transition-all duration-300 motion-reduce:transition-none hover:shadow-lg hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 ${padded ? "p-6" : ""} ${className}`;
+  const classes = `rounded-2xl border border-berea-border/60 bg-white shadow-sm transition-all duration-300 motion-reduce:transition-none hover:shadow-md hover:-translate-y-1 motion-reduce:hover:translate-y-0 ${padded ? "p-6" : ""} ${className}`;
 
   if (href) {
     return (
@@ -45,7 +45,7 @@ export function CardTitle({
 }) {
   return (
     <h3
-      className={`mt-2 text-lg font-bold text-berea-navy transition-colors duration-200 motion-reduce:transition-none group-hover:text-berea-gold ${className}`}
+      className={`mt-3 text-lg font-bold text-berea-navy transition-colors duration-200 motion-reduce:transition-none group-hover:text-berea-gold ${className}`}
     >
       {children}
     </h3>

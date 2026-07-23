@@ -40,7 +40,7 @@ export default async function HistoriaPage() {
         subtitle="Conoce cómo Dios ha guiado a nuestra iglesia."
       />
 
-      <ContentBlock>
+      <ContentBlock variant="cream">
         <ContentNarrow>
           {page?.content ? (
             <div className="space-y-8 text-berea-muted leading-relaxed">

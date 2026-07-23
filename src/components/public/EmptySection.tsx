@@ -11,7 +11,7 @@ export function EmptySection({ title, message, icon: Icon = FolderOpen }: EmptyS
   return (
     <section className="px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-lg text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-berea-navy/5">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-berea-border/40 bg-white shadow-sm">
           <Icon className="h-8 w-8 text-berea-gold/40" />
         </div>
         <h2 className="mt-6 text-xl font-bold tracking-tight text-berea-navy">{title}</h2>

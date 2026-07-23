@@ -51,7 +51,7 @@ export default async function FormacionBiblicaPage() {
       />
 
       {programs.length > 0 ? (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-5xl">
             <div className="grid gap-8 sm:grid-cols-2">
               {programs.map((p, i) => (
@@ -90,7 +90,7 @@ export default async function FormacionBiblicaPage() {
           </div>
         </ContentBlock>
       ) : (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-4xl">
             <div className="grid gap-8 sm:grid-cols-2">
               {programOverview.map((p, i) => (

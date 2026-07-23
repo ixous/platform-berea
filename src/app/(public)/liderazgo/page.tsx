@@ -30,7 +30,7 @@ export default async function LiderazgoPage() {
       <PageBanner title="Liderazgo" subtitle="Conoce a quienes guían nuestra iglesia." />
 
       {leaders.length > 0 ? (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-5xl">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {leaders.map((leader, i) => (

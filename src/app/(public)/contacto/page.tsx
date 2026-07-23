@@ -44,7 +44,7 @@ export default async function ContactoPage() {
         backgroundImage="/images/banner-contacto.png"
       />
 
-      <ContentBlock>
+      <ContentBlock variant="cream">
         <div className="mx-auto max-w-5xl">
           <div className="grid gap-16 lg:grid-cols-2">
             <div>

@@ -31,7 +31,7 @@ export default async function VisionAnualPage() {
       <PageBanner title="Visión Anual" subtitle="Lo que Dios nos ha encomendado este año." />
 
       {vision ? (
-        <ContentBlock>
+        <ContentBlock variant="cream">
           <div className="mx-auto max-w-3xl">
             <div className="rounded-2xl border border-berea-border bg-white p-12 text-center">
               {vision.year && (
