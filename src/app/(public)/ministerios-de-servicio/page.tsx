@@ -89,10 +89,6 @@ export default async function MinisteriosServicioPage() {
                 </Card>
               ))}
             </div>
-            <p className="mt-10 text-center text-sm text-berea-muted">
-              Cada ministerio será completamente administrable desde el CMS, donde se podrá añadir
-              descripción, líder, horario y fotografías.
-            </p>
           </div>
         </ContentBlock>
       )}

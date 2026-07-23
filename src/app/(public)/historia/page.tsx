@@ -64,12 +64,6 @@ export default async function HistoriaPage() {
               </p>
             </div>
           )}
-          <div className="mt-12 rounded-xl border border-berea-border bg-berea-light p-8">
-            <p className="text-sm text-berea-muted">
-              Esta sección es administrable desde el CMS. Una vez que el equipo de Centro Cristiano
-              Berea proporcione el contenido histórico oficial, se actualizará automáticamente.
-            </p>
-          </div>
         </ContentNarrow>
       </ContentBlock>
     </>

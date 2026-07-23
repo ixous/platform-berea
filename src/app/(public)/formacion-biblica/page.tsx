@@ -106,10 +106,6 @@ export default async function FormacionBiblicaPage() {
                 </Card>
               ))}
             </div>
-            <p className="mt-10 text-center text-sm text-berea-muted">
-              Cada programa será completamente administrable desde el CMS, con información detallada
-              de instructores, fechas, requisitos y modalidad.
-            </p>
           </div>
         </ContentBlock>
       )}

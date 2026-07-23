@@ -3,7 +3,7 @@ import { contact } from "@/lib/db/schema";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
 import { ContactForm } from "@/components/public/ContactForm";
-import { MapPin, Clock, Phone, Mail, MessageCircle } from "lucide-react";
+import { MapPin, Clock, Phone, Mail } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -31,8 +31,9 @@ export default async function ContactoPage() {
   const schedules = scheduleData.schedules?.length
     ? scheduleData.schedules
     : [
-        { day: "Domingo", time: "10:00 AM y 12:30 PM" },
-        { day: "Miércoles", time: "7:00 PM" },
+        { day: "Domingo", time: "11:00 AM a 1:00 PM" },
+        { day: "Miércoles", time: "Escuela de Líderes 8:00 PM" },
+        { day: "Jueves", time: "Escuela de Ministerios 8:00 PM" },
       ];
 
   return (
@@ -56,22 +57,18 @@ export default async function ContactoPage() {
                   {
                     icon: MapPin,
                     label: "Dirección",
-                    value: info?.address || "Mexicali, Baja California, México",
+                    value:
+                      "C. Tercera 109, Zona Urbana Xochimilco, Mexicali, Baja California, C.P. 21380",
                   },
                   {
                     icon: Phone,
                     label: "Teléfono",
-                    value: info?.phone || "[Pendiente de configuración]",
+                    value: info?.phone || "686 555 6149",
                   },
                   {
                     icon: Mail,
                     label: "Correo electrónico",
-                    value: info?.email || "[Pendiente de configuración]",
-                  },
-                  {
-                    icon: MessageCircle,
-                    label: "WhatsApp",
-                    value: info?.whatsapp || "[Pendiente de configuración]",
+                    value: info?.email || "centrocristianobereamxli@gmail.com",
                   },
                 ].map((item) => (
                   <div key={item.label} className="flex items-start gap-4">
@@ -105,9 +102,7 @@ export default async function ContactoPage() {
                     </div>
                   </div>
                 ))}
-                <p className="text-xs italic text-berea-muted">
-                  Los horarios son administrables desde el CMS.
-                </p>
+                <p className="text-xs italic text-berea-muted">Duración aproximada: 2 horas</p>
               </div>
             </div>
           </div>

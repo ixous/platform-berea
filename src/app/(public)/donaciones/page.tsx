@@ -74,15 +74,19 @@ export default async function DonacionesPage() {
           ) : (
             <div className="rounded-2xl border border-berea-border bg-berea-light p-12 text-center">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white">
-                <Banknote className="h-8 w-8 text-berea-muted/40" />
+                <Heart className="h-8 w-8 text-berea-gold" />
               </div>
-              <h3 className="mt-6 text-lg font-bold text-berea-navy">Información pendiente</h3>
+              <h3 className="mt-6 text-lg font-bold text-berea-navy">Donaciones</h3>
               <p className="mx-auto mt-3 max-w-md text-sm text-berea-muted">
-                Los datos bancarios, cuentas y métodos de donación se configurarán desde el CMS
-                cuando el equipo de Centro Cristiano Berea proporcione la información oficial.
+                Tu generosidad nos ayuda a continuar compartiendo el mensaje de Jesucristo,
+                fortaleciendo los ministerios de la iglesia y sirviendo a nuestra comunidad.
               </p>
-              <p className="mt-2 text-sm text-berea-muted">
-                En el futuro se integrará Stripe para facilitar donaciones en línea.
+              <p className="mx-auto mt-4 max-w-md text-sm text-berea-muted">
+                Si deseas apoyar esta obra, puedes comunicarte directamente con nosotros para
+                conocer las diferentes formas de colaborar.
+              </p>
+              <p className="mx-auto mt-4 max-w-md text-sm text-berea-muted font-medium text-berea-navy">
+                Agradecemos profundamente cada oración, ofrenda y muestra de amor hacia esta casa.
               </p>
             </div>
           )}
