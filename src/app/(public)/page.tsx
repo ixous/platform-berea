@@ -76,10 +76,7 @@ export default async function HomePage() {
 
       <ContentBlock>
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-berea-gold">
-            Bienvenidos
-          </p>
-          <h2 className="mt-4 text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+          <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
             Una familia que vive para Cristo
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-berea-muted">
@@ -142,12 +139,12 @@ export default async function HomePage() {
         </ContentBlock>
       </section>
 
-      <ContentBlock>
-        <SectionHeading
-          title="Próximos Eventos"
-          subtitle="Mantente al día con nuestras actividades y servicios especiales."
-        />
-        {upcomingEvents.length > 0 ? (
+      {upcomingEvents.length > 0 ? (
+        <ContentBlock>
+          <SectionHeading
+            title="Próximos Eventos"
+            subtitle="Mantente al día con nuestras actividades y servicios especiales."
+          />
           <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {upcomingEvents.map((event, i) => (
               <Card
@@ -179,22 +176,22 @@ export default async function HomePage() {
               </Card>
             ))}
           </div>
-        ) : (
-          <EmptySection
-            title="Próximos Eventos"
-            message="Próximamente podrás consultar aquí los eventos y actividades de la iglesia."
-            icon={CalendarDays}
-          />
-        )}
-      </ContentBlock>
+        </ContentBlock>
+      ) : (
+        <EmptySection
+          title="Próximos Eventos"
+          message="Próximamente podrás consultar aquí los eventos y actividades de la iglesia."
+          icon={CalendarDays}
+        />
+      )}
 
       <section className="bg-white">
-        <ContentBlock>
-          <SectionHeading
-            title="Ministerios"
-            subtitle="Descubre las diferentes áreas donde puedes servir y crecer."
-          />
-          {activeMinistries.length > 0 ? (
+        {activeMinistries.length > 0 ? (
+          <ContentBlock>
+            <SectionHeading
+              title="Ministerios"
+              subtitle="Descubre las diferentes áreas donde puedes servir y crecer."
+            />
             <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {activeMinistries.map((m, i) => (
                 <Card
@@ -212,22 +209,22 @@ export default async function HomePage() {
                 </Card>
               ))}
             </div>
-          ) : (
-            <EmptySection
-              title="Ministerios"
-              message="Próximamente podrás consultar aquí los ministerios activos de la iglesia."
-              icon={Church}
-            />
-          )}
-        </ContentBlock>
+          </ContentBlock>
+        ) : (
+          <EmptySection
+            title="Ministerios"
+            message="Próximamente podrás consultar aquí los ministerios activos de la iglesia."
+            icon={Church}
+          />
+        )}
       </section>
 
-      <ContentBlock>
-        <SectionHeading
-          title="Devocionales"
-          subtitle="Reflexiones bíblicas para edificar tu vida espiritual."
-        />
-        {recentDevotionals.length > 0 ? (
+      {recentDevotionals.length > 0 ? (
+        <ContentBlock>
+          <SectionHeading
+            title="Devocionales"
+            subtitle="Reflexiones bíblicas para edificar tu vida espiritual."
+          />
           <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {recentDevotionals.map((d, i) => (
               <Card
@@ -244,14 +241,14 @@ export default async function HomePage() {
               </Card>
             ))}
           </div>
-        ) : (
-          <EmptySection
-            title="Devocionales"
-            message="Próximamente publicaremos devocionales para tu crecimiento espiritual."
-            icon={BookOpen}
-          />
-        )}
-      </ContentBlock>
+        </ContentBlock>
+      ) : (
+        <EmptySection
+          title="Devocionales"
+          message="Próximamente publicaremos devocionales para tu crecimiento espiritual."
+          icon={BookOpen}
+        />
+      )}
 
       <section className="relative overflow-hidden bg-berea-navy">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.1),transparent_60%)]" />
