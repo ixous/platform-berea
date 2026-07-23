@@ -8,7 +8,7 @@ interface PageBannerProps {
 
 export function PageBanner({ title, subtitle, backgroundImage }: PageBannerProps) {
   return (
-    <section className="relative overflow-hidden bg-berea-navy">
+    <section className="relative flex min-h-[500px] items-center justify-center overflow-hidden bg-berea-navy">
       {backgroundImage ? (
         <>
           <BereaImage
@@ -23,7 +23,7 @@ export function PageBanner({ title, subtitle, backgroundImage }: PageBannerProps
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.08),transparent_50%)]" />
       )}
 
-      <div className="relative px-4 py-20 sm:px-6 lg:px-8">
+      <div className="relative px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <div className="mx-auto mb-4 h-1 w-16 rounded-full bg-berea-gold/60" />
           <h1 className="text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl">
