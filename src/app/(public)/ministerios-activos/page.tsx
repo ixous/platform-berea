@@ -3,12 +3,21 @@ import { ministries } from "@/lib/db/schema";
 import { and, isNull, eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
-import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
-import { Church, Users, MapPin, Clock } from "lucide-react";
+import { Users, MapPin, Clock } from "lucide-react";
 import type { Metadata } from "next";
+
+interface MinistryItem {
+  name: string;
+  description: string | null;
+  leader?: string | null;
+  schedule?: string | null;
+  location?: string | null;
+  id?: string;
+  slug?: string;
+}
 
 export const metadata: Metadata = {
   title: "Ministerios Activos",
@@ -24,12 +33,43 @@ async function getMinistries() {
     .orderBy(ministries.displayOrder);
 }
 
+const fiveFoldMinistries: MinistryItem[] = [
+  {
+    name: "Apóstoles",
+    description:
+      "Los apóstoles son enviados por Dios para establecer fundamentos doctrinales, abrir nuevos campos ministeriales y velar por el crecimiento espiritual de la iglesia. Tienen la capacidad de levantar líderes, impartir visión y extender el Reino de Dios más allá de las fronteras locales, asegurando que cada obra esté alineada con el propósito divino.",
+  },
+  {
+    name: "Profetas",
+    description:
+      "Los profetas son portavoces de Dios que traen revelación, dirección y edificación al cuerpo de Cristo. Su ministerio fortalece la fe de la congregación al confirmar la voluntad de Dios, advertir sobre peligros espirituales y preparar los corazones para los tiempos que vienen. Operan con una sensibilidad especial al Espíritu Santo.",
+  },
+  {
+    name: "Evangelistas",
+    description:
+      "Los evangelistas tienen el don y la pasión de compartir el Evangelio con los perdidos. Su ministerio se enfoca en alcanzar almas para Cristo, organizar campañas evangelísticas y movilizar a la iglesia para cumplir la Gran Comisión. Son puentes entre la comunidad y la iglesia, llevando esperanza y restauración a quienes aún no conocen a Cristo.",
+  },
+  {
+    name: "Pastores",
+    description:
+      "Los pastores son llamados a cuidar, guiar y pastorear el rebaño de Dios. Su corazón está puesto en el discipulado, la consejería y el acompañamiento espiritual de cada miembro. Se dedican a velar por la salud espiritual de la congregación, asegurando que cada persona crezca en su fe, encuentre propósito y sea edificada en amor.",
+  },
+  {
+    name: "Maestros",
+    description:
+      "Los maestros tienen la capacidad de explicar y aplicar la Palabra de Dios con claridad y profundidad. Su ministerio consiste en formar discípulos mediante la enseñanza sistemática de la Biblia, preparando a los creyentes para defender su fe, crecer en conocimiento y enseñar a otros. Son fundamentales para la edificación doctrinal de la iglesia.",
+  },
+];
+
 export default async function MinisteriosActivosPage() {
   const items = await getMinistries();
   const mediaMap = await getEntityMediaMap(
     "ministry",
     items.map((m) => m.id)
   );
+
+  const hasCmsData = items.length > 0;
+  const displayItems = hasCmsData ? items : fiveFoldMinistries;
 
   return (
     <>
@@ -39,31 +79,33 @@ export default async function MinisteriosActivosPage() {
         backgroundImage="/images/banner-ministerios.png"
       />
 
-      {items.length > 0 ? (
-        <ContentBlock variant="gold-mist">
-          <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
-                Áreas de Servicio
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
-                Descubre las diferentes áreas donde puedes servir y crecer en la fe junto a otros.
-              </p>
-            </div>
-          </ScrollReveal>
+      <ContentBlock variant="gold-mist">
+        <ScrollReveal animation="fade-up">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+              Los Cinco Ministerios
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+              Cristo dio estos ministerios para equipar al pueblo de Dios, edificar el cuerpo de
+              Cristo y llevarnos a la madurez espiritual. Cada uno es un regalo divino para la
+              iglesia.
+            </p>
+          </div>
+        </ScrollReveal>
 
-          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((m) => {
-                const img = mediaMap.get(m.id);
-                return (
-                  <MediaCard
-                    key={m.id}
-                    title={m.name}
-                    description={m.description || null}
-                    imageUrl={img?.mediaUrl || img?.thumbnailUrl}
-                    category="Ministerio"
-                    meta={
+        <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {displayItems.map((m: MinistryItem) => {
+              const img = hasCmsData ? mediaMap.get(m.id!) : null;
+              return (
+                <MediaCard
+                  key={m.name || m.id}
+                  title={m.name}
+                  description={m.description || null}
+                  imageUrl={img?.mediaUrl || img?.thumbnailUrl}
+                  category="Ministerio"
+                  meta={
+                    hasCmsData ? (
                       <div className="space-y-1.5 text-xs text-berea-muted">
                         {m.leader && (
                           <p className="flex items-center gap-1.5">
@@ -84,20 +126,14 @@ export default async function MinisteriosActivosPage() {
                           </p>
                         )}
                       </div>
-                    }
-                  />
-                );
-              })}
-            </div>
-          </ScrollReveal>
-        </ContentBlock>
-      ) : (
-        <EmptySection
-          title="Ministerios Activos"
-          message="Próximamente podrás consultar aquí los ministerios activos de la iglesia."
-          icon={Church}
-        />
-      )}
+                    ) : undefined
+                  }
+                />
+              );
+            })}
+          </div>
+        </ScrollReveal>
+      </ContentBlock>
     </>
   );
 }
