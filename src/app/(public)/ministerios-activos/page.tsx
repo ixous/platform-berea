@@ -4,8 +4,9 @@ import { and, isNull, eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
-import { Card, CardDescription } from "@/components/public/Card";
+import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
+import { getEntityMediaMap } from "@/lib/db/media-helpers";
 import { Church, Users, MapPin, Clock } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -25,6 +26,10 @@ async function getMinistries() {
 
 export default async function MinisteriosActivosPage() {
   const items = await getMinistries();
+  const mediaMap = await getEntityMediaMap(
+    "ministry",
+    items.map((m) => m.id)
+  );
 
   return (
     <>
@@ -37,38 +42,52 @@ export default async function MinisteriosActivosPage() {
       {items.length > 0 ? (
         <ContentBlock variant="gold-mist">
           <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-5xl">
-              <div className="grid gap-8 sm:grid-cols-2">
-                {items.map((m) => (
-                  <Card key={m.id} className="p-8">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
-                      <Church className="h-6 w-6 text-berea-gold/60" />
-                    </div>
-                    <h3 className="mt-4 text-xl font-bold text-berea-navy">{m.name}</h3>
-                    {m.description && <CardDescription>{m.description}</CardDescription>}
-                    <div className="mt-6 space-y-2 text-sm">
-                      {m.leader && (
-                        <p className="flex items-center gap-2 text-berea-navy">
-                          <Users className="h-4 w-4 text-berea-gold/60" />
-                          <strong>{m.leader}</strong>
-                        </p>
-                      )}
-                      {m.schedule && (
-                        <p className="flex items-center gap-2 text-berea-muted">
-                          <Clock className="h-4 w-4 text-berea-gold/40" />
-                          {m.schedule}
-                        </p>
-                      )}
-                      {m.location && (
-                        <p className="flex items-center gap-2 text-berea-muted">
-                          <MapPin className="h-4 w-4 text-berea-gold/40" />
-                          {m.location}
-                        </p>
-                      )}
-                    </div>
-                  </Card>
-                ))}
-              </div>
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+                Áreas de Servicio
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+                Descubre las diferentes áreas donde puedes servir y crecer en la fe junto a otros.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((m) => {
+                const img = mediaMap.get(m.id);
+                return (
+                  <MediaCard
+                    key={m.id}
+                    title={m.name}
+                    description={m.description || null}
+                    imageUrl={img?.mediaUrl || img?.thumbnailUrl}
+                    category="Ministerio"
+                    meta={
+                      <div className="space-y-1.5 text-xs text-berea-muted">
+                        {m.leader && (
+                          <p className="flex items-center gap-1.5">
+                            <Users className="h-3.5 w-3.5 text-berea-gold/60" />
+                            {m.leader}
+                          </p>
+                        )}
+                        {m.schedule && (
+                          <p className="flex items-center gap-1.5">
+                            <Clock className="h-3.5 w-3.5 text-berea-gold/60" />
+                            {m.schedule}
+                          </p>
+                        )}
+                        {m.location && (
+                          <p className="flex items-center gap-1.5">
+                            <MapPin className="h-3.5 w-3.5 text-berea-gold/60" />
+                            {m.location}
+                          </p>
+                        )}
+                      </div>
+                    }
+                  />
+                );
+              })}
             </div>
           </ScrollReveal>
         </ContentBlock>

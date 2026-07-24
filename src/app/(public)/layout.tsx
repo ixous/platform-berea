@@ -6,7 +6,7 @@ export const revalidate = 300;
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col bg-berea-light">
+    <div className="flex min-h-screen flex-col bg-ambient-warm">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-berea-navy focus:px-4 focus:py-2 focus:text-sm focus:text-white focus:outline-none"

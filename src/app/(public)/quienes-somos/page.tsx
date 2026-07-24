@@ -3,41 +3,54 @@ import { pages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { PageBanner } from "@/components/public/PageBanner";
-import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
+import { ContentBlock } from "@/components/public/ContentBlock";
+import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
-import { Heart, Target, Eye, List } from "lucide-react";
 import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Quienes Somos",
+  description:
+    "Conoce la identidad, misión y visión de Centro Cristiano Berea en Mexicali, Baja California.",
+  openGraph: {
+    title: "Quienes Somos | Centro Cristiano Berea",
+    description:
+      "Conoce la identidad, misión y visión de Centro Cristiano Berea en Mexicali, Baja California.",
+  },
+};
 
 async function getPage(slug: string) {
   const [page] = await db.select().from(pages).where(eq(pages.slug, slug)).limit(1);
   return page;
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Quienes Somos",
-    description:
-      "Conoce la identidad, misión y visión de Centro Cristiano Berea en Mexicali, Baja California.",
-    openGraph: {
-      title: "Quienes Somos | Centro Cristiano Berea",
-      description:
-        "Conoce la identidad, misión y visión de Centro Cristiano Berea en Mexicali, Baja California.",
-    },
-  };
-}
-
-function renderContent(content: string | null) {
-  if (!content) return null;
-  return content.split("\n").map((p, i) => (
-    <p key={i} className="leading-relaxed text-berea-muted">
-      {p}
-    </p>
-  ));
-}
-
 export default async function QuienesSomosPage() {
   const page = await getPage("quienes-somos");
   if (!page) notFound();
+
+  const coreCards = [
+    {
+      title: "Nuestra Identidad",
+      description: page.content
+        ? page.content
+        : "Centro Cristiano Berea es una iglesia cristiana ubicada en Mexicali, Baja California, México. Somos una comunidad de fe comprometida con la Palabra de Dios y con el amor al prójimo. Creemos en el poder transformador del Evangelio y trabajamos para que cada persona pueda experimentar una relación personal con Jesucristo.",
+    },
+    {
+      title: "Misión",
+      description:
+        "Formar discípulos de Cristo, fortalecer familias y extender el Reino de Dios en nuestra comunidad y más allá, a través de la predicación de la Palabra, la adoración genuina y el servicio amoroso. Cada miembro de nuestra congregación es equipado para cumplir el propósito que Dios ha diseñado para su vida.",
+    },
+    {
+      title: "Visión",
+      description:
+        "Ser una iglesia que impacta a Mexicali y al mundo con el mensaje de Cristo, formando líderes comprometidos, familias sólidas y una comunidad que refleje el amor de Dios en cada área de la vida. Anhelamos ver vidas transformadas, hogares restaurados y una ciudad alcanzada por el Evangelio.",
+    },
+    {
+      title: "Valores",
+      description:
+        "La Palabra de Dios como fundamento de todo lo que hacemos. La oración como estilo de vida. La unidad del cuerpo de Cristo. El servicio como expresión de amor. La excelencia para la gloria de Dios. Estos valores nos guían en cada decisión y nos mantienen firmes en nuestra identidad como iglesia.",
+    },
+  ];
 
   return (
     <>
@@ -48,88 +61,25 @@ export default async function QuienesSomosPage() {
       />
 
       <ContentBlock variant="gold-mist">
-        <ContentNarrow>
-          <ScrollReveal animation="fade-up">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-berea-gold/10 to-berea-gold/5">
-                <Heart className="h-5 w-5 text-berea-gold" />
-              </div>
-              <h2 className="text-2xl font-bold text-berea-navy">Nuestra Identidad</h2>
-            </div>
-            <div className="mt-4 h-0.5 w-12 rounded-full bg-gradient-to-r from-berea-gold/80 to-berea-gold" />
-            {page.content ? (
-              <div className="mt-6 space-y-5">{renderContent(page.content)}</div>
-            ) : (
-              <div className="mt-6 space-y-5 leading-relaxed text-berea-muted">
-                <p>
-                  Centro Cristiano Berea es una iglesia cristiana ubicada en Mexicali, Baja
-                  California, México. Somos una comunidad de fe comprometida con la Palabra de Dios
-                  y con el amor al prójimo.
-                </p>
-                <p>
-                  Creemos en el poder transformador del Evangelio y trabajamos para que cada persona
-                  pueda experimentar una relación personal con Jesucristo.
-                </p>
-              </div>
-            )}
-          </ScrollReveal>
-
-          <ScrollReveal animation="fade-up" delay={100}>
-            <div className="mt-16 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-berea-gold/10 to-berea-gold/5">
-                <Target className="h-5 w-5 text-berea-gold" />
-              </div>
-              <h2 className="text-2xl font-bold text-berea-navy">Misión</h2>
-            </div>
-            <div className="mt-4 h-0.5 w-12 rounded-full bg-gradient-to-r from-berea-gold/80 to-berea-gold" />
-            <p className="mt-6 leading-relaxed text-berea-muted">
-              Formar discípulos de Cristo, fortalecer familias y extender el Reino de Dios en
-              nuestra comunidad y más allá, a través de la predicación de la Palabra, la adoración
-              genuina y el servicio amoroso.
+        <ScrollReveal animation="fade-up">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+              Una Iglesia con Propósito
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+              Centro Cristiano Berea es una familia espiritual comprometida con la Palabra de Dios,
+              el amor al prójimo y la transformación de nuestra comunidad.
             </p>
-          </ScrollReveal>
+          </div>
+        </ScrollReveal>
 
-          <ScrollReveal animation="fade-up" delay={200}>
-            <div className="mt-16 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-berea-gold/10 to-berea-gold/5">
-                <Eye className="h-5 w-5 text-berea-gold" />
-              </div>
-              <h2 className="text-2xl font-bold text-berea-navy">Visión</h2>
-            </div>
-            <div className="mt-4 h-0.5 w-12 rounded-full bg-gradient-to-r from-berea-gold/80 to-berea-gold" />
-            <p className="mt-6 leading-relaxed text-berea-muted">
-              Ser una iglesia que impacta a Mexicali y al mundo con el mensaje de Cristo, formando
-              líderes comprometidos, familias sólidas y una comunidad que refleje el amor de Dios en
-              cada área de la vida.
-            </p>
-          </ScrollReveal>
-
-          <ScrollReveal animation="fade-up" delay={300}>
-            <div className="mt-16 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-berea-gold/10 to-berea-gold/5">
-                <List className="h-5 w-5 text-berea-gold" />
-              </div>
-              <h2 className="text-2xl font-bold text-berea-navy">Valores</h2>
-            </div>
-            <div className="mt-4 h-0.5 w-12 rounded-full bg-gradient-to-r from-berea-gold/80 to-berea-gold" />
-            <ul className="mt-6 space-y-4">
-              {[
-                { bold: "La Palabra de Dios", rest: "como fundamento de todo lo que hacemos." },
-                { bold: "La oración", rest: "como estilo de vida." },
-                { bold: "La unidad", rest: "del cuerpo de Cristo." },
-                { bold: "El servicio", rest: "como expresión de amor." },
-                { bold: "La excelencia", rest: "para la gloria de Dios." },
-              ].map((v) => (
-                <li key={v.bold} className="flex items-start gap-3">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-berea-gold" />
-                  <span className="text-berea-muted">
-                    <strong className="text-berea-navy">{v.bold}</strong> {v.rest}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </ScrollReveal>
-        </ContentNarrow>
+        <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+          <div className="grid gap-8 sm:grid-cols-2">
+            {coreCards.map((card) => (
+              <MediaCard key={card.title} title={card.title} description={card.description} />
+            ))}
+          </div>
+        </ScrollReveal>
       </ContentBlock>
     </>
   );
