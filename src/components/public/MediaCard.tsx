@@ -102,12 +102,7 @@ export function MediaCard({
           <div className="mt-auto pt-4">{meta}</div>
         )}
 
-        <div className="mt-3 flex items-center gap-1 text-xs font-semibold text-berea-gold opacity-0 transition-all duration-300 motion-reduce:transition-none group-hover:opacity-100">
-          <span>Ver más</span>
-          <svg className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
+
       </div>
     </div>
   );

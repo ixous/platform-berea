@@ -6,7 +6,6 @@ import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
 import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
-import { getEntityMediaMap } from "@/lib/db/media-helpers";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
