@@ -4,9 +4,10 @@ import { and, isNull, eq, gte } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
-import { Card, CardTitle, CardDescription } from "@/components/public/Card";
+import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
-import { CalendarDays, MapPin, Clock } from "lucide-react";
+import { getEntityMediaMap } from "@/lib/db/media-helpers";
+import { CalendarDays, Clock, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -30,8 +31,20 @@ async function getUpcomingEvents() {
     .limit(20);
 }
 
+function formatDate(date: Date) {
+  return date.toLocaleDateString("es-MX", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 export default async function EventosPage() {
   const items = await getUpcomingEvents();
+  const mediaMap = await getEntityMediaMap(
+    "event",
+    items.map((e) => e.id)
+  );
 
   return (
     <>
@@ -44,46 +57,51 @@ export default async function EventosPage() {
       {items.length > 0 ? (
         <ContentBlock variant="warm">
           <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-4xl">
-              <div className="space-y-6">
-                {items.map((e, i) => (
-                  <Card
-                    key={e.id}
-                    href={`/eventos/${e.slug}`}
-                    className="flex-col gap-6 p-8 sm:flex-row sm:items-center"
-                  >
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-berea-navy/5">
-                      <CalendarDays className="h-7 w-7 text-berea-gold" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <CardTitle className="mt-0">{e.title}</CardTitle>
-                      {e.description && <CardDescription>{e.description}</CardDescription>}
-                      <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-berea-muted">
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+                Próximos Eventos
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+                Conferencias, congresos y actividades especiales para toda la familia.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((event) => {
+                const img = mediaMap.get(event.id);
+                return (
+                  <MediaCard
+                    key={event.id}
+                    title={event.title}
+                    description={event.description || event.additionalInfo}
+                    imageUrl={img?.mediaUrl || img?.thumbnailUrl}
+                    href={`/eventos/${event.slug}`}
+                    category={event.eventType || "Evento"}
+                    meta={
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-berea-muted">
                         <span className="flex items-center gap-1.5">
                           <CalendarDays className="h-3.5 w-3.5 text-berea-gold/60" />
-                          {new Date(e.startDate).toLocaleDateString("es-MX", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })}
+                          {formatDate(new Date(event.startDate))}
                         </span>
-                        {e.time && (
+                        {event.time && (
                           <span className="flex items-center gap-1.5">
                             <Clock className="h-3.5 w-3.5 text-berea-gold/60" />
-                            {e.time}
+                            {event.time}
                           </span>
                         )}
-                        {e.location && (
+                        {event.location && (
                           <span className="flex items-center gap-1.5">
                             <MapPin className="h-3.5 w-3.5 text-berea-gold/60" />
-                            {e.location}
+                            {event.location}
                           </span>
                         )}
                       </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
+                    }
+                  />
+                );
+              })}
             </div>
           </ScrollReveal>
         </ContentBlock>

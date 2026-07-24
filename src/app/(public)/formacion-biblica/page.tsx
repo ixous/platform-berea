@@ -3,9 +3,10 @@ import { biblicalPrograms } from "@/lib/db/schema";
 import { and, isNull, eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
-import { Card, CardDescription } from "@/components/public/Card";
+import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
-import { GraduationCap, Clock, User, Layers } from "lucide-react";
+import { getEntityMediaMap } from "@/lib/db/media-helpers";
+import { User, Layers, Clock } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -42,6 +43,10 @@ const programOverview = [
 
 export default async function FormacionBiblicaPage() {
   const programs = await getPrograms();
+  const mediaMap = await getEntityMediaMap(
+    "biblical_program",
+    programs.map((p) => p.id)
+  );
 
   return (
     <>
@@ -52,58 +57,75 @@ export default async function FormacionBiblicaPage() {
       />
 
       {programs.length > 0 ? (
-        <ContentBlock variant="warm">
+        <ContentBlock variant="gold-mist">
           <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-5xl">
-              <div className="grid gap-8 sm:grid-cols-2">
-                {programs.map((p, i) => (
-                  <Card key={p.id} className="p-8">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
-                      <GraduationCap className="h-6 w-6 text-berea-gold/60" />
-                    </div>
-                    <h3 className="mt-4 text-xl font-bold text-berea-navy">{p.name}</h3>
-                    {p.description && <CardDescription>{p.description}</CardDescription>}
-                    <div className="mt-5 space-y-2 text-sm">
-                      {p.instructor && (
-                        <p className="flex items-center gap-2 text-berea-navy">
-                          <User className="h-4 w-4 text-berea-gold/60" />
-                          <strong>{p.instructor}</strong>
-                        </p>
-                      )}
-                      {p.modality && (
-                        <p className="flex items-center gap-2 text-berea-muted">
-                          <Layers className="h-4 w-4 text-berea-gold/40" />
-                          {p.modality}
-                        </p>
-                      )}
-                      {p.duration && (
-                        <p className="flex items-center gap-2 text-berea-muted">
-                          <Clock className="h-4 w-4 text-berea-gold/40" />
-                          {p.duration}
-                        </p>
-                      )}
-                    </div>
-                  </Card>
-                ))}
-              </div>
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+                Programas de Formación
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+                Capacitación ministerial y teológica para todos los niveles.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {programs.map((p) => {
+                const img = mediaMap.get(p.id);
+                return (
+                  <MediaCard
+                    key={p.id}
+                    title={p.name}
+                    description={p.description || null}
+                    imageUrl={img?.mediaUrl || img?.thumbnailUrl}
+                    category={p.modality || "Programa"}
+                    meta={
+                      <div className="space-y-1.5 text-xs text-berea-muted">
+                        {p.instructor && (
+                          <p className="flex items-center gap-1.5">
+                            <User className="h-3.5 w-3.5 text-berea-gold/60" />
+                            {p.instructor}
+                          </p>
+                        )}
+                        {p.modality && (
+                          <p className="flex items-center gap-1.5">
+                            <Layers className="h-3.5 w-3.5 text-berea-gold/60" />
+                            {p.modality}
+                          </p>
+                        )}
+                        {p.duration && (
+                          <p className="flex items-center gap-1.5">
+                            <Clock className="h-3.5 w-3.5 text-berea-gold/60" />
+                            {p.duration}
+                          </p>
+                        )}
+                      </div>
+                    }
+                  />
+                );
+              })}
             </div>
           </ScrollReveal>
         </ContentBlock>
       ) : (
-        <ContentBlock variant="warm">
+        <ContentBlock variant="gold-mist">
           <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-4xl">
-              <div className="grid gap-8 sm:grid-cols-2">
-                {programOverview.map((p, i) => (
-                  <Card key={p.name} className="p-8">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
-                      <GraduationCap className="h-6 w-6 text-berea-gold/60" />
-                    </div>
-                    <h3 className="mt-4 text-lg font-bold text-berea-navy">{p.name}</h3>
-                    <CardDescription>{p.desc}</CardDescription>
-                  </Card>
-                ))}
-              </div>
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+                Programas de Formación
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+                Capacitación ministerial y teológica para todos los niveles.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {programOverview.map((p) => (
+                <MediaCard key={p.name} title={p.name} description={p.desc} category="Programa" />
+              ))}
             </div>
           </ScrollReveal>
         </ContentBlock>

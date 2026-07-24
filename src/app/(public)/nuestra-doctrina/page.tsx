@@ -4,8 +4,9 @@ import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
-import { Card, CardTitle, CardDescription } from "@/components/public/Card";
+import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
+import { getEntityMediaMap } from "@/lib/db/media-helpers";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -60,16 +61,22 @@ export default async function DoctrinaPage() {
 
       <ContentBlock variant="gold-mist">
         <ScrollReveal animation="fade-up">
-          <div className="mx-auto max-w-4xl">
-            <div className="grid gap-8 sm:grid-cols-2">
-              {doctrinalPoints.map((p) => (
-                <Card key={p.title} className="p-8">
-                  <CardTitle className="mt-0">{p.title}</CardTitle>
-                  <div className="mt-3 h-0.5 w-8 rounded-full bg-berea-gold/40" />
-                  <CardDescription className="mt-4">{p.desc}</CardDescription>
-                </Card>
-              ))}
-            </div>
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+              Puntos Doctrinales
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+              Nuestra fe está fundamentada en la Palabra de Dios. Estos son los pilares que nos
+              sostienen como iglesia.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {doctrinalPoints.map((p) => (
+              <MediaCard key={p.title} title={p.title} description={p.desc} />
+            ))}
           </div>
         </ScrollReveal>
       </ContentBlock>
