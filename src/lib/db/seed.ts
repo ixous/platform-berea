@@ -635,6 +635,9 @@ async function main() {
   const seededContact = await seedContact();
   console.log(`  Contact: ${seededContact ? 1 : 0} configurado`);
 
+  const seededDonations = await seedDonations();
+  console.log(`  Donations: ${seededDonations ? 1 : 0} configurado`);
+
   const homepage = await seedHomepageData();
   console.log(
     `  Homepage: settings=${homepage.settings ? 1 : 0}, sections=${homepage.sections}, services=${homepage.services}`
@@ -1336,6 +1339,16 @@ async function seedInstitutionalPages() {
       published: true,
     },
     {
+      slug: "donaciones",
+      metaTitle: "Donaciones",
+      metaDescription:
+        "Apoya económicamente la obra de Centro Cristiano Berea. Tu ofrenda hace una diferencia.",
+      bannerTitle: "Donaciones",
+      bannerSubtitle: "Apoya la obra del Señor con tus ofrendas.",
+      bannerImage: "/images/banner-donaciones.png",
+      published: true,
+    },
+    {
       slug: "contacto",
       metaTitle: "Contacto",
       metaDescription:
@@ -1526,6 +1539,31 @@ async function seedContact() {
     ctaDescription: "Completa el formulario y te responderemos a la brevedad.",
     ctaButtonText: "Enviar mensaje",
     ctaButtonHref: "#contact-form",
+  });
+  return true;
+}
+
+async function seedDonations() {
+  const existing = await db.select({ id: schema.donations.id }).from(schema.donations).limit(1);
+  if (existing.length > 0) return false;
+
+  await db.insert(schema.donations).values({
+    title: "Ofrenda con un corazón generoso",
+    description:
+      "Cada aportación contribuye a la obra de Dios, permitiendo que el Evangelio siga siendo predicado.",
+    bankInfo: JSON.stringify([
+      { bank: "BBVA", account: "1234567890", clabe: "012345678901234567" },
+    ]),
+    suggestedAmounts: JSON.stringify([
+      { label: "$100", value: 100 },
+      { label: "$200", value: 200 },
+      { label: "$500", value: 500 },
+    ]),
+    message:
+      "Tu generosidad nos ayuda a continuar compartiendo el mensaje de Jesucristo, fortaleciendo los ministerios de la iglesia y sirviendo a nuestra comunidad.",
+    ctaButtonText: "Contáctanos",
+    ctaButtonHref: "/contacto",
+    status: "active",
   });
   return true;
 }

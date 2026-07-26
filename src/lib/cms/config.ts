@@ -508,6 +508,8 @@ export const entityConfigs: Record<string, EntityDef> = {
         help: 'Formato: [{"label":"$100","value":100}]',
       },
       { name: "message", label: "Mensaje", type: "textarea" },
+      { name: "ctaButtonText", label: "Texto del botón CTA", type: "text" },
+      { name: "ctaButtonHref", label: "Enlace del botón CTA", type: "url" },
       {
         name: "status",
         label: "Estado",

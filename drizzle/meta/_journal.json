@@ -71,6 +71,13 @@
       "when": 1785051799126,
       "tag": "0009_last_skreet",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1785052465427,
+      "tag": "0010_rapid_ma_gnuci",
+      "breakpoints": true
     }
   ]
 }

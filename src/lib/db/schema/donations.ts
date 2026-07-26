@@ -9,6 +9,8 @@ export const donations = pgTable(
     bankInfo: jsonb("bank_info"),
     suggestedAmounts: jsonb("suggested_amounts"),
     message: text("message"),
+    ctaButtonText: varchar("cta_button_text", { length: 255 }),
+    ctaButtonHref: varchar("cta_button_href", { length: 500 }),
     status: varchar("status", { length: 20 }).notNull().default("active"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
