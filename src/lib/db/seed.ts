@@ -632,6 +632,9 @@ async function main() {
   const seededDoctrines = await seedDoctrines();
   console.log(`  Doctrines: ${seededDoctrines.length} creados`);
 
+  const seededContact = await seedContact();
+  console.log(`  Contact: ${seededContact ? 1 : 0} configurado`);
+
   const homepage = await seedHomepageData();
   console.log(
     `  Homepage: settings=${homepage.settings ? 1 : 0}, sections=${homepage.sections}, services=${homepage.services}`
@@ -1333,6 +1336,16 @@ async function seedInstitutionalPages() {
       published: true,
     },
     {
+      slug: "contacto",
+      metaTitle: "Contacto",
+      metaDescription:
+        "Contáctanos. Información de contacto, ubicación y horarios de Centro Cristiano Berea en Mexicali, Baja California.",
+      bannerTitle: "Contacto",
+      bannerSubtitle: "Nos encantaría saber de ti.",
+      bannerImage: "/images/banner-contacto.png",
+      published: true,
+    },
+    {
       slug: "nuestra-doctrina",
       metaTitle: "Nuestra Doctrina",
       metaDescription:
@@ -1477,6 +1490,44 @@ async function seedDoctrines() {
     created.push(d.title);
   }
   return created;
+}
+
+async function seedContact() {
+  const existing = await db.select({ id: schema.contact.id }).from(schema.contact).limit(1);
+  if (existing.length > 0) return false;
+
+  await db.insert(schema.contact).values({
+    churchName: "Centro Cristiano Berea",
+    address: "C. Tercera 109, Zona Urbana Xochimilco, Mexicali, Baja California, C.P. 21380",
+    phone: "686 555 6149",
+    email: "centrocristianobereamxli@gmail.com",
+    whatsapp: "+526865556149",
+    mapUrl: "https://maps.google.com/?q=Centro+Cristiano+Berea+Mexicali",
+    coordinates: JSON.stringify({ lat: 32.6634, lng: -115.4678 }),
+    schedules: JSON.stringify([
+      { day: "Domingo", time: "11:00 AM a 1:00 PM" },
+      { day: "Miércoles", time: "Escuela de Líderes 8:00 PM" },
+      { day: "Jueves", time: "Escuela de Ministerios 8:00 PM" },
+    ]),
+    scheduleNote: "Duración aproximada: 2 horas",
+    socialMedia: JSON.stringify([
+      { platform: "facebook", url: "https://facebook.com/centrocristianoberea", label: "Facebook" },
+      {
+        platform: "instagram",
+        url: "https://instagram.com/centrocristianoberea",
+        label: "Instagram",
+      },
+      { platform: "youtube", url: "https://youtube.com/@centrocristianoberea", label: "YouTube" },
+      { platform: "tiktok", url: "https://tiktok.com/@centrocristianoberea", label: "TikTok" },
+      { platform: "spotify", url: "https://open.spotify.com/...", label: "Spotify" },
+      { platform: "website", url: "https://centrocristianoberea.org", label: "Sitio Web" },
+    ]),
+    ctaTitle: "Envíanos un mensaje",
+    ctaDescription: "Completa el formulario y te responderemos a la brevedad.",
+    ctaButtonText: "Enviar mensaje",
+    ctaButtonHref: "#contact-form",
+  });
+  return true;
 }
 
 export {

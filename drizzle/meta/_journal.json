@@ -64,6 +64,13 @@
       "when": 1785051339984,
       "tag": "0008_sparkling_moonstone",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1785051799126,
+      "tag": "0009_last_skreet",
+      "breakpoints": true
     }
   ]
 }
