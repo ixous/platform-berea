@@ -1,12 +1,13 @@
 import { db } from "@/lib/db";
 import { cells } from "@/lib/db/schema";
-import { and, isNull, eq } from "drizzle-orm";
+import { and, isNull, eq, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
+import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
-import { MapPin, Clock, User } from "lucide-react";
+import { MapPin, Clock, User, Home } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -25,14 +26,8 @@ async function getCells() {
     .select()
     .from(cells)
     .where(and(eq(cells.status, "active"), isNull(cells.deletedAt)))
-    .orderBy(cells.name);
+    .orderBy(asc(cells.name));
 }
-
-const cellTypes = [
-  { name: "Mixtas", desc: "Grupos para hombres y mujeres que se reúnen semanalmente." },
-  { name: "Mujeres", desc: "Células enfocadas en el crecimiento espiritual de las mujeres." },
-  { name: "Varones", desc: "Grupos diseñados para fortalecer la fe de los varones." },
-];
 
 export default async function CelulasPage() {
   const items = await getCells();
@@ -49,19 +44,19 @@ export default async function CelulasPage() {
         backgroundImage="/images/banner-celulas.png"
       />
 
-      <ContentBlock variant="gold-mist">
-        <ScrollReveal animation="fade-up">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
-              Grupos de Crecimiento
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
-              Conoce las células disponibles y encuentra un grupo cerca de ti.
-            </p>
-          </div>
-        </ScrollReveal>
+      {items.length > 0 ? (
+        <ContentBlock variant="gold-mist">
+          <ScrollReveal animation="fade-up">
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+                Grupos de Crecimiento
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+                Conoce las células disponibles y encuentra un grupo cerca de ti.
+              </p>
+            </div>
+          </ScrollReveal>
 
-        {items.length > 0 ? (
           <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((c) => {
@@ -70,7 +65,7 @@ export default async function CelulasPage() {
                   <MediaCard
                     key={c.id}
                     title={c.name}
-                    description={c.description || null}
+                    description={c.description}
                     imageUrl={img?.mediaUrl || img?.thumbnailUrl}
                     category={c.type || null}
                     meta={
@@ -100,20 +95,16 @@ export default async function CelulasPage() {
               })}
             </div>
           </ScrollReveal>
-        ) : (
-          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {cellTypes.map((t) => (
-                <MediaCard key={t.name} title={t.name} description={t.desc} category="Célula" />
-              ))}
-            </div>
-            <p className="mt-12 text-center text-sm text-berea-muted">
-              Próximamente se mostrará aquí el listado completo de células activas con su ubicación,
-              horario e información de contacto.
-            </p>
-          </ScrollReveal>
-        )}
-      </ContentBlock>
+        </ContentBlock>
+      ) : (
+        <ContentBlock variant="gold-mist">
+          <EmptySection
+            title="Células"
+            message="Próximamente se mostrará aquí el listado completo de células activas con su ubicación, horario e información de contacto."
+            icon={Home}
+          />
+        </ContentBlock>
+      )}
     </>
   );
 }

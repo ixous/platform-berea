@@ -1,12 +1,13 @@
 import { db } from "@/lib/db";
 import { biblicalPrograms } from "@/lib/db/schema";
-import { and, isNull, eq } from "drizzle-orm";
+import { and, isNull, eq, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
+import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
-import { User, Layers, Clock } from "lucide-react";
+import { User, Layers, Clock, GraduationCap } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -23,27 +24,8 @@ async function getPrograms() {
     .select()
     .from(biblicalPrograms)
     .where(and(eq(biblicalPrograms.status, "published"), isNull(biblicalPrograms.deletedAt)))
-    .orderBy(biblicalPrograms.displayOrder);
+    .orderBy(asc(biblicalPrograms.displayOrder));
 }
-
-const programOverview = [
-  {
-    name: "Escuela de Líderes",
-    desc: "Programa diseñado para formar líderes con carácter cristiano, fundamento bíblico y visión ministerial.",
-  },
-  {
-    name: "Escuela de Ministerios",
-    desc: "Capacitación especializada para quienes desean servir en ministerios específicos dentro de la iglesia.",
-  },
-  {
-    name: "Universidad de Teología Holmes",
-    desc: "Formación teológica de nivel profesional, avalada por una institución reconocida internacionalmente.",
-  },
-  {
-    name: "Maestría",
-    desc: "Estudios avanzados para profundizar en el conocimiento teológico y la aplicación ministerial.",
-  },
-];
 
 export default async function FormacionBiblicaPage() {
   const programs = await getPrograms();
@@ -60,19 +42,19 @@ export default async function FormacionBiblicaPage() {
         backgroundImage="/images/banner-formacion-biblica.png"
       />
 
-      <ContentBlock variant="gold-mist">
-        <ScrollReveal animation="fade-up">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
-              Programas de Formación
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
-              Capacitación ministerial y teológica para todos los niveles.
-            </p>
-          </div>
-        </ScrollReveal>
+      {programs.length > 0 ? (
+        <ContentBlock variant="gold-mist">
+          <ScrollReveal animation="fade-up">
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+                Programas de Formación
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+                Capacitación ministerial y teológica para todos los niveles.
+              </p>
+            </div>
+          </ScrollReveal>
 
-        {programs.length > 0 ? (
           <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {programs.map((p) => {
@@ -81,7 +63,7 @@ export default async function FormacionBiblicaPage() {
                   <MediaCard
                     key={p.id}
                     title={p.name}
-                    description={p.description || null}
+                    description={p.description}
                     imageUrl={img?.mediaUrl || img?.thumbnailUrl}
                     category={p.modality || "Programa"}
                     meta={
@@ -111,16 +93,16 @@ export default async function FormacionBiblicaPage() {
               })}
             </div>
           </ScrollReveal>
-        ) : (
-          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {programOverview.map((p) => (
-                <MediaCard key={p.name} title={p.name} description={p.desc} category="Programa" />
-              ))}
-            </div>
-          </ScrollReveal>
-        )}
-      </ContentBlock>
+        </ContentBlock>
+      ) : (
+        <ContentBlock variant="gold-mist">
+          <EmptySection
+            title="Formación Bíblica"
+            message="Próximamente podrás conocer los programas de formación y capacitación ministerial disponibles."
+            icon={GraduationCap}
+          />
+        </ContentBlock>
+      )}
     </>
   );
 }

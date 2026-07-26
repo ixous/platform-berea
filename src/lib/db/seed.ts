@@ -599,6 +599,24 @@ async function main() {
   const svcMinistries = await seedServiceMinistries();
   console.log(`  Service Ministries: ${svcMinistries.length} creados`);
 
+  const demoUser = await seedDemoUser();
+  console.log(`  Demo user: ${demoUser || "ya existe"}`);
+
+  const seededMinistries = await seedFiveMinistries();
+  console.log(`  Five Ministries: ${seededMinistries.length} creados`);
+
+  const seededCells = await seedCells();
+  console.log(`  Cells: ${seededCells.length} creados`);
+
+  const seededPrograms = await seedBiblicalPrograms();
+  console.log(`  Biblical Programs: ${seededPrograms.length} creados`);
+
+  const seededEvents = await seedEvents();
+  console.log(`  Events: ${seededEvents.length} creados`);
+
+  const seededDevos = await seedDevotionals();
+  console.log(`  Devotionals: ${seededDevos.length} creados`);
+
   console.log("\n✅ Seeds completados.\n");
 }
 
@@ -791,6 +809,339 @@ async function seedServiceMinistries() {
   for (const m of entries) {
     await db.insert(schema.serviceMinistries).values(m);
     created.push(m.name);
+  }
+  return created;
+}
+
+async function seedDemoUser() {
+  const existing = await db.select({ id: schema.users.id }).from(schema.users).limit(1);
+  if (existing.length > 0) return null;
+
+  const adminRole = await db
+    .select()
+    .from(schema.roles)
+    .where(eq(schema.roles.name, "Super Administrator"))
+    .limit(1);
+
+  if (adminRole.length === 0) return null;
+
+  const { hash } = await import("bcryptjs");
+  const hashedPassword = await hash("demo123456", 12);
+
+  await db.insert(schema.users).values({
+    name: "Content Manager",
+    email: "content@berea.test",
+    password: hashedPassword,
+    roleId: adminRole[0].id,
+    status: "active",
+  });
+
+  return "content@berea.test";
+}
+
+async function seedFiveMinistries() {
+  const existing = await db.select({ id: schema.ministries.id }).from(schema.ministries).limit(1);
+  if (existing.length > 0) return [];
+
+  const entries = [
+    {
+      name: "Apóstoles",
+      slug: "apostoles",
+      description:
+        "Los apóstoles son enviados por Dios para establecer fundamentos doctrinales, abrir nuevos campos ministeriales y velar por el crecimiento espiritual de la iglesia. Tienen la capacidad de levantar líderes, impartir visión y extender el Reino de Dios más allá de las fronteras locales, asegurando que cada obra esté alineada con el propósito divino.",
+      leader: "Ps. Juan Pérez",
+      schedule: "Reunión mensual de líderes",
+      location: "Templo Principal",
+      displayOrder: 1,
+      status: "active",
+    },
+    {
+      name: "Profetas",
+      slug: "profetas",
+      description:
+        "Los profetas son portavoces de Dios que traen revelación, dirección y edificación al cuerpo de Cristo. Su ministerio fortalece la fe de la congregación al confirmar la voluntad de Dios, advertir sobre peligros espirituales y preparar los corazones para los tiempos que vienen.",
+      leader: "Ps. María García",
+      schedule: "Vigilias mensuales",
+      location: "Templo Principal",
+      displayOrder: 2,
+      status: "active",
+    },
+    {
+      name: "Evangelistas",
+      slug: "evangelistas",
+      description:
+        "Los evangelistas tienen el don y la pasión de compartir el Evangelio con los perdidos. Su ministerio se enfoca en alcanzar almas para Cristo, organizar campañas evangelísticas y movilizar a la iglesia para cumplir la Gran Comisión.",
+      leader: "Hno. Roberto Sánchez",
+      schedule: "Campañas trimestrales",
+      location: "Comunidad",
+      displayOrder: 3,
+      status: "active",
+    },
+    {
+      name: "Pastores",
+      slug: "pastores",
+      description:
+        "Los pastores son llamados a cuidar, guiar y pastorear el rebaño de Dios. Su corazón está puesto en el discipulado, la consejería y el acompañamiento espiritual de cada miembro. Se dedican a velar por la salud espiritual de la congregación.",
+      leader: "Ps. Juan Pérez",
+      schedule: "Domingos 10:00 AM",
+      location: "Templo Principal",
+      displayOrder: 4,
+      status: "active",
+    },
+    {
+      name: "Maestros",
+      slug: "maestros",
+      description:
+        "Los maestros tienen la capacidad de explicar y aplicar la Palabra de Dios con claridad y profundidad. Su ministerio consiste en formar discípulos mediante la enseñanza sistemática de la Biblia, preparando a los creyentes para defender su fe.",
+      leader: "Hno. Carlos López",
+      schedule: "Miércoles 7:00 PM",
+      location: "Salón de Conferencias",
+      displayOrder: 5,
+      status: "active",
+    },
+  ];
+
+  const created: string[] = [];
+  for (const m of entries) {
+    await db.insert(schema.ministries).values(m);
+    created.push(m.name);
+  }
+  return created;
+}
+
+async function seedCells() {
+  const existing = await db.select({ id: schema.cells.id }).from(schema.cells).limit(1);
+  if (existing.length > 0) return [];
+
+  const entries = [
+    {
+      name: "Célula de Fe y Esperanza",
+      slug: "celula-fe-esperanza",
+      type: "mixta",
+      leader: "Hno. Pedro Hernández",
+      meetingDay: "martes",
+      meetingTime: "19:00",
+      address: "Calle principal #123, Colonia Centro",
+      city: "Mexicali",
+      description:
+        "Grupo mixto donde estudiamos la Palabra, compartimos experiencias y crecemos juntos en comunidad.",
+      capacity: 15,
+      status: "active",
+    },
+    {
+      name: "Mujeres de Propósito",
+      slug: "mujeres-proposito",
+      type: "mujeres",
+      leader: "Hna. Laura Martínez",
+      meetingDay: "jueves",
+      meetingTime: "10:00",
+      address: "Av. Reforma #456, Colonia Nueva",
+      city: "Mexicali",
+      description:
+        "Célula de mujeres enfocada en el crecimiento espiritual, la oración y el compañerismo.",
+      capacity: 12,
+      status: "active",
+    },
+    {
+      name: "Varones de Valor",
+      slug: "varones-valor",
+      type: "varones",
+      leader: "Hno. Carlos López",
+      meetingDay: "sabado",
+      meetingTime: "08:00",
+      address: "Templo Principal, Salón 2",
+      city: "Mexicali",
+      description:
+        "Grupo de varones dedicados a fortalecer su fe, su liderazgo familiar y su caminar con Dios.",
+      capacity: 20,
+      status: "active",
+    },
+  ];
+
+  const created: string[] = [];
+  for (const c of entries) {
+    await db.insert(schema.cells).values(c);
+    created.push(c.name);
+  }
+  return created;
+}
+
+async function seedBiblicalPrograms() {
+  const existing = await db
+    .select({ id: schema.biblicalPrograms.id })
+    .from(schema.biblicalPrograms)
+    .limit(1);
+  if (existing.length > 0) return [];
+
+  const entries = [
+    {
+      name: "Escuela de Líderes",
+      slug: "escuela-de-lideres",
+      description:
+        "Programa diseñado para formar líderes con carácter cristiano, fundamento bíblico y visión ministerial. Incluye módulos de liderazgo, administración eclesiástica, consejería y homilética.",
+      instructor: "Ps. Juan Pérez",
+      duration: "12 meses",
+      modality: "presencial",
+      schedule: "Sábados 9:00 AM - 1:00 PM",
+      status: "published",
+      displayOrder: 1,
+    },
+    {
+      name: "Escuela de Ministerios",
+      slug: "escuela-de-ministerios",
+      description:
+        "Capacitación especializada para quienes desean servir en ministerios específicos dentro de la iglesia. Con áreas de alabanza, enseñanza, intercesión y servicio.",
+      instructor: "Ps. María García",
+      duration: "9 meses",
+      modality: "presencial",
+      schedule: "Sábados 9:00 AM - 1:00 PM",
+      status: "published",
+      displayOrder: 2,
+    },
+    {
+      name: "Universidad de Teología Holmes",
+      slug: "universidad-teologia-holmes",
+      description:
+        "Formación teológica de nivel profesional, avalada por una institución reconocida internacionalmente. Programas de certificado, licenciatura y maestría en estudios teológicos.",
+      instructor: "Dr. Roberto Sánchez",
+      duration: "4 años",
+      modality: "hibrido",
+      schedule: "Coordinación directa",
+      status: "published",
+      displayOrder: 3,
+    },
+    {
+      name: "Maestría en Teología",
+      slug: "maestria-teologia",
+      description:
+        "Estudios avanzados para profundizar en el conocimiento teológico y la aplicación ministerial. Enfocado en exégesis bíblica, teología sistemática y liderazgo eclesiástico.",
+      instructor: "Dr. Roberto Sánchez",
+      duration: "18 meses",
+      modality: "hibrido",
+      schedule: "Coordinación directa",
+      status: "published",
+      displayOrder: 4,
+    },
+  ];
+
+  const created: string[] = [];
+  for (const p of entries) {
+    await db.insert(schema.biblicalPrograms).values(p);
+    created.push(p.name);
+  }
+  return created;
+}
+
+async function seedEvents() {
+  const existing = await db.select({ id: schema.events.id }).from(schema.events).limit(1);
+  if (existing.length > 0) return [];
+
+  const now = new Date();
+  const future = (daysFromNow: number) => {
+    const d = new Date(now);
+    d.setDate(d.getDate() + daysFromNow);
+    return d;
+  };
+
+  const entries = [
+    {
+      title: "Noche Mexicana",
+      slug: "noche-mexicana",
+      description:
+        "Una noche llena de color, sabor y tradición mexicana. Celebraremos juntos nuestras raíces con música en vivo, bailes folclóricos, antojitos mexicanos y un ambiente de convivencia familiar. Habrá platillos típicos como pozole, tamales, tacos y aguas frescas, además de juegos tradicionales y sorpresas para todas las edades. Ven con tu familia y disfruta de una velada inolvidable donde celebramos la herencia que Dios nos ha dado como pueblo.",
+      startDate: future(30),
+      time: "6:00 PM",
+      location: "Centro Cristiano Berea",
+      eventType: "Celebración",
+      status: "published",
+    },
+    {
+      title: "Bautizmos",
+      slug: "bautizmos",
+      description:
+        "Un día especial para celebrar la decisión de fe de aquellos que han decidido seguir a Cristo mediante el bautismo en agua. Este servicio es un momento de profundo significado espiritual, donde testigos presenciales serán edificados al ver vidas transformadas por el poder del Evangelio. Habrá testimonios, alabanzas y un ambiente de gozo celestial.",
+      startDate: future(60),
+      time: "11:00 AM",
+      location: "Centro Cristiano Berea",
+      eventType: "Servicio Especial",
+      status: "published",
+    },
+    {
+      title: "Posada Navideña",
+      slug: "posada-navidena",
+      description:
+        "Cerramos el año con una posada llena de alegría, amor y el verdadero espíritu navideño. Habrá piñatas, aguinaldos, ponche caliente, dulces típicos y un ambiente de confraternidad que recordará a grandes y pequeños el verdadero significado de la Navidad: el nacimiento de nuestro Salvador Jesucristo.",
+      startDate: future(120),
+      time: "6:00 PM",
+      location: "Centro Cristiano Berea",
+      eventType: "Celebración",
+      status: "published",
+    },
+  ];
+
+  const created: string[] = [];
+  for (const e of entries) {
+    await db.insert(schema.events).values(e);
+    created.push(e.title);
+  }
+  return created;
+}
+
+async function seedDevotionals() {
+  const existing = await db.select({ id: schema.devotionals.id }).from(schema.devotionals).limit(1);
+  if (existing.length > 0) return [];
+
+  const author = await db.select({ id: schema.users.id }).from(schema.users).limit(1);
+  if (author.length === 0) return [];
+
+  const authorId = author[0].id;
+
+  const entries = [
+    {
+      title: "El Fundamento de Nuestra Fe",
+      slug: "el-fundamento-de-nuestra-fe",
+      verse:
+        "Mateo 7:24 — 'Todo aquel que oye estas palabras mías y las pone en práctica, será semejante a un hombre prudente que edificó su casa sobre la roca.'",
+      content:
+        "La Palabra de Dios es la roca sólida sobre la cual edificamos nuestra vida espiritual. En un mundo de constantes cambios y doctrinas variables, la Biblia permanece como nuestra guía infalible y nuestra fuente de verdad eterna. Cada página nos revela el carácter de Dios, su amor por la humanidad y su plan perfecto de redención. Al meditar en las Escrituras, encontramos dirección para cada decisión, consuelo en medio de la prueba y esperanza para el futuro. Te invitamos a hacer de la lectura bíblica un hábito diario y a permitir que la Palabra transforme tu vida.",
+      excerpt:
+        "La Palabra de Dios es la roca sólida sobre la cual edificamos nuestra vida espiritual.",
+      authorId,
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      title: "El Poder de la Oración",
+      slug: "el-poder-de-la-oracion",
+      verse:
+        "Filipenses 4:6-7 — 'Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias.'",
+      content:
+        "La oración no es solo una práctica religiosa; es el medio por el cual nos conectamos con el Dios vivo. Es el puente que une nuestro corazón con el corazón del Padre. A través de la oración, depositamos nuestras cargas, recibimos dirección celestial y experimentamos la paz que sobrepasa todo entendimiento. La oración persistente y sincera tiene el poder de transformar circunstancias, renovar mentes y abrir puertas que parecían cerradas. No subestimes el poder de una vida de oración constante.",
+      excerpt:
+        "La oración no es solo una práctica religiosa; es el medio por el cual nos conectamos con el Dios vivo.",
+      authorId,
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      title: "El Gozo del Servicio",
+      slug: "el-gozo-del-servicio",
+      verse:
+        "1 Pedro 4:10 — 'Cada uno según el don que ha recibido, minístrelo a los otros, como buenos administradores de la multiforme gracia de Dios.'",
+      content:
+        "Servir a Dios y a los demás no es una carga, sino un privilegio que trae gozo y satisfacción al alma. Cuando usamos nuestros dones y talentos para bendecir a otros, experimentamos la alegría que viene de sembrar en el Reino de Dios. El servicio desinteresado nos transforma, nos hace más parecidos a Cristo y nos permite ser parte de lo que Dios está haciendo en el mundo. Encuentra tu lugar de servicio y descubre la alegría de ser instrumento en las manos de Dios.",
+      excerpt:
+        "Servir a Dios y a los demás no es una carga, sino un privilegio que trae gozo y satisfacción al alma.",
+      authorId,
+      status: "published",
+      publishedAt: new Date(),
+    },
+  ];
+
+  const created: string[] = [];
+  for (const d of entries) {
+    await db.insert(schema.devotionals).values(d);
+    created.push(d.title);
   }
   return created;
 }
