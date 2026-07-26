@@ -20,6 +20,11 @@ export const metadata: Metadata = {
   title: "Devocionales",
   description:
     "Reflexiones bíblicas para tu crecimiento espiritual. Devocionales de Centro Cristiano Berea.",
+  openGraph: {
+    title: "Devocionales | Centro Cristiano Berea",
+    description:
+      "Reflexiones bíblicas para tu crecimiento espiritual. Devocionales de Centro Cristiano Berea.",
+  },
 };
 
 async function getDevotionals() {

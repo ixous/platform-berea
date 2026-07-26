@@ -12,6 +12,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Formación Bíblica",
   description: "Programas de formación y capacitación ministerial de Centro Cristiano Berea.",
+  openGraph: {
+    title: "Formación Bíblica | Centro Cristiano Berea",
+    description: "Programas de formación y capacitación ministerial de Centro Cristiano Berea.",
+  },
 };
 
 async function getPrograms() {
@@ -56,19 +60,19 @@ export default async function FormacionBiblicaPage() {
         backgroundImage="/images/banner-formacion-biblica.png"
       />
 
-      {programs.length > 0 ? (
-        <ContentBlock variant="gold-mist">
-          <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
-                Programas de Formación
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
-                Capacitación ministerial y teológica para todos los niveles.
-              </p>
-            </div>
-          </ScrollReveal>
+      <ContentBlock variant="gold-mist">
+        <ScrollReveal animation="fade-up">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+              Programas de Formación
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+              Capacitación ministerial y teológica para todos los niveles.
+            </p>
+          </div>
+        </ScrollReveal>
 
+        {programs.length > 0 ? (
           <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {programs.map((p) => {
@@ -107,20 +111,7 @@ export default async function FormacionBiblicaPage() {
               })}
             </div>
           </ScrollReveal>
-        </ContentBlock>
-      ) : (
-        <ContentBlock variant="gold-mist">
-          <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
-                Programas de Formación
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
-                Capacitación ministerial y teológica para todos los niveles.
-              </p>
-            </div>
-          </ScrollReveal>
-
+        ) : (
           <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {programOverview.map((p) => (
@@ -128,8 +119,8 @@ export default async function FormacionBiblicaPage() {
               ))}
             </div>
           </ScrollReveal>
-        </ContentBlock>
-      )}
+        )}
+      </ContentBlock>
     </>
   );
 }

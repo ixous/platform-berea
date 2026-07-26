@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   title: "Nuevo Auditorio Berea",
   description:
     "Conoce el proyecto del Nuevo Auditorio Berea con capacidad para más de 3000 personas en Mexicali, Baja California.",
+  openGraph: {
+    title: "Nuevo Auditorio Berea | Centro Cristiano Berea",
+    description:
+      "Conoce el proyecto del Nuevo Auditorio Berea con capacidad para más de 3000 personas en Mexicali, Baja California.",
+  },
 };
 
 export default function AuditorioPage() {
@@ -28,7 +33,7 @@ export default function AuditorioPage() {
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10">
                   <Users className="h-10 w-10 text-berea-gold" />
                 </div>
-                <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl">
+                <h2 className="mt-6 text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl">
                   Un espacio para más de 3,000 personas
                 </h2>
                 <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-white/70">

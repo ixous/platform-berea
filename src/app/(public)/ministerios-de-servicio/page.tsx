@@ -3,15 +3,21 @@ import { serviceMinistries } from "@/lib/db/schema";
 import { and, isNull, eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
-import { Card, CardDescription } from "@/components/public/Card";
+import { MediaCard } from "@/components/public/MediaCard";
+import { SectionHeading } from "@/components/public/SectionHeading";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
-import { HandHeart, Users } from "lucide-react";
+import { HandHeart, Heart, Users } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Ministerios de Servicio",
   description:
     "Conoce los ministerios de servicio de Centro Cristiano Berea. Áreas donde puedes poner tus dones al servicio de Dios.",
+  openGraph: {
+    title: "Ministerios de Servicio | Centro Cristiano Berea",
+    description:
+      "Conoce los ministerios de servicio de Centro Cristiano Berea. Áreas donde puedes poner tus dones al servicio de Dios.",
+  },
 };
 
 async function getServiceMinistries() {
@@ -46,50 +52,56 @@ export default async function MinisteriosServicioPage() {
         subtitle="Donde tus dones pueden marcar la diferencia."
       />
 
-      {items.length > 0 ? (
-        <ContentBlock variant="warm">
-          <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-5xl">
-              <div className="grid gap-8 sm:grid-cols-2">
-                {items.map((m) => (
-                  <Card key={m.id} className="p-8">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-berea-navy/5">
-                      <HandHeart className="h-6 w-6 text-berea-gold/60" />
-                    </div>
-                    <h3 className="mt-4 text-xl font-bold text-berea-navy">{m.name}</h3>
-                    {m.description && <CardDescription>{m.description}</CardDescription>}
-                    {m.leader && (
-                      <p className="mt-4 flex items-center gap-2 text-sm font-medium text-berea-navy">
-                        <Users className="h-4 w-4 text-berea-gold/60" />
+      <ContentBlock variant="warm">
+        <ScrollReveal animation="fade-up">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-berea-border/40 bg-white shadow-sm">
+            <Heart className="h-10 w-10 text-berea-gold" />
+          </div>
+          <SectionHeading
+            title="Encuentra tu Lugar"
+            subtitle="Cada creyente tiene dones únicos. Nuestros ministerios de servicio son el espacio perfecto para ponerlos al servicio de Dios y la comunidad."
+          />
+        </ScrollReveal>
+
+        {items.length > 0 ? (
+          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((m) => (
+                <MediaCard
+                  key={m.id}
+                  variant="icon"
+                  icon={HandHeart}
+                  title={m.name}
+                  description={m.description}
+                  meta={
+                    m.leader ? (
+                      <span className="flex items-center gap-1.5">
+                        <Users className="h-3.5 w-3.5 text-berea-gold" />
                         {m.leader}
-                      </p>
-                    )}
-                  </Card>
-                ))}
-              </div>
+                      </span>
+                    ) : undefined
+                  }
+                />
+              ))}
             </div>
           </ScrollReveal>
-        </ContentBlock>
-      ) : (
-        <ContentBlock variant="warm">
-          <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-5xl">
-              <div className="mb-12 text-center">
-                <p className="text-berea-muted">
-                  Estos son algunos de los ministerios de servicio donde puedes participar:
-                </p>
-              </div>
+        ) : (
+          <>
+            <div className="mb-12 mt-16 text-center">
+              <p className="text-berea-muted">
+                Estos son algunos de los ministerios de servicio donde puedes participar:
+              </p>
+            </div>
+            <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-8">
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {knownServiceMinistries.map((name) => (
-                  <Card key={name} className="px-6 py-5 text-center" padded={false}>
-                    <span className="text-sm font-semibold text-berea-navy">{name}</span>
-                  </Card>
+                  <MediaCard key={name} variant="minimal" size="sm" title={name} />
                 ))}
               </div>
-            </div>
-          </ScrollReveal>
-        </ContentBlock>
-      )}
+            </ScrollReveal>
+          </>
+        )}
+      </ContentBlock>
     </>
   );
 }

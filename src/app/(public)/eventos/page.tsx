@@ -25,6 +25,11 @@ export const metadata: Metadata = {
   title: "Eventos",
   description:
     "Próximos eventos y actividades de Centro Cristiano Berea en Mexicali, Baja California.",
+  openGraph: {
+    title: "Eventos | Centro Cristiano Berea",
+    description:
+      "Próximos eventos y actividades de Centro Cristiano Berea en Mexicali, Baja California.",
+  },
 };
 
 async function getUpcomingEvents() {

@@ -50,7 +50,7 @@ export default async function ContactoPage() {
           <div className="mx-auto max-w-5xl">
             <div className="grid gap-16 lg:grid-cols-2">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight text-berea-navy">
+                <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
                   Información de contacto
                 </h2>
                 <div className="mt-4 h-1 w-10 rounded-full bg-berea-gold" />
@@ -87,7 +87,9 @@ export default async function ContactoPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold tracking-tight text-berea-navy">Horarios</h2>
+                <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+                  Horarios
+                </h2>
                 <div className="mt-4 h-1 w-10 rounded-full bg-berea-gold" />
                 <div className="mt-8 space-y-4">
                   {schedules.map((h, i) => (
@@ -110,7 +112,9 @@ export default async function ContactoPage() {
             </div>
 
             <div className="mt-20 rounded-2xl border border-berea-border bg-white p-10 shadow-sm">
-              <h2 className="text-xl font-bold text-berea-navy">Envíanos un mensaje</h2>
+              <h2 className="text-2xl font-bold tracking-tight text-berea-navy">
+                Envíanos un mensaje
+              </h2>
               <p className="mt-2 text-sm text-berea-muted">
                 Completa el formulario y te responderemos a la brevedad.
               </p>

@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   title: "Células",
   description:
     "Encuentra una célula cercana en Centro Cristiano Berea. Grupos pequeños para crecer en comunidad.",
+  openGraph: {
+    title: "Células | Centro Cristiano Berea",
+    description:
+      "Encuentra una célula cercana en Centro Cristiano Berea. Grupos pequeños para crecer en comunidad.",
+  },
 };
 
 async function getCells() {
@@ -44,19 +49,19 @@ export default async function CelulasPage() {
         backgroundImage="/images/banner-celulas.png"
       />
 
-      {items.length > 0 ? (
-        <ContentBlock variant="gold-mist">
-          <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
-                Grupos de Crecimiento
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
-                Conoce las células disponibles y encuentra un grupo cerca de ti.
-              </p>
-            </div>
-          </ScrollReveal>
+      <ContentBlock variant="gold-mist">
+        <ScrollReveal animation="fade-up">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
+              Grupos de Crecimiento
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
+              Conoce las células disponibles y encuentra un grupo cerca de ti.
+            </p>
+          </div>
+        </ScrollReveal>
 
+        {items.length > 0 ? (
           <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((c) => {
@@ -95,20 +100,7 @@ export default async function CelulasPage() {
               })}
             </div>
           </ScrollReveal>
-        </ContentBlock>
-      ) : (
-        <ContentBlock variant="gold-mist">
-          <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
-                Grupos de Crecimiento
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
-                Conoce las células disponibles y encuentra un grupo cerca de ti.
-              </p>
-            </div>
-          </ScrollReveal>
-
+        ) : (
           <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {cellTypes.map((t) => (
@@ -120,8 +112,8 @@ export default async function CelulasPage() {
               horario e información de contacto.
             </p>
           </ScrollReveal>
-        </ContentBlock>
-      )}
+        )}
+      </ContentBlock>
     </>
   );
 }

@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   title: "Ministerios Activos",
   description:
     "Descubre los ministerios activos de Centro Cristiano Berea y encuentra tu lugar para servir.",
+  openGraph: {
+    title: "Ministerios Activos | Centro Cristiano Berea",
+    description:
+      "Descubre los ministerios activos de Centro Cristiano Berea y encuentra tu lugar para servir.",
+  },
 };
 
 async function getMinistries() {

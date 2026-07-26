@@ -2,11 +2,12 @@ import { db } from "@/lib/db";
 import { donations } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
-import { ContentBlock } from "@/components/public/ContentBlock";
+import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
+import { MediaCard } from "@/components/public/MediaCard";
+import { SectionHeading } from "@/components/public/SectionHeading";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
-import { Heart, Banknote } from "lucide-react";
+import { Heart, Building, CreditCard, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -41,67 +42,96 @@ export default async function DonacionesPage() {
 
       <ContentBlock variant="gold-mist">
         <ScrollReveal animation="fade-up">
-          <div className="mx-auto max-w-4xl">
-            <div className="mb-20 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-berea-navy/5">
-                <Heart className="h-10 w-10 text-berea-gold" />
-              </div>
-              <h2 className="mt-6 text-balance text-2xl font-bold tracking-tight text-berea-navy sm:text-3xl">
-                {info?.title || "Ofrenda con un corazón generoso"}
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-berea-muted">
-                {info?.description ||
-                  "Cada aportación contribuye a la obra de Dios, permitiendo que el Evangelio siga siendo predicado."}
-              </p>
+          <ContentNarrow className="text-center">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-berea-border/40 bg-white shadow-sm">
+              <Heart className="h-10 w-10 text-berea-gold" />
             </div>
+            <SectionHeading
+              title={info?.title || "Ofrenda con un corazón generoso"}
+              subtitle={
+                info?.description ||
+                "Cada aportación contribuye a la obra de Dios, permitiendo que el Evangelio siga siendo predicado."
+              }
+            />
+          </ContentNarrow>
+        </ScrollReveal>
 
-            {bankData.length > 0 ? (
+        {bankData.length > 0 ? (
+          <>
+            <ScrollReveal animation="fade-up" className="mt-8">
+              <div className="mx-auto flex items-center gap-4 text-center justify-center">
+                <div className="h-px w-12 bg-gradient-to-r from-transparent to-berea-gold/30" />
+                <span className="text-sm font-semibold uppercase tracking-widest text-berea-gold">
+                  Transferencia Bancaria
+                </span>
+                <div className="h-px w-12 bg-gradient-to-l from-transparent to-berea-gold/30" />
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-10">
               <div className="grid gap-6 sm:grid-cols-2">
                 {bankData.map((b, i) => (
-                  <div
+                  <MediaCard
                     key={i}
-                    className="rounded-xl border border-berea-border/30 bg-white/80 p-8 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-berea-gold/30 hover:shadow-lg hover:shadow-berea-gold/5"
-                  >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-berea-navy/5">
-                      <Banknote className="h-5 w-5 text-berea-gold" />
-                    </div>
-                    <p className="mt-4 text-lg font-bold text-berea-navy">{b.bank || "Banco"}</p>
-                    {b.account && (
-                      <p className="mt-2 text-sm text-berea-muted">Cuenta: {b.account}</p>
-                    )}
-                    {b.clabe && <p className="mt-1 text-sm text-berea-muted">CLABE: {b.clabe}</p>}
-                  </div>
+                    variant="icon"
+                    icon={i % 2 === 0 ? Building : CreditCard}
+                    title={b.bank || "Banco"}
+                    meta={
+                      <div className="space-y-1.5">
+                        {b.account && (
+                          <p className="flex items-center gap-2">
+                            <span className="font-medium text-berea-navy">Cuenta:</span>
+                            <span className="text-berea-muted font-mono text-xs">{b.account}</span>
+                          </p>
+                        )}
+                        {b.clabe && (
+                          <p className="flex items-center gap-2">
+                            <span className="font-medium text-berea-navy">CLABE:</span>
+                            <span className="text-berea-muted font-mono text-xs break-all">
+                              {b.clabe}
+                            </span>
+                          </p>
+                        )}
+                      </div>
+                    }
+                  />
                 ))}
               </div>
-            ) : (
-              <div className="rounded-2xl border border-berea-border bg-berea-light p-12 text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white">
+            </ScrollReveal>
+          </>
+        ) : (
+          <ScrollReveal animation="fade-up" className="mt-16">
+            <div className="mx-auto max-w-lg">
+              <div className="rounded-2xl border border-berea-border/40 bg-white p-12 text-center shadow-sm">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-berea-gold/10 to-berea-navy/5">
                   <Heart className="h-8 w-8 text-berea-gold" />
                 </div>
-                <h3 className="mt-6 text-lg font-bold text-berea-navy">Donaciones</h3>
-                <p className="mx-auto mt-3 max-w-md text-sm text-berea-muted">
+                <h3 className="mt-6 text-xl font-bold text-berea-navy">Donaciones</h3>
+                <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-berea-muted">
                   Tu generosidad nos ayuda a continuar compartiendo el mensaje de Jesucristo,
                   fortaleciendo los ministerios de la iglesia y sirviendo a nuestra comunidad.
                 </p>
-                <p className="mx-auto mt-4 max-w-md text-sm text-berea-muted">
+                <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-berea-muted">
                   Si deseas apoyar esta obra, puedes comunicarte directamente con nosotros para
                   conocer las diferentes formas de colaborar.
                 </p>
-                <p className="mx-auto mt-4 max-w-md text-sm text-berea-muted font-medium text-berea-navy">
+                <p className="mx-auto mt-6 max-w-md text-sm font-medium text-berea-navy">
                   Agradecemos profundamente cada oración, ofrenda y muestra de amor hacia esta casa.
                 </p>
               </div>
-            )}
-
-            <div className="mt-12 text-center">
-              <Link
-                href="/contacto"
-                className="inline-flex items-center gap-2 rounded-lg bg-berea-navy px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-              >
-                Contáctanos
-                <ArrowRight className="h-4 w-4" />
-              </Link>
             </div>
+          </ScrollReveal>
+        )}
+
+        <ScrollReveal animation="fade-up" className="mt-12">
+          <div className="text-center">
+            <Link
+              href="/contacto"
+              className="group inline-flex items-center gap-2 rounded-xl bg-berea-navy px-7 py-3.5 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              Contáctanos
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+            </Link>
           </div>
         </ScrollReveal>
       </ContentBlock>

@@ -6,7 +6,7 @@ import { HeroSection } from "@/components/public/HeroSection";
 import { SectionHeading } from "@/components/public/SectionHeading";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
-import { Card, CardCategory, CardTitle, CardDescription, CardMeta } from "@/components/public/Card";
+import { MediaCard } from "@/components/public/MediaCard";
 import { SectionSeparator } from "@/components/public/SectionSeparator";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import {
@@ -148,16 +148,13 @@ export default async function HomePage() {
                 desc: "Encuentra tu lugar para servir y crecer en la fe junto a otros.",
               },
             ].map((item) => (
-              <div
+              <MediaCard
                 key={item.title}
-                className="rounded-2xl border border-berea-border/60 bg-white p-8 text-center shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1.5"
-              >
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-berea-gold/10 to-berea-gold/5">
-                  <item.icon className="h-8 w-8 text-berea-gold" />
-                </div>
-                <h3 className="mt-6 text-lg font-bold text-berea-navy">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-berea-muted">{item.desc}</p>
-              </div>
+                variant="icon"
+                icon={item.icon}
+                title={item.title}
+                description={item.desc}
+              />
             ))}
           </div>
         </ScrollReveal>
@@ -176,29 +173,33 @@ export default async function HomePage() {
           <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {upcomingEvents.map((event) => (
-                <Card key={event.id} href={`/eventos/${event.slug}`}>
-                  <CardCategory>{event.eventType || "Evento"}</CardCategory>
-                  <CardTitle>{event.title}</CardTitle>
-                  <CardMeta>
-                    <span className="flex items-center gap-1.5">
-                      <CalendarDays className="h-3.5 w-3.5 text-berea-gold" />
-                      {new Date(event.startDate).toLocaleDateString("es-MX", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </span>
-                    {event.time && (
+                <MediaCard
+                  key={event.id}
+                  variant="minimal"
+                  title={event.title}
+                  category={event.eventType || "Evento"}
+                  href={`/eventos/${event.slug}`}
+                  meta={
+                    <div className="flex flex-wrap gap-x-4 gap-y-1">
                       <span className="flex items-center gap-1.5">
-                        <Clock className="h-3.5 w-3.5 text-berea-gold" />
-                        {event.time}
+                        <CalendarDays className="h-3.5 w-3.5 text-berea-gold" />
+                        {new Date(event.startDate).toLocaleDateString("es-MX", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
                       </span>
-                    )}
-                  </CardMeta>
-                  {event.location && (
-                    <p className="mt-2 text-xs text-berea-muted">{event.location}</p>
-                  )}
-                </Card>
+                      {event.time && (
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="h-3.5 w-3.5 text-berea-gold" />
+                          {event.time}
+                        </span>
+                      )}
+                    </div>
+                  }
+                >
+                  {event.location && <p className="text-xs text-berea-muted">{event.location}</p>}
+                </MediaCard>
               ))}
             </div>
           </ScrollReveal>
@@ -224,15 +225,14 @@ export default async function HomePage() {
           <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {activeMinistries.map((m) => (
-                <Card key={m.id} href="/ministerios-activos">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-berea-gold/10 to-berea-gold/5">
-                    <Church className="h-7 w-7 text-berea-gold/70" />
-                  </div>
-                  <CardTitle className="text-center">{m.name}</CardTitle>
-                  {m.description && (
-                    <CardDescription className="text-center">{m.description}</CardDescription>
-                  )}
-                </Card>
+                <MediaCard
+                  key={m.id}
+                  variant="icon"
+                  icon={Church}
+                  title={m.name}
+                  description={m.description}
+                  href="/ministerios-activos"
+                />
               ))}
             </div>
           </ScrollReveal>
@@ -259,14 +259,18 @@ export default async function HomePage() {
           <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {recentDevotionals.map((d) => (
-                <Card key={d.id} href={`/devocionales/${d.slug}`}>
-                  <CardCategory>Devocional</CardCategory>
-                  <CardTitle>{d.title}</CardTitle>
-                  {d.excerpt && <CardDescription>{d.excerpt}</CardDescription>}
+                <MediaCard
+                  key={d.id}
+                  variant="minimal"
+                  title={d.title}
+                  category="Devocional"
+                  description={d.excerpt}
+                  href={`/devocionales/${d.slug}`}
+                >
                   {d.verse && (
                     <p className="mt-4 text-xs italic text-berea-gold/70 line-clamp-2">{d.verse}</p>
                   )}
-                </Card>
+                </MediaCard>
               ))}
             </div>
           </ScrollReveal>

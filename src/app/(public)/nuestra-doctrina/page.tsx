@@ -3,21 +3,29 @@ import { pages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { PageBanner } from "@/components/public/PageBanner";
-import { ContentBlock } from "@/components/public/ContentBlock";
+import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
 import { MediaCard } from "@/components/public/MediaCard";
+import { SectionHeading } from "@/components/public/SectionHeading";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
+import { Book, Infinity, Heart, Wind, ShieldCheck, Church } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Nuestra Doctrina",
   description:
     "Conoce las bases doctrinales de Centro Cristiano Berea. Nuestra fe está fundamentada en la Palabra de Dios.",
+  openGraph: {
+    title: "Nuestra Doctrina | Centro Cristiano Berea",
+    description: "Conoce las bases doctrinales de Centro Cristiano Berea.",
+  },
 };
 
 async function getPage() {
   const [page] = await db.select().from(pages).where(eq(pages.slug, "nuestra-doctrina")).limit(1);
   return page;
 }
+
+const icons = [Book, Infinity, Heart, Wind, ShieldCheck, Church];
 
 const doctrinalPoints = [
   {
@@ -59,22 +67,25 @@ export default async function DoctrinaPage() {
       />
 
       <ContentBlock variant="gold-mist">
-        <ScrollReveal animation="fade-up">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
-              Puntos Doctrinales
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-berea-muted">
-              Nuestra fe está fundamentada en la Palabra de Dios. Estos son los pilares que nos
-              sostienen como iglesia.
-            </p>
-          </div>
-        </ScrollReveal>
+        <ContentNarrow>
+          <ScrollReveal animation="fade-up">
+            <SectionHeading
+              title="Puntos Doctrinales"
+              subtitle="Nuestra fe está fundamentada en la Palabra de Dios. Estos son los pilares que nos sostienen como iglesia."
+            />
+          </ScrollReveal>
+        </ContentNarrow>
 
-        <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {doctrinalPoints.map((p) => (
-              <MediaCard key={p.title} title={p.title} description={p.desc} />
+        <ScrollReveal animation="stagger" staggerItems delay={120} className="mt-16">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {doctrinalPoints.map((p, i) => (
+              <MediaCard
+                key={p.title}
+                variant="icon"
+                icon={icons[i]}
+                title={p.title}
+                description={p.desc}
+              />
             ))}
           </div>
         </ScrollReveal>

@@ -2,16 +2,22 @@ import { db } from "@/lib/db";
 import { annualVision } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
-import { ContentBlock } from "@/components/public/ContentBlock";
+import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
+import { SectionHeading } from "@/components/public/SectionHeading";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
-import { Eye } from "lucide-react";
+import { Eye, Quote } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Visión Anual",
   description:
     "Conoce la visión anual de Centro Cristiano Berea y el enfoque que Dios nos ha dado para este año.",
+  openGraph: {
+    title: "Visión Anual | Centro Cristiano Berea",
+    description:
+      "Conoce la visión anual de Centro Cristiano Berea y el enfoque que Dios nos ha dado para este año.",
+  },
 };
 
 async function getCurrentVision() {
@@ -34,30 +40,52 @@ export default async function VisionAnualPage() {
       {vision ? (
         <ContentBlock variant="gold-mist">
           <ScrollReveal animation="fade-up">
-            <div className="mx-auto max-w-3xl">
-              <div className="relative overflow-hidden rounded-2xl border border-berea-border/40 bg-gradient-to-br from-white via-white to-berea-light/50 p-12 text-center shadow-lg shadow-berea-navy/5">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.08),transparent_60%)] pointer-events-none" />
-                {vision.year && (
-                  <span className="inline-block rounded-full bg-berea-navy/5 px-4 py-1.5 text-sm font-semibold tracking-wider text-berea-gold">
-                    Visión {vision.year}
-                  </span>
-                )}
-                <h2 className="mt-6 text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl">
-                  {vision.name}
-                </h2>
-                {vision.verse && (
-                  <blockquote className="mx-auto mt-8 max-w-lg rounded-xl border-l-4 border-berea-gold bg-berea-light p-6 text-left italic text-berea-muted">
-                    {vision.verse}
-                  </blockquote>
-                )}
-                {vision.description && (
-                  <div className="mx-auto mt-8 h-0.5 w-20 rounded-full bg-berea-gold/30" />
-                )}
-                {vision.description && (
-                  <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-berea-muted">
-                    {vision.description}
-                  </p>
-                )}
+            <ContentNarrow>
+              <SectionHeading
+                title="Nuestra Visión"
+                subtitle="Cada año Dios nos da un enfoque específico para guiar nuestro caminar como iglesia."
+              />
+            </ContentNarrow>
+          </ScrollReveal>
+
+          <ScrollReveal animation="fade-up" delay={200} className="mt-16">
+            <div className="mx-auto max-w-4xl">
+              <div className="relative overflow-hidden rounded-3xl border border-berea-border/30 bg-white shadow-xl">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.08),transparent_60%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(201,162,39,0.04),transparent_50%)]" />
+
+                <div className="relative p-10 sm:p-14 lg:p-20">
+                  {vision.year && (
+                    <div className="flex justify-center">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-berea-gold/10 px-5 py-2 text-sm font-semibold tracking-wider text-berea-gold ring-1 ring-berea-gold/10">
+                        <Eye className="h-4 w-4" />
+                        Visión {vision.year}
+                      </span>
+                    </div>
+                  )}
+
+                  <h2 className="mt-8 text-center text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl lg:text-5xl">
+                    {vision.name}
+                  </h2>
+
+                  {vision.verse && (
+                    <div className="relative mx-auto mt-10 max-w-2xl">
+                      <Quote className="absolute -left-2 -top-2 h-8 w-8 text-berea-gold/15" />
+                      <blockquote className="rounded-2xl bg-gradient-to-br from-berea-navy/[0.03] to-berea-gold/[0.04] p-6 text-center text-lg leading-relaxed italic text-berea-navy/70 sm:p-8 sm:text-xl">
+                        &ldquo;{vision.verse}&rdquo;
+                      </blockquote>
+                    </div>
+                  )}
+
+                  {vision.description && (
+                    <>
+                      <div className="mx-auto mt-10 h-px w-16 bg-gradient-to-r from-transparent via-berea-gold/40 to-transparent" />
+                      <p className="mx-auto mt-10 max-w-3xl text-center text-lg leading-relaxed text-berea-muted">
+                        {vision.description}
+                      </p>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </ScrollReveal>
