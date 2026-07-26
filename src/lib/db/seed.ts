@@ -173,6 +173,11 @@ async function seedPermissions() {
       slug: "content.publish",
       description: "Publicar, despublicar y archivar contenido.",
     },
+    {
+      name: "Manage Homepage",
+      slug: "homepage.manage",
+      description: "Administrar el contenido de la página de inicio.",
+    },
   ];
 
   const created: string[] = [];
@@ -203,6 +208,7 @@ async function seedRolePermissions() {
     "Super Administrator": allPermissions.map((p) => p.slug),
     Administrator: allPermissions.filter((p) => p.slug !== "roles.manage").map((p) => p.slug),
     Editor: [
+      "homepage.manage",
       "pages.manage",
       "devotionals.manage",
       "events.manage",
@@ -616,6 +622,11 @@ async function main() {
 
   const seededDevos = await seedDevotionals();
   console.log(`  Devotionals: ${seededDevos.length} creados`);
+
+  const homepage = await seedHomepageData();
+  console.log(
+    `  Homepage: settings=${homepage.settings ? 1 : 0}, sections=${homepage.sections}, services=${homepage.services}`
+  );
 
   console.log("\n✅ Seeds completados.\n");
 }
@@ -1144,6 +1155,160 @@ async function seedDevotionals() {
     created.push(d.title);
   }
   return created;
+}
+
+async function seedHomepageData() {
+  let settingsCreated = false;
+  let sectionsCount = 0;
+  let servicesCount = 0;
+
+  const [existingSettings] = await db
+    .select({ id: schema.homepageSettings.id })
+    .from(schema.homepageSettings)
+    .limit(1);
+  if (!existingSettings) {
+    await db.insert(schema.homepageSettings).values({
+      heroTagline: "BIENVENIDOS",
+      heroTitle: "Centro Cristiano Berea",
+      heroSubtitle: "Un lugar para conocer a Cristo, crecer en Su Palabra y servir con propósito.",
+      heroCtaText: "Conócenos",
+      heroCtaHref: "/quienes-somos",
+      heroSecondaryCtaText: "Horarios de Servicio",
+      heroSecondaryCtaHref: "/contacto",
+      heroBackgroundImage: "/images/banner-berea.png",
+      heroImageAlt: "Centro Cristiano Berea",
+      welcomeTitle: "Una familia que vive para Cristo",
+      welcomeDescription:
+        "En Centro Cristiano Berea creemos que cada persona puede encontrar esperanza, propósito y una familia espiritual en Cristo. Nuestra misión es enseñar fielmente la Palabra de Dios, formar discípulos y servir a nuestra comunidad con amor.",
+      welcomeCtaText: "Quienes Somos",
+      welcomeCtaHref: "/quienes-somos",
+      welcomeCtaSecondaryText: "Ubicación y contacto",
+      welcomeCtaSecondaryHref: "/contacto",
+      ctaTitle: "Visítanos",
+      ctaDescription:
+        "Nos encantaría recibirte en nuestra iglesia. Ven tal como eres y descubre una comunidad que te amará y te apoyará en tu caminar con Cristo.",
+      ctaButtonText: "Ubicación y horarios",
+      ctaButtonHref: "/contacto",
+      status: "active",
+    });
+    settingsCreated = true;
+  }
+
+  const sectionDefs = [
+    {
+      sectionKey: "welcome",
+      title: "Una familia que vive para Cristo",
+      visible: true,
+      displayOrder: 1,
+    },
+    { sectionKey: "services", title: "Nuestros Servicios", visible: true, displayOrder: 2 },
+    {
+      sectionKey: "events",
+      title: "Próximos Eventos",
+      subtitle: "Mantente al día con nuestras actividades.",
+      visible: true,
+      displayOrder: 3,
+    },
+    {
+      sectionKey: "ministries",
+      title: "Ministerios",
+      subtitle: "Descubre las diferentes áreas donde puedes servir.",
+      visible: true,
+      displayOrder: 4,
+    },
+    {
+      sectionKey: "devotionals",
+      title: "Devocionales",
+      subtitle: "Reflexiones bíblicas para edificar tu vida espiritual.",
+      visible: true,
+      displayOrder: 5,
+    },
+    { sectionKey: "cta", title: "Visítanos", visible: true, displayOrder: 6 },
+  ];
+
+  for (const sd of sectionDefs) {
+    const existing = await db
+      .select({ id: schema.homepageSections.id })
+      .from(schema.homepageSections)
+      .where(eq(schema.homepageSections.sectionKey, sd.sectionKey))
+      .limit(1);
+    if (existing.length === 0) {
+      await db.insert(schema.homepageSections).values(sd);
+      sectionsCount++;
+    }
+  }
+
+  const serviceEntries = [
+    {
+      title: "Servicios",
+      description: "Domingo 11:00 AM",
+      icon: "Sparkles",
+      displayOrder: 1,
+      status: "published",
+    },
+    {
+      title: "Eventos",
+      description: "Conferencias y actividades para toda la familia.",
+      icon: "CalendarDays",
+      displayOrder: 2,
+      status: "published",
+    },
+    {
+      title: "Devocionales",
+      description: "Reflexiones bíblicas semanales para tu crecimiento.",
+      icon: "BookOpen",
+      displayOrder: 3,
+      status: "published",
+    },
+    {
+      title: "Ministerios",
+      description: "Encuentra tu lugar para servir y crecer en la fe.",
+      icon: "Church",
+      displayOrder: 4,
+      status: "published",
+    },
+  ];
+
+  for (const svc of serviceEntries) {
+    const existing = await db
+      .select({ id: schema.homepageServices.id })
+      .from(schema.homepageServices)
+      .where(eq(schema.homepageServices.title, svc.title))
+      .limit(1);
+    if (existing.length === 0) {
+      await db.insert(schema.homepageServices).values(svc);
+      servicesCount++;
+    }
+  }
+
+  const allMinistries = await db
+    .select({ id: schema.ministries.id })
+    .from(schema.ministries)
+    .limit(5);
+  for (let i = 0; i < allMinistries.length; i++) {
+    await db
+      .update(schema.ministries)
+      .set({ featured: true, featuredOrder: i + 1 })
+      .where(eq(schema.ministries.id, allMinistries[i].id));
+  }
+
+  const allEvents = await db.select({ id: schema.events.id }).from(schema.events).limit(3);
+  for (let i = 0; i < allEvents.length; i++) {
+    await db
+      .update(schema.events)
+      .set({ featured: true, featuredOrder: i + 1 })
+      .where(eq(schema.events.id, allEvents[i].id));
+  }
+
+  const allDevos = await db.select({ id: schema.devotionals.id }).from(schema.devotionals).limit(3);
+  for (let i = 0; i < allDevos.length; i++) {
+    await db
+      .update(schema.devotionals)
+      .set({ featured: true, featuredOrder: i + 1 })
+      .where(eq(schema.devotionals.id, allDevos[i].id));
+  }
+
+  return { settings: settingsCreated, sections: sectionsCount, services: servicesCount };
 }
 
 export {

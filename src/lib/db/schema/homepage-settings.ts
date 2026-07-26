@@ -1,0 +1,28 @@
+import { pgTable, uuid, varchar, text, timestamp } from "drizzle-orm/pg-core";
+
+export const homepageSettings = pgTable("homepage_settings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  heroTagline: varchar("hero_tagline", { length: 255 }).default(""),
+  heroTitle: varchar("hero_title", { length: 255 }).default(""),
+  heroSubtitle: text("hero_subtitle"),
+  heroCtaText: varchar("hero_cta_text", { length: 100 }).default(""),
+  heroCtaHref: varchar("hero_cta_href", { length: 255 }).default(""),
+  heroSecondaryCtaText: varchar("hero_secondary_cta_text", { length: 100 }).default(""),
+  heroSecondaryCtaHref: varchar("hero_secondary_cta_href", { length: 255 }).default(""),
+  heroBackgroundImage: varchar("hero_background_image", { length: 500 }),
+  heroImageAlt: varchar("hero_image_alt", { length: 255 }).default(""),
+  welcomeTitle: varchar("welcome_title", { length: 255 }).default(""),
+  welcomeDescription: text("welcome_description"),
+  welcomeCtaText: varchar("welcome_cta_text", { length: 100 }).default(""),
+  welcomeCtaHref: varchar("welcome_cta_href", { length: 255 }).default(""),
+  welcomeCtaSecondaryText: varchar("welcome_cta_secondary_text", { length: 100 }).default(""),
+  welcomeCtaSecondaryHref: varchar("welcome_cta_secondary_href", { length: 255 }).default(""),
+  ctaTitle: varchar("cta_title", { length: 255 }).default(""),
+  ctaDescription: text("cta_description"),
+  ctaButtonText: varchar("cta_button_text", { length: 100 }).default(""),
+  ctaButtonHref: varchar("cta_button_href", { length: 255 }).default(""),
+  ctaBackgroundImage: varchar("cta_background_image", { length: 500 }),
+  status: varchar("status", { length: 20 }).notNull().default("active"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});

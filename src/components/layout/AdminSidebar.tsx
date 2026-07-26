@@ -11,6 +11,7 @@ import {
   ClipboardList,
   BookOpen,
   Calendar,
+  Home,
   type LucideIcon,
 } from "lucide-react";
 
@@ -29,7 +30,15 @@ interface SidebarCategory {
 const categories: SidebarCategory[] = [
   {
     name: "INICIO",
-    items: [{ label: "Dashboard", href: "/admin", icon: LayoutDashboard }],
+    items: [
+      { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+      {
+        label: "Personalizar Inicio",
+        href: "/admin/homepage",
+        icon: Home,
+        permission: "homepage.manage",
+      },
+    ],
   },
   {
     name: "CONTENIDO",

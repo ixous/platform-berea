@@ -67,6 +67,7 @@ const tableRegistry: Record<string, any> = {
   contact: schema.contact,
   leaders: schema.leaders,
   historyMilestones: schema.historyMilestones,
+  homepageServices: schema.homepageServices,
 };
 
 function getTable(entityType: string): any {

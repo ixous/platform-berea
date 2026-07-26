@@ -1,11 +1,16 @@
 import { db } from "@/lib/db";
-import { events, devotionals, ministries } from "@/lib/db/schema";
-import { eq, and, isNull, gte, desc } from "drizzle-orm";
-import Link from "next/link";
+import {
+  events,
+  devotionals,
+  ministries,
+  homepageSettings,
+  homepageServices,
+  homepageSections,
+} from "@/lib/db/schema";
+import { eq, and, isNull, gte, asc } from "drizzle-orm";
 import { HeroSection } from "@/components/public/HeroSection";
 import { SectionHeading } from "@/components/public/SectionHeading";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
-import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { SectionSeparator } from "@/components/public/SectionSeparator";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
@@ -20,6 +25,7 @@ import {
   MapPin,
   Sparkles,
 } from "lucide-react";
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -33,288 +39,345 @@ export const metadata: Metadata = {
   },
 };
 
-async function getUpcomingEvents() {
-  return db
+async function getHomepageData() {
+  const [settings] = await db.select().from(homepageSettings).limit(1);
+
+  const sections = await db
+    .select()
+    .from(homepageSections)
+    .where(eq(homepageSections.visible, true))
+    .orderBy(asc(homepageSections.displayOrder));
+
+  const services = await db
+    .select()
+    .from(homepageServices)
+    .where(and(eq(homepageServices.status, "published"), isNull(homepageServices.deletedAt)))
+    .orderBy(asc(homepageServices.displayOrder));
+
+  const featuredEvents = await db
     .select()
     .from(events)
     .where(
       and(
         eq(events.status, "published"),
+        eq(events.featured, true),
         isNull(events.deletedAt),
         gte(events.startDate, new Date())
       )
     )
-    .orderBy(events.startDate)
-    .limit(3);
-}
+    .orderBy(asc(events.featuredOrder))
+    .limit(6);
 
-async function getRecentDevotionals() {
-  return db
-    .select()
-    .from(devotionals)
-    .where(and(eq(devotionals.status, "published"), isNull(devotionals.deletedAt)))
-    .orderBy(desc(devotionals.publishedAt))
-    .limit(3);
-}
-
-async function getActiveMinistries() {
-  return db
+  const featuredMinistries = await db
     .select()
     .from(ministries)
-    .where(and(eq(ministries.status, "active"), isNull(ministries.deletedAt)))
-    .orderBy(ministries.displayOrder)
-    .limit(4);
+    .where(
+      and(
+        eq(ministries.status, "active"),
+        eq(ministries.featured, true),
+        isNull(ministries.deletedAt)
+      )
+    )
+    .orderBy(asc(ministries.featuredOrder))
+    .limit(6);
+
+  const featuredDevotionals = await db
+    .select()
+    .from(devotionals)
+    .where(
+      and(
+        eq(devotionals.status, "published"),
+        eq(devotionals.featured, true),
+        isNull(devotionals.deletedAt)
+      )
+    )
+    .orderBy(asc(devotionals.featuredOrder))
+    .limit(6);
+
+  return { settings, sections, services, featuredEvents, featuredMinistries, featuredDevotionals };
 }
 
+const iconMap: Record<string, React.ReactNode> = {
+  Sparkles: <Sparkles className="h-5 w-5" />,
+  CalendarDays: <CalendarDays className="h-5 w-5" />,
+  BookOpen: <BookOpen className="h-5 w-5" />,
+  Church: <Church className="h-5 w-5" />,
+};
+
 export default async function HomePage() {
-  const [upcomingEvents, recentDevotionals, activeMinistries] = await Promise.all([
-    getUpcomingEvents(),
-    getRecentDevotionals(),
-    getActiveMinistries(),
-  ]);
+  const { settings, sections, services, featuredEvents, featuredMinistries, featuredDevotionals } =
+    await getHomepageData();
+
+  const sectionVisible = (key: string) => sections.some((s) => s.sectionKey === key);
 
   return (
     <>
       <HeroSection
-        tagline="BIENVENIDOS"
-        title="Centro Cristiano Berea"
-        subtitle="Un lugar para conocer a Cristo, crecer en Su Palabra y servir con propósito."
-        ctaText="Conócenos"
-        ctaHref="/quienes-somos"
-        secondaryCtaText="Horarios de Servicio"
-        secondaryCtaHref="/contacto"
-        backgroundImage="/images/banner-berea.png"
+        tagline={settings?.heroTagline || "BIENVENIDOS"}
+        title={settings?.heroTitle || "Centro Cristiano Berea"}
+        subtitle={
+          settings?.heroSubtitle ||
+          "Un lugar para conocer a Cristo, crecer en Su Palabra y servir con propósito."
+        }
+        ctaText={settings?.heroCtaText || "Conócenos"}
+        ctaHref={settings?.heroCtaHref || "/quienes-somos"}
+        secondaryCtaText={settings?.heroSecondaryCtaText || "Horarios de Servicio"}
+        secondaryCtaHref={settings?.heroSecondaryCtaHref || "/contacto"}
+        backgroundImage={settings?.heroBackgroundImage || "/images/banner-berea.png"}
       />
 
-      <ContentBlock variant="gold-mist">
-        <ScrollReveal animation="fade-up">
-          <ContentNarrow className="text-center">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-berea-border/40 bg-white shadow-sm">
-              <Heart className="h-10 w-10 text-berea-gold" />
-            </div>
-            <h2 className="mt-8 text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl lg:text-5xl">
-              Una familia que vive para Cristo
-            </h2>
-            <p className="mx-auto mt-8 max-w-3xl text-pretty text-lg leading-relaxed text-berea-muted">
-              En Centro Cristiano Berea creemos que cada persona puede encontrar esperanza,
-              propósito y una familia espiritual en Cristo. Nuestra misión es enseñar fielmente la
-              Palabra de Dios, formar discípulos y servir a nuestra comunidad con amor.
-            </p>
-            <div className="mt-12 flex flex-wrap justify-center gap-4">
-              <Link
-                href="/quienes-somos"
-                className="group inline-flex items-center gap-2 rounded-xl bg-berea-navy px-7 py-3.5 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-              >
-                <Users className="h-4 w-4" />
-                Quienes Somos
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                href="/contacto"
-                className="group inline-flex items-center gap-2 rounded-xl border border-berea-border bg-white px-7 py-3.5 text-sm font-semibold text-berea-navy shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
-              >
-                <MapPin className="h-4 w-4" />
-                Ubicación y contacto
-              </Link>
-            </div>
-          </ContentNarrow>
-        </ScrollReveal>
-      </ContentBlock>
-
-      <SectionSeparator variant="wave-gold" />
-
-      <ContentBlock variant="warm">
-        <ScrollReveal animation="stagger" staggerItems delay={100}>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                icon: Sparkles,
-                title: "Servicios",
-                desc: "Domingo 11:00 AM · Miércoles Escuela de Líderes 8:00 PM · Jueves Escuela de Ministerios 8:00 PM",
-              },
-              {
-                icon: CalendarDays,
-                title: "Eventos",
-                desc: "Conferencias, congresos y actividades especiales para toda la familia.",
-              },
-              {
-                icon: BookOpen,
-                title: "Devocionales",
-                desc: "Reflexiones bíblicas semanales para tu crecimiento espiritual.",
-              },
-              {
-                icon: Church,
-                title: "Ministerios",
-                desc: "Encuentra tu lugar para servir y crecer en la fe junto a otros.",
-              },
-            ].map((item) => (
-              <MediaCard
-                key={item.title}
-                variant="icon"
-                icon={item.icon}
-                title={item.title}
-                description={item.desc}
-              />
-            ))}
-          </div>
-        </ScrollReveal>
-      </ContentBlock>
-
-      <SectionSeparator variant="curve-gold" />
-
-      {upcomingEvents.length > 0 ? (
-        <ContentBlock variant="light">
-          <ScrollReveal animation="fade-up">
-            <SectionHeading
-              title="Próximos Eventos"
-              subtitle="Mantente al día con nuestras actividades y servicios especiales."
-            />
-          </ScrollReveal>
-          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {upcomingEvents.map((event) => (
-                <MediaCard
-                  key={event.id}
-                  variant="minimal"
-                  title={event.title}
-                  category={event.eventType || "Evento"}
-                  href={`/eventos/${event.slug}`}
-                  meta={
-                    <div className="flex flex-wrap gap-x-4 gap-y-1">
-                      <span className="flex items-center gap-1.5">
-                        <CalendarDays className="h-3.5 w-3.5 text-berea-gold" />
-                        {new Date(event.startDate).toLocaleDateString("es-MX", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })}
-                      </span>
-                      {event.time && (
-                        <span className="flex items-center gap-1.5">
-                          <Clock className="h-3.5 w-3.5 text-berea-gold" />
-                          {event.time}
-                        </span>
-                      )}
-                    </div>
-                  }
-                >
-                  {event.location && <p className="text-xs text-berea-muted">{event.location}</p>}
-                </MediaCard>
-              ))}
-            </div>
-          </ScrollReveal>
-        </ContentBlock>
-      ) : (
-        <EmptySection
-          title="Próximos Eventos"
-          message="Próximamente podrás consultar aquí los eventos y actividades de la iglesia."
-          icon={CalendarDays}
-        />
-      )}
-
-      <SectionSeparator variant="wave" />
-
-      {activeMinistries.length > 0 ? (
+      {sectionVisible("welcome") && (
         <ContentBlock variant="gold-mist">
           <ScrollReveal animation="fade-up">
-            <SectionHeading
-              title="Ministerios"
-              subtitle="Descubre las diferentes áreas donde puedes servir y crecer."
-            />
-          </ScrollReveal>
-          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {activeMinistries.map((m) => (
-                <MediaCard
-                  key={m.id}
-                  variant="icon"
-                  icon={Church}
-                  title={m.name}
-                  description={m.description}
-                  href="/ministerios-activos"
-                />
-              ))}
-            </div>
-          </ScrollReveal>
-        </ContentBlock>
-      ) : (
-        <EmptySection
-          title="Ministerios"
-          message="Próximamente podrás consultar aquí los ministerios activos de la iglesia."
-          icon={Church}
-          variant="navy"
-        />
-      )}
-
-      <SectionSeparator variant="curve" />
-
-      {recentDevotionals.length > 0 ? (
-        <ContentBlock variant="warm">
-          <ScrollReveal animation="fade-up">
-            <SectionHeading
-              title="Devocionales"
-              subtitle="Reflexiones bíblicas para edificar tu vida espiritual."
-            />
-          </ScrollReveal>
-          <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {recentDevotionals.map((d) => (
-                <MediaCard
-                  key={d.id}
-                  variant="minimal"
-                  title={d.title}
-                  category="Devocional"
-                  description={d.excerpt}
-                  href={`/devocionales/${d.slug}`}
-                >
-                  {d.verse && (
-                    <p className="mt-4 text-xs italic text-berea-gold/70 line-clamp-2">{d.verse}</p>
-                  )}
-                </MediaCard>
-              ))}
-            </div>
-          </ScrollReveal>
-        </ContentBlock>
-      ) : (
-        <EmptySection
-          title="Devocionales"
-          message="Próximamente publicaremos devocionales para tu crecimiento espiritual."
-          icon={BookOpen}
-        />
-      )}
-
-      <section className="relative overflow-hidden bg-section-navy-warm">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.15),transparent_60%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(201,162,39,0.06),transparent_50%)]" />
-        </div>
-        <ContentBlock className="relative">
-          <ScrollReveal animation="fade-up">
             <ContentNarrow className="text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-lg">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-berea-border/40 bg-white shadow-sm">
                 <Heart className="h-10 w-10 text-berea-gold" />
               </div>
-              <h2 className="mt-8 text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-                Visítanos
+              <h2 className="mt-8 text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl lg:text-5xl">
+                {settings?.welcomeTitle || "Una familia que vive para Cristo"}
               </h2>
-              <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-white/70">
-                Nos encantaría recibirte en nuestra iglesia. Ven tal como eres y descubre una
-                comunidad que te amará y te apoyará en tu caminar con Cristo.
+              <p className="mx-auto mt-8 max-w-3xl text-pretty text-lg leading-relaxed text-berea-muted">
+                {settings?.welcomeDescription ||
+                  "En Centro Cristiano Berea creemos que cada persona puede encontrar esperanza, propósito y una familia espiritual en Cristo."}
               </p>
               <div className="mt-12 flex flex-wrap justify-center gap-4">
-                <Link
-                  href="/contacto"
-                  className="group inline-flex items-center gap-2 rounded-xl bg-berea-gold px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-berea-gold/25 transition-all duration-300 hover:bg-berea-gold/90 hover:-translate-y-0.5 hover:shadow-xl"
-                >
-                  <MapPin className="h-4 w-4" />
-                  Ubicación y horarios
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                </Link>
+                {settings?.welcomeCtaText && settings?.welcomeCtaHref ? (
+                  <Link
+                    href={settings.welcomeCtaHref}
+                    className="group inline-flex items-center gap-2 rounded-xl bg-berea-navy px-7 py-3.5 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                  >
+                    <Users className="h-4 w-4" />
+                    {settings.welcomeCtaText}
+                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </Link>
+                ) : (
+                  <Link
+                    href="/quienes-somos"
+                    className="group inline-flex items-center gap-2 rounded-xl bg-berea-navy px-7 py-3.5 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                  >
+                    <Users className="h-4 w-4" />
+                    Quienes Somos
+                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </Link>
+                )}
+                {settings?.welcomeCtaSecondaryText && settings?.welcomeCtaSecondaryHref ? (
+                  <Link
+                    href={settings.welcomeCtaSecondaryHref}
+                    className="group inline-flex items-center gap-2 rounded-xl border border-berea-border bg-white px-7 py-3.5 text-sm font-semibold text-berea-navy shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                  >
+                    <MapPin className="h-4 w-4" />
+                    {settings.welcomeCtaSecondaryText}
+                  </Link>
+                ) : (
+                  <Link
+                    href="/contacto"
+                    className="group inline-flex items-center gap-2 rounded-xl border border-berea-border bg-white px-7 py-3.5 text-sm font-semibold text-berea-navy shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                  >
+                    <MapPin className="h-4 w-4" />
+                    Ubicación y contacto
+                  </Link>
+                )}
               </div>
             </ContentNarrow>
           </ScrollReveal>
         </ContentBlock>
-      </section>
+      )}
+
+      {sectionVisible("services") && services.length > 0 && (
+        <>
+          <SectionSeparator variant="wave-gold" />
+          <ContentBlock variant="warm">
+            <ScrollReveal animation="stagger" staggerItems delay={100}>
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {services.map((svc) => (
+                  <MediaCard
+                    key={svc.id}
+                    variant="icon"
+                    icon={svc.icon && iconMap[svc.icon] ? undefined : Sparkles}
+                    title={svc.title}
+                    description={
+                      svc.description ||
+                      (svc.day && svc.time ? `${svc.day} ${svc.time}` : undefined)
+                    }
+                  >
+                    {svc.day && svc.time && (
+                      <p className="mt-8 text-xs text-berea-muted">
+                        {svc.day} &middot; {svc.time}
+                      </p>
+                    )}
+                  </MediaCard>
+                ))}
+              </div>
+            </ScrollReveal>
+          </ContentBlock>
+        </>
+      )}
+
+      {sectionVisible("events") && featuredEvents.length > 0 && (
+        <>
+          <SectionSeparator variant="curve-gold" />
+          <ContentBlock variant="light">
+            <ScrollReveal animation="fade-up">
+              <SectionHeading
+                title={sections.find((s) => s.sectionKey === "events")?.title || "Próximos Eventos"}
+                subtitle={
+                  sections.find((s) => s.sectionKey === "events")?.subtitle ||
+                  "Mantente al día con nuestras actividades."
+                }
+              />
+            </ScrollReveal>
+            <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {featuredEvents.map((event) => (
+                  <MediaCard
+                    key={event.id}
+                    variant="minimal"
+                    title={event.title}
+                    category={event.eventType || "Evento"}
+                    href={`/eventos/${event.slug}`}
+                    meta={
+                      <div className="flex flex-wrap gap-x-4 gap-y-1">
+                        <span className="flex items-center gap-1.5">
+                          <CalendarDays className="h-3.5 w-3.5 text-berea-gold" />
+                          {new Date(event.startDate).toLocaleDateString("es-MX", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          })}
+                        </span>
+                        {event.time && (
+                          <span className="flex items-center gap-1.5">
+                            <Clock className="h-3.5 w-3.5 text-berea-gold" />
+                            {event.time}
+                          </span>
+                        )}
+                      </div>
+                    }
+                  >
+                    {event.location && <p className="text-xs text-berea-muted">{event.location}</p>}
+                  </MediaCard>
+                ))}
+              </div>
+            </ScrollReveal>
+          </ContentBlock>
+        </>
+      )}
+
+      {sectionVisible("ministries") && featuredMinistries.length > 0 && (
+        <>
+          <SectionSeparator variant="wave" />
+          <ContentBlock variant="gold-mist">
+            <ScrollReveal animation="fade-up">
+              <SectionHeading
+                title={sections.find((s) => s.sectionKey === "ministries")?.title || "Ministerios"}
+                subtitle={
+                  sections.find((s) => s.sectionKey === "ministries")?.subtitle ||
+                  "Descubre las diferentes áreas donde puedes servir."
+                }
+              />
+            </ScrollReveal>
+            <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {featuredMinistries.map((m) => (
+                  <MediaCard
+                    key={m.id}
+                    variant="icon"
+                    icon={Church}
+                    title={m.name}
+                    description={m.description}
+                    href="/ministerios-activos"
+                  />
+                ))}
+              </div>
+            </ScrollReveal>
+          </ContentBlock>
+        </>
+      )}
+
+      {sectionVisible("devotionals") && featuredDevotionals.length > 0 && (
+        <>
+          <SectionSeparator variant="curve" />
+          <ContentBlock variant="warm">
+            <ScrollReveal animation="fade-up">
+              <SectionHeading
+                title={
+                  sections.find((s) => s.sectionKey === "devotionals")?.title || "Devocionales"
+                }
+                subtitle={
+                  sections.find((s) => s.sectionKey === "devotionals")?.subtitle ||
+                  "Reflexiones bíblicas para edificar tu vida espiritual."
+                }
+              />
+            </ScrollReveal>
+            <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {featuredDevotionals.map((d) => (
+                  <MediaCard
+                    key={d.id}
+                    variant="minimal"
+                    title={d.title}
+                    category="Devocional"
+                    description={d.excerpt}
+                    href={`/devocionales/${d.slug}`}
+                  >
+                    {d.verse && (
+                      <p className="mt-4 text-xs italic text-berea-gold/70 line-clamp-2">
+                        {d.verse}
+                      </p>
+                    )}
+                  </MediaCard>
+                ))}
+              </div>
+            </ScrollReveal>
+          </ContentBlock>
+        </>
+      )}
+
+      {sectionVisible("cta") && (
+        <section className="relative overflow-hidden bg-section-navy-warm">
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.15),transparent_60%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(201,162,39,0.06),transparent_50%)]" />
+          </div>
+          <ContentBlock className="relative">
+            <ScrollReveal animation="fade-up">
+              <ContentNarrow className="text-center">
+                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-lg">
+                  <Heart className="h-10 w-10 text-berea-gold" />
+                </div>
+                <h2 className="mt-8 text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                  {settings?.ctaTitle || "Visítanos"}
+                </h2>
+                <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-white/70">
+                  {settings?.ctaDescription ||
+                    "Nos encantaría recibirte en nuestra iglesia. Ven tal como eres y descubre una comunidad que te amará y te apoyará en tu caminar con Cristo."}
+                </p>
+                <div className="mt-12 flex flex-wrap justify-center gap-4">
+                  {settings?.ctaButtonText && settings?.ctaButtonHref ? (
+                    <Link
+                      href={settings.ctaButtonHref}
+                      className="group inline-flex items-center gap-2 rounded-xl bg-berea-gold px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-berea-gold/25 transition-all duration-300 hover:bg-berea-gold/90 hover:-translate-y-0.5 hover:shadow-xl"
+                    >
+                      <MapPin className="h-4 w-4" />
+                      {settings.ctaButtonText}
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/contacto"
+                      className="group inline-flex items-center gap-2 rounded-xl bg-berea-gold px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-berea-gold/25 transition-all duration-300 hover:bg-berea-gold/90 hover:-translate-y-0.5 hover:shadow-xl"
+                    >
+                      <MapPin className="h-4 w-4" />
+                      Ubicación y horarios
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    </Link>
+                  )}
+                </div>
+              </ContentNarrow>
+            </ScrollReveal>
+          </ContentBlock>
+        </section>
+      )}
     </>
   );
 }

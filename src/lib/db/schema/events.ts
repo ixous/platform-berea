@@ -23,7 +23,8 @@ export const events = pgTable(
     location: varchar("location", { length: 255 }),
     eventType: varchar("event_type", { length: 50 }),
     status: varchar("status", { length: 20 }).notNull().default("draft"),
-    featured: boolean("featured").default(false),
+    featured: boolean("featured").notNull().default(false),
+    featuredOrder: integer("featured_order").default(0),
     organizerId: uuid("organizer_id").references(() => users.id, {
       onDelete: "set null",
     }),

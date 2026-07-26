@@ -1,4 +1,13 @@
-import { pgTable, uuid, varchar, text, integer, timestamp, index } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  uuid,
+  varchar,
+  text,
+  boolean,
+  integer,
+  timestamp,
+  index,
+} from "drizzle-orm/pg-core";
 
 export const ministries = pgTable(
   "ministries",
@@ -11,6 +20,8 @@ export const ministries = pgTable(
     schedule: text("schedule"),
     location: varchar("location", { length: 255 }),
     contactInfo: text("contact_info"),
+    featured: boolean("featured").notNull().default(false),
+    featuredOrder: integer("featured_order").default(0),
     status: varchar("status", { length: 20 }).notNull().default("active"),
     displayOrder: integer("display_order").default(0),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

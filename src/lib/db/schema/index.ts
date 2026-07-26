@@ -29,3 +29,6 @@ export * from "./content-versions";
 export * from "./relations";
 export * from "./history-milestones";
 export * from "./leaders";
+export * from "./homepage-settings";
+export * from "./homepage-services";
+export * from "./homepage-sections";

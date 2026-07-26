@@ -113,6 +113,16 @@ export const entityConfigs: Record<string, EntityDef> = {
       { name: "content", label: "Contenido", type: "textarea", required: true },
       { name: "excerpt", label: "Extracto", type: "textarea" },
       {
+        name: "featured",
+        label: "Destacado en Inicio",
+        type: "select",
+        options: [
+          { value: "false", label: "No" },
+          { value: "true", label: "Sí" },
+        ],
+      },
+      { name: "featuredOrder", label: "Orden en Inicio", type: "number" },
+      {
         name: "status",
         label: "Estado",
         type: "select",
@@ -167,13 +177,14 @@ export const entityConfigs: Record<string, EntityDef> = {
       },
       {
         name: "featured",
-        label: "Destacado",
+        label: "Destacado en Inicio",
         type: "select",
         options: [
           { value: "false", label: "No" },
           { value: "true", label: "Sí" },
         ],
       },
+      { name: "featuredOrder", label: "Orden en Inicio", type: "number" },
       { name: "cost", label: "Costo", type: "text", placeholder: "Ej: Gratuito, $100 MXN" },
       { name: "capacity", label: "Capacidad", type: "number" },
       { name: "additionalInfo", label: "Información adicional", type: "textarea" },
@@ -216,6 +227,16 @@ export const entityConfigs: Record<string, EntityDef> = {
       { name: "location", label: "Ubicación", type: "text" },
       { name: "contactInfo", label: "Información de contacto", type: "textarea" },
       { name: "displayOrder", label: "Orden", type: "number" },
+      {
+        name: "featured",
+        label: "Destacado en Inicio",
+        type: "select",
+        options: [
+          { value: "false", label: "No" },
+          { value: "true", label: "Sí" },
+        ],
+      },
+      { name: "featuredOrder", label: "Orden en Inicio", type: "number" },
       {
         name: "status",
         label: "Estado",
@@ -596,6 +617,50 @@ export const entityConfigs: Record<string, EntityDef> = {
         type: "textarea",
       },
       { name: "imageUrl", label: "Fotografía (URL)", type: "image" },
+      { name: "displayOrder", label: "Orden", type: "number" },
+      {
+        name: "status",
+        label: "Estado",
+        type: "select",
+        required: true,
+        options: [
+          { value: "draft", label: "Borrador" },
+          { value: "published", label: "Publicado" },
+          { value: "archived", label: "Archivado" },
+        ],
+      },
+    ],
+  },
+
+  homepageServices: {
+    entityType: "homepageServices",
+    schemaTable: "homepageServices",
+    displayName: "Servicio (Home)",
+    pluralName: "Servicios (Home)",
+    permission: "homepage.manage",
+    icon: "Sparkles",
+    listSearchFields: ["title", "description"],
+    listColumns: ["title", "day", "time", "status", "displayOrder"],
+    softDelete: true,
+    statusField: "status",
+    statusTransitions: {
+      draft: ["published", "archived"],
+      published: ["draft", "archived"],
+      archived: ["draft", "published"],
+    },
+    defaultSort: { field: "displayOrder", dir: "asc" },
+    fields: [
+      { name: "title", label: "Título", type: "text", required: true },
+      { name: "day", label: "Día", type: "text", placeholder: "Ej: Domingo" },
+      { name: "time", label: "Horario", type: "text", placeholder: "Ej: 11:00 AM" },
+      { name: "description", label: "Descripción", type: "textarea" },
+      {
+        name: "icon",
+        label: "Icono",
+        type: "text",
+        help: "Nombre del icono (Sparkles, CalendarDays, BookOpen, Church)",
+      },
+      { name: "link", label: "Enlace opcional", type: "url" },
       { name: "displayOrder", label: "Orden", type: "number" },
       {
         name: "status",

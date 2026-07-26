@@ -1,4 +1,13 @@
-import { pgTable, uuid, varchar, text, timestamp, index } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  uuid,
+  varchar,
+  text,
+  boolean,
+  integer,
+  timestamp,
+  index,
+} from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 export const devotionals = pgTable(
@@ -10,6 +19,8 @@ export const devotionals = pgTable(
     verse: text("verse"),
     content: text("content").notNull(),
     excerpt: text("excerpt"),
+    featured: boolean("featured").notNull().default(false),
+    featuredOrder: integer("featured_order").default(0),
     authorId: uuid("author_id")
       .notNull()
       .references(() => users.id, { onDelete: "restrict" }),
