@@ -32,3 +32,6 @@ export * from "./leaders";
 export * from "./homepage-settings";
 export * from "./homepage-services";
 export * from "./homepage-sections";
+export * from "./institutional-pages";
+export * from "./institutional-sections";
+export * from "./doctrines";

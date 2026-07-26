@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useActionState } from "react";
+import { useState, useActionState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   createEntity,
@@ -11,6 +11,7 @@ import {
 } from "@/lib/cms/actions";
 import type { EntityDef } from "@/lib/cms/config";
 import { CmsStatusBadge } from "./CmsStatusBadge";
+import { RichTextEditor } from "./RichTextEditor";
 import { Loader2, Save, Trash2, Undo2 } from "lucide-react";
 
 interface CmsFormProps {
@@ -42,11 +43,31 @@ export function CmsForm({ entityType, config, initialData, isEditing }: CmsFormP
   const [currentStatus, setCurrentStatus] = useState<string>(
     initialData && config.statusField ? String(initialData[config.statusField] ?? "draft") : "draft"
   );
+  const [richTextValues, setRichTextValues] = useState<Record<string, string>>(() => {
+    const rv: Record<string, string> = {};
+    for (const field of config.fields) {
+      if (field.type === "richtext") {
+        rv[field.name] = initialData?.[field.name]
+          ? formatInitialValue(initialData[field.name], field.type)
+          : "";
+      }
+    }
+    return rv;
+  });
+
+  const handleRichTextChange = useCallback((fieldName: string, html: string) => {
+    setRichTextValues((prev) => ({ ...prev, [fieldName]: html }));
+  }, []);
 
   const [, formAction, pending] = useActionState(async (_prev: unknown, formData: FormData) => {
     const data: Record<string, unknown> = {};
     for (const field of config.fields) {
       if (field.hidden) continue;
+      if (field.type === "richtext") {
+        const html = richTextValues[field.name];
+        if (html) data[field.name] = html;
+        continue;
+      }
       const formValue = formData.get(fieldToInputName(field.name));
       if (formValue !== null && String(formValue) !== "") {
         data[field.name] = String(formValue);
@@ -130,14 +151,22 @@ export function CmsForm({ entityType, config, initialData, isEditing }: CmsFormP
     if (field.hidden) return null;
 
     switch (field.type) {
-      case "textarea":
       case "richtext":
+        return (
+          <RichTextEditor
+            value={richTextValues[field.name] ?? ""}
+            onChange={(html) => handleRichTextChange(field.name, html)}
+            placeholder={field.placeholder}
+          />
+        );
+
+      case "textarea":
         return (
           <textarea
             id={inputName}
             name={inputName}
             defaultValue={value ?? ""}
-            rows={field.type === "richtext" ? 12 : 5}
+            rows={5}
             placeholder={field.placeholder}
             required={field.required}
             className={baseInputClass}

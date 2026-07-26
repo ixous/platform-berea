@@ -1,69 +1,76 @@
 import { db } from "@/lib/db";
-import { pages } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { institutionalPages, doctrines } from "@/lib/db/schema";
+import { eq, and, asc } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
 import { MediaCard } from "@/components/public/MediaCard";
 import { SectionHeading } from "@/components/public/SectionHeading";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
+import { EmptySection } from "@/components/public/EmptySection";
 import { Book, Infinity, Heart, Wind, ShieldCheck, Church } from "lucide-react";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Nuestra Doctrina",
-  description:
-    "Conoce las bases doctrinales de Centro Cristiano Berea. Nuestra fe está fundamentada en la Palabra de Dios.",
-  openGraph: {
-    title: "Nuestra Doctrina | Centro Cristiano Berea",
-    description: "Conoce las bases doctrinales de Centro Cristiano Berea.",
-  },
-};
-
-async function getPage() {
-  const [page] = await db.select().from(pages).where(eq(pages.slug, "nuestra-doctrina")).limit(1);
-  return page;
-}
-
 const icons = [Book, Infinity, Heart, Wind, ShieldCheck, Church];
 
-const doctrinalPoints = [
-  {
-    title: "La Biblia",
-    desc: "Creemos que la Biblia es la Palabra de Dios, inspirada, infalible y nuestra única regla de fe y conducta.",
-  },
-  {
-    title: "Dios",
-    desc: "Creemos en un solo Dios, eterno, omnipotente, omnisciente y omnipresente, que existe en tres personas: Padre, Hijo y Espíritu Santo.",
-  },
-  {
-    title: "Jesucristo",
-    desc: "Creemos en la deidad de Jesucristo, su nacimiento virginal, su vida sin pecado, su muerte expiatoria, su resurrección corporal y su Segunda Venida.",
-  },
-  {
-    title: "El Espíritu Santo",
-    desc: "Creemos en la persona y obra del Espíritu Santo, quien convence, regenera, santifica y capacita al creyente.",
-  },
-  {
-    title: "La Salvación",
-    desc: "Creemos que la salvación es por gracia mediante la fe en Jesucristo, no por obras.",
-  },
-  {
-    title: "La Iglesia",
-    desc: "Creemos que la Iglesia es el cuerpo de Cristo, llamada a adorar, edificar y proclamar el Evangelio.",
-  },
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const [page] = await db
+    .select()
+    .from(institutionalPages)
+    .where(eq(institutionalPages.slug, "nuestra-doctrina"))
+    .limit(1);
+  if (!page) return { title: "Nuestra Doctrina" };
+  return {
+    title: page.metaTitle || "Nuestra Doctrina",
+    description: page.metaDescription || "Conoce las bases doctrinales de Centro Cristiano Berea.",
+    openGraph: {
+      title: page.metaTitle
+        ? `${page.metaTitle} | Centro Cristiano Berea`
+        : "Nuestra Doctrina | Centro Cristiano Berea",
+      description:
+        page.metaDescription || "Conoce las bases doctrinales de Centro Cristiano Berea.",
+    },
+  };
+}
 
 export default async function DoctrinaPage() {
-  const page = await getPage();
-  if (!page) notFound();
+  const [page] = await db
+    .select()
+    .from(institutionalPages)
+    .where(eq(institutionalPages.slug, "nuestra-doctrina"))
+    .limit(1);
+  if (!page || !page.published) notFound();
+
+  const doctrinalPoints = await db
+    .select()
+    .from(doctrines)
+    .where(and(eq(doctrines.status, "published")))
+    .orderBy(asc(doctrines.displayOrder));
+
+  if (doctrinalPoints.length === 0) {
+    return (
+      <>
+        <PageBanner
+          title={page.bannerTitle || "Nuestra Doctrina"}
+          subtitle={page.bannerSubtitle || "Los fundamentos de nuestra fe."}
+          backgroundImage={page.bannerImage || "/images/banner-doctrina.png"}
+        />
+        <ContentBlock variant="gold-mist">
+          <EmptySection
+            title="Nuestra Doctrina"
+            message="Próximamente estaremos compartiendo nuestras bases doctrinales."
+          />
+        </ContentBlock>
+      </>
+    );
+  }
 
   return (
     <>
       <PageBanner
-        title="Nuestra Doctrina"
-        subtitle="Los fundamentos de nuestra fe."
-        backgroundImage="/images/banner-doctrina.png"
+        title={page.bannerTitle || "Nuestra Doctrina"}
+        subtitle={page.bannerSubtitle || "Los fundamentos de nuestra fe."}
+        backgroundImage={page.bannerImage || "/images/banner-doctrina.png"}
       />
 
       <ContentBlock variant="gold-mist">
@@ -80,11 +87,11 @@ export default async function DoctrinaPage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {doctrinalPoints.map((p, i) => (
               <MediaCard
-                key={p.title}
+                key={p.id}
                 variant="icon"
-                icon={icons[i]}
+                icon={icons[i % icons.length]}
                 title={p.title}
-                description={p.desc}
+                description={p.subtitle || p.content || ""}
               />
             ))}
           </div>

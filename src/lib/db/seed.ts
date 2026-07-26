@@ -623,6 +623,15 @@ async function main() {
   const seededDevos = await seedDevotionals();
   console.log(`  Devotionals: ${seededDevos.length} creados`);
 
+  const instPages = await seedInstitutionalPages();
+  console.log(`  Institutional Pages: ${instPages.length} creados`);
+
+  const instSections = await seedInstitutionalSections();
+  console.log(`  Institutional Sections: ${instSections.length} creados`);
+
+  const seededDoctrines = await seedDoctrines();
+  console.log(`  Doctrines: ${seededDoctrines.length} creados`);
+
   const homepage = await seedHomepageData();
   console.log(
     `  Homepage: settings=${homepage.settings ? 1 : 0}, sections=${homepage.sections}, services=${homepage.services}`
@@ -1309,6 +1318,165 @@ async function seedHomepageData() {
   }
 
   return { settings: settingsCreated, sections: sectionsCount, services: servicesCount };
+}
+
+async function seedInstitutionalPages() {
+  const entries = [
+    {
+      slug: "quienes-somos",
+      metaTitle: "Quienes Somos",
+      metaDescription:
+        "Conoce la identidad, misión y visión de Centro Cristiano Berea en Mexicali, Baja California.",
+      bannerTitle: "Quienes Somos",
+      bannerSubtitle: "Conoce nuestra identidad, misión y visión.",
+      bannerImage: "/images/banner-quienes-somos.png",
+      published: true,
+    },
+    {
+      slug: "nuestra-doctrina",
+      metaTitle: "Nuestra Doctrina",
+      metaDescription:
+        "Conoce las bases doctrinales de Centro Cristiano Berea. Nuestra fe está fundamentada en la Palabra de Dios.",
+      bannerTitle: "Nuestra Doctrina",
+      bannerSubtitle: "Los fundamentos de nuestra fe.",
+      bannerImage: "/images/banner-doctrina.png",
+      published: true,
+    },
+  ];
+
+  const created: string[] = [];
+  for (const entry of entries) {
+    const existing = await db
+      .select({ id: schema.institutionalPages.id })
+      .from(schema.institutionalPages)
+      .where(eq(schema.institutionalPages.slug, entry.slug))
+      .limit(1);
+    if (existing.length === 0) {
+      await db.insert(schema.institutionalPages).values(entry);
+      created.push(entry.slug);
+    }
+  }
+  return created;
+}
+
+async function seedInstitutionalSections() {
+  const existing = await db
+    .select({ id: schema.institutionalSections.id })
+    .from(schema.institutionalSections)
+    .limit(1);
+  if (existing.length > 0) return [];
+
+  const entries = [
+    {
+      pageSlug: "quienes-somos",
+      sectionKey: "identity",
+      title: "Nuestra Identidad",
+      content:
+        "Centro Cristiano Berea es una iglesia cristiana ubicada en Mexicali, Baja California, México. Somos una comunidad de fe comprometida con la Palabra de Dios y con el amor al prójimo. Creemos en el poder transformador del Evangelio y trabajamos para que cada persona pueda experimentar una relación personal con Jesucristo.",
+      displayOrder: 1,
+      visible: true,
+      status: "published",
+    },
+    {
+      pageSlug: "quienes-somos",
+      sectionKey: "mission",
+      title: "Misión",
+      content:
+        "Formar discípulos de Cristo, fortalecer familias y extender el Reino de Dios en nuestra comunidad y más allá, a través de la predicación de la Palabra, la adoración genuina y el servicio amoroso. Cada miembro de nuestra congregación es equipado para cumplir el propósito que Dios ha diseñado para su vida.",
+      displayOrder: 2,
+      visible: true,
+      status: "published",
+    },
+    {
+      pageSlug: "quienes-somos",
+      sectionKey: "vision",
+      title: "Visión",
+      content:
+        "Ser una iglesia que impacta a Mexicali y al mundo con el mensaje de Cristo, formando líderes comprometidos, familias sólidas y una comunidad que refleje el amor de Dios en cada área de la vida. Anhelamos ver vidas transformadas, hogares restaurados y una ciudad alcanzada por el Evangelio.",
+      displayOrder: 3,
+      visible: true,
+      status: "published",
+    },
+    {
+      pageSlug: "quienes-somos",
+      sectionKey: "values",
+      title: "Valores",
+      content:
+        "La Palabra de Dios como fundamento de todo lo que hacemos. La oración como estilo de vida. La unidad del cuerpo de Cristo. El servicio como expresión de amor. La excelencia para la gloria de Dios. Estos valores nos guían en cada decisión y nos mantienen firmes en nuestra identidad como iglesia.",
+      displayOrder: 4,
+      visible: true,
+      status: "published",
+    },
+  ];
+
+  const created: string[] = [];
+  for (const s of entries) {
+    await db.insert(schema.institutionalSections).values(s);
+    created.push(s.sectionKey);
+  }
+  return created;
+}
+
+async function seedDoctrines() {
+  const existing = await db.select({ id: schema.doctrines.id }).from(schema.doctrines).limit(1);
+  if (existing.length > 0) return [];
+
+  const entries = [
+    {
+      title: "La Biblia",
+      content:
+        "Creemos que la Biblia es la Palabra de Dios, inspirada, infalible y nuestra única regla de fe y conducta.",
+      bibleVerses: "2 Timoteo 3:16\n2 Pedro 1:20-21",
+      displayOrder: 1,
+      status: "published",
+    },
+    {
+      title: "Dios",
+      content:
+        "Creemos en un solo Dios, eterno, omnipotente, omnisciente y omnipresente, que existe en tres personas: Padre, Hijo y Espíritu Santo.",
+      bibleVerses: "Deuteronomio 6:4\nMateo 28:19\n2 Corintios 13:14",
+      displayOrder: 2,
+      status: "published",
+    },
+    {
+      title: "Jesucristo",
+      content:
+        "Creemos en la deidad de Jesucristo, su nacimiento virginal, su vida sin pecado, su muerte expiatoria, su resurrección corporal y su Segunda Venida.",
+      bibleVerses: "Juan 1:1-14\nFilipenses 2:5-11\nHebreos 1:1-3",
+      displayOrder: 3,
+      status: "published",
+    },
+    {
+      title: "El Espíritu Santo",
+      content:
+        "Creemos en la persona y obra del Espíritu Santo, quien convence, regenera, santifica y capacita al creyente.",
+      bibleVerses: "Juan 14:16-17\nHechos 1:8\nGálatas 5:22-23",
+      displayOrder: 4,
+      status: "published",
+    },
+    {
+      title: "La Salvación",
+      content: "Creemos que la salvación es por gracia mediante la fe en Jesucristo, no por obras.",
+      bibleVerses: "Efesios 2:8-9\nRomanos 10:9-10\nJuan 3:16",
+      displayOrder: 5,
+      status: "published",
+    },
+    {
+      title: "La Iglesia",
+      content:
+        "Creemos que la Iglesia es el cuerpo de Cristo, llamada a adorar, edificar y proclamar el Evangelio.",
+      bibleVerses: "Efesios 1:22-23\n1 Corintios 12:12-13\nMateo 16:18",
+      displayOrder: 6,
+      status: "published",
+    },
+  ];
+
+  const created: string[] = [];
+  for (const d of entries) {
+    await db.insert(schema.doctrines).values(d);
+    created.push(d.title);
+  }
+  return created;
 }
 
 export {

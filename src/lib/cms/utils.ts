@@ -16,6 +16,9 @@ const tableMap: Record<string, PgTable> = {
   leaders: schema.leaders,
   historyMilestones: schema.historyMilestones,
   homepageServices: schema.homepageServices,
+  institutionalSections: schema.institutionalSections,
+  doctrines: schema.doctrines,
+  institutionalPages: schema.institutionalPages,
 };
 
 export function getTable(entityType: string): PgTable {

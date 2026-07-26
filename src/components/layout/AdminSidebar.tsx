@@ -12,6 +12,8 @@ import {
   BookOpen,
   Calendar,
   Home,
+  Book,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 
@@ -66,6 +68,29 @@ const categories: SidebarCategory[] = [
         href: "/admin/media",
         icon: ImageIcon,
         permission: "media.manage",
+      },
+    ],
+  },
+  {
+    name: "INSTITUCIONAL",
+    items: [
+      {
+        label: "Páginas Institucionales",
+        href: "/admin/content/institutionalPages",
+        icon: FileText,
+        permission: "pages.manage",
+      },
+      {
+        label: "Secciones",
+        href: "/admin/content/institutionalSections",
+        icon: Users,
+        permission: "pages.manage",
+      },
+      {
+        label: "Doctrinas",
+        href: "/admin/content/doctrines",
+        icon: Book,
+        permission: "pages.manage",
       },
     ],
   },
