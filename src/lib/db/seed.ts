@@ -593,6 +593,9 @@ async function main() {
   const milestones = await seedHistoryMilestones();
   console.log(`  History Milestones: ${milestones.length} creados`);
 
+  const leaders = await seedLeaders();
+  console.log(`  Leaders: ${leaders.length} creados`);
+
   console.log("\n✅ Seeds completados.\n");
 }
 
@@ -660,6 +663,48 @@ async function seedHistoryMilestones() {
   for (const m of milestones) {
     await db.insert(schema.historyMilestones).values(m);
     created.push(m.title);
+  }
+  return created;
+}
+
+async function seedLeaders() {
+  const existing = await db.select({ id: schema.leaders.id }).from(schema.leaders).limit(1);
+  if (existing.length > 0) return [];
+
+  const entries = [
+    {
+      name: "Ps. Juan Pérez",
+      position: "Pastor Principal",
+      biography: "Liderando la iglesia con dedicación y amor desde su fundación.",
+      imageUrl: "",
+      displayOrder: 1,
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      name: "Ps. María García",
+      position: "Pastora Asociada",
+      biography: "Apoyando el crecimiento espiritual de la congregación.",
+      imageUrl: "",
+      displayOrder: 2,
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      name: "Hno. Carlos López",
+      position: "Líder de Alabanza",
+      biography: "Guiando al equipo de adoración con pasión y excelencia.",
+      imageUrl: "",
+      displayOrder: 3,
+      status: "published",
+      publishedAt: new Date(),
+    },
+  ];
+
+  const created: string[] = [];
+  for (const l of entries) {
+    await db.insert(schema.leaders).values(l);
+    created.push(l.name);
   }
   return created;
 }

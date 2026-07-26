@@ -28,3 +28,4 @@ export * from "./settings";
 export * from "./content-versions";
 export * from "./relations";
 export * from "./history-milestones";
+export * from "./leaders";

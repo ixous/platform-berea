@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
-import { eq, and, isNull } from "drizzle-orm";
+import { leaders as leadersTable } from "@/lib/db/schema";
+import { eq, and, isNull, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
 import { EmptySection } from "@/components/public/EmptySection";
@@ -22,10 +22,10 @@ export const metadata: Metadata = {
 
 async function getLeaders() {
   return db
-    .select({ id: users.id, name: users.name, email: users.email })
-    .from(users)
-    .where(and(eq(users.status, "active"), isNull(users.deletedAt)))
-    .limit(12);
+    .select()
+    .from(leadersTable)
+    .where(and(eq(leadersTable.status, "published"), isNull(leadersTable.deletedAt)))
+    .orderBy(asc(leadersTable.displayOrder));
 }
 
 export default async function LiderazgoPage() {
@@ -60,8 +60,10 @@ export default async function LiderazgoPage() {
                   <MediaCard
                     key={leader.id}
                     variant="profile"
-                    title={leader.name || ""}
-                    description="Líder"
+                    title={leader.name}
+                    description={leader.position}
+                    imageUrl={leader.imageUrl ?? undefined}
+                    imageAlt={leader.name}
                   />
                 ))}
               </div>
