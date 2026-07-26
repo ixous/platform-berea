@@ -16,6 +16,7 @@ import {
   Heart,
   Phone,
   Users,
+  MapPin,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -31,6 +32,7 @@ const iconMap: Record<string, React.ReactNode> = {
   Heart: <Heart className="h-5 w-5" />,
   Phone: <Phone className="h-5 w-5" />,
   Users: <Users className="h-5 w-5" />,
+  MapPin: <MapPin className="h-5 w-5" />,
 };
 
 export default async function ContentOverviewPage() {

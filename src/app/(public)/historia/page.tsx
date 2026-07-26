@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
-import { pages } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { pages, historyMilestones } from "@/lib/db/schema";
+import { eq, and, isNull, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
 import { MediaCard } from "@/components/public/MediaCard";
@@ -27,46 +27,16 @@ async function getPage() {
   return page;
 }
 
-const milestones = [
-  {
-    year: "2010",
-    title: "Fundación",
-    description:
-      "Centro Cristiano Berea nace con una visión clara: ser una iglesia fundamentada en la Palabra de Dios, comprometida con la enseñanza bíblica y la formación de discípulos. Un pequeño grupo de creyentes se reúne con el deseo de ver vidas transformadas por el evangelio.",
-    image: "/images/banner-quienes-somos.png",
-  },
-  {
-    year: "2013",
-    title: "Crecimiento y Consolidación",
-    description:
-      "La iglesia experimenta un crecimiento significativo. Se establecen los primeros ministerios y la congregación se fortalece. La Escuela de Líderes y la Escuela de Ministerios comienzan a formar a una nueva generación de siervos comprometidos con la obra de Dios.",
-    image: "/images/banner-ministerios.png",
-  },
-  {
-    year: "2016",
-    title: "Expansión Ministerial",
-    description:
-      "Se multiplican los ministerios de servicio y alcance comunitario. Las células de discipulado se convierten en el motor de la iglesia, llegando a diferentes colonias de Mexicali con el mensaje de esperanza y amor de Cristo.",
-    image: "/images/banner-formacion-biblica.png",
-  },
-  {
-    year: "2020",
-    title: "Fe en Tiempos de Prueba",
-    description:
-      "En medio de desafíos globales, la iglesia demuestra su resiliencia. La transmisión digital de servicios permite alcanzar a personas más allá de las fronteras de Mexicali. La comunidad se mantiene unida a través de la oración, los devocionales en línea y el cuidado pastoral.",
-    image: "/images/banner-devocionales.png",
-  },
-  {
-    year: "2024",
-    title: "Una Visión de Futuro",
-    description:
-      "Berea continúa su caminar con una visión renovada. El proyecto del nuevo auditorio representa un paso de fe hacia el futuro. La iglesia sigue creciendo, alcanzando más vidas y preparándose para lo que Dios tiene preparado.",
-    image: "/images/banner-eventos.png",
-  },
-];
+async function getMilestones() {
+  return db
+    .select()
+    .from(historyMilestones)
+    .where(and(eq(historyMilestones.status, "published"), isNull(historyMilestones.deletedAt)))
+    .orderBy(asc(historyMilestones.displayOrder));
+}
 
 export default async function HistoriaPage() {
-  const page = await getPage();
+  const [page, milestones] = await Promise.all([getPage(), getMilestones()]);
 
   return (
     <>
@@ -105,48 +75,50 @@ export default async function HistoriaPage() {
 
       <SectionSeparator variant="wave-gold" />
 
-      <ContentBlock variant="warm">
-        <ScrollReveal animation="fade-up">
-          <SectionHeading
-            title="Nuestra Trayectoria"
-            subtitle="Cada etapa ha sido un peldaño en el plan de Dios para nuestra iglesia."
-          />
-        </ScrollReveal>
+      {milestones.length > 0 && (
+        <ContentBlock variant="warm">
+          <ScrollReveal animation="fade-up">
+            <SectionHeading
+              title="Nuestra Trayectoria"
+              subtitle="Cada etapa ha sido un peldaño en el plan de Dios para nuestra iglesia."
+            />
+          </ScrollReveal>
 
-        <div className="relative mx-auto mt-20 max-w-6xl">
-          <div className="absolute left-8 top-0 hidden h-full w-px bg-gradient-to-b from-transparent via-berea-gold/20 to-transparent lg:block" />
+          <div className="relative mx-auto mt-20 max-w-6xl">
+            <div className="absolute left-8 top-0 hidden h-full w-px bg-gradient-to-b from-transparent via-berea-gold/20 to-transparent lg:block" />
 
-          <div className="space-y-16 lg:space-y-24">
-            {milestones.map((m, i) => (
-              <ScrollReveal key={m.year} animation="fade-up" delay={i * 100}>
-                <div
-                  className={`relative flex flex-col items-start gap-6 lg:flex-row ${
-                    i % 2 === 1 ? "lg:flex-row-reverse" : ""
-                  }`}
-                >
-                  <div className="hidden lg:absolute lg:left-1/2 lg:flex lg:-translate-x-1/2 lg:items-center lg:justify-center">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-berea-gold/30 bg-white shadow-md">
-                      <span className="text-sm font-bold text-berea-gold">{m.year}</span>
+            <div className="space-y-16 lg:space-y-24">
+              {milestones.map((m, i) => (
+                <ScrollReveal key={m.id} animation="fade-up" delay={i * 100}>
+                  <div
+                    className={`relative flex flex-col items-start gap-6 lg:flex-row ${
+                      i % 2 === 1 ? "lg:flex-row-reverse" : ""
+                    }`}
+                  >
+                    <div className="hidden lg:absolute lg:left-1/2 lg:flex lg:-translate-x-1/2 lg:items-center lg:justify-center">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-berea-gold/30 bg-white shadow-md">
+                        <span className="text-sm font-bold text-berea-gold">{m.year}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="lg:w-1/2">
-                    <MediaCard
-                      title={m.title}
-                      description={m.description}
-                      imageUrl={m.image}
-                      imageAlt={m.title}
-                      orientation="horizontal"
-                      badge={m.year}
-                    />
+                    <div className="lg:w-1/2">
+                      <MediaCard
+                        title={m.title}
+                        description={m.description}
+                        imageUrl={m.imageUrl}
+                        imageAlt={m.title}
+                        orientation="horizontal"
+                        badge={m.year}
+                      />
+                    </div>
+                    <div className="hidden lg:block lg:w-1/2" />
                   </div>
-                  <div className="hidden lg:block lg:w-1/2" />
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              ))}
+            </div>
           </div>
-        </div>
-      </ContentBlock>
+        </ContentBlock>
+      )}
 
       <section className="relative overflow-hidden bg-section-navy-warm">
         <div className="pointer-events-none absolute inset-0">

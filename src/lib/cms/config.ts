@@ -530,6 +530,43 @@ export const entityConfigs: Record<string, EntityDef> = {
     ],
   },
 
+  historyMilestones: {
+    entityType: "historyMilestones",
+    schemaTable: "historyMilestones",
+    displayName: "Hito Histórico",
+    pluralName: "Historia",
+    permission: "pages.manage",
+    icon: "MapPin",
+    listSearchFields: ["title", "description", "year"],
+    listColumns: ["title", "year", "status", "displayOrder"],
+    softDelete: true,
+    statusField: "status",
+    statusTransitions: {
+      draft: ["published", "archived"],
+      published: ["draft", "archived"],
+      archived: ["draft", "published"],
+    },
+    defaultSort: { field: "displayOrder", dir: "asc" },
+    fields: [
+      { name: "year", label: "Año", type: "text", required: true },
+      { name: "title", label: "Título", type: "text", required: true },
+      { name: "description", label: "Descripción", type: "textarea", required: true },
+      { name: "imageUrl", label: "Imagen (URL)", type: "image" },
+      { name: "displayOrder", label: "Orden", type: "number" },
+      {
+        name: "status",
+        label: "Estado",
+        type: "select",
+        required: true,
+        options: [
+          { value: "draft", label: "Borrador" },
+          { value: "published", label: "Publicado" },
+          { value: "archived", label: "Archivado" },
+        ],
+      },
+    ],
+  },
+
   leadership: {
     entityType: "leadership",
     schemaTable: "users",

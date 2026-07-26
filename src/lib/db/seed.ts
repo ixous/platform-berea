@@ -590,6 +590,9 @@ async function main() {
   const pages = await seedPages();
   console.log(`  Pages: ${pages.length} paginas creadas (${pages.length} nuevas)`);
 
+  const milestones = await seedHistoryMilestones();
+  console.log(`  History Milestones: ${milestones.length} creados`);
+
   console.log("\n✅ Seeds completados.\n");
 }
 
@@ -597,6 +600,69 @@ main().catch((err) => {
   console.error("❌ Error ejecutando seeds:", err);
   process.exit(1);
 });
+
+async function seedHistoryMilestones() {
+  const existing = await db
+    .select({ id: schema.historyMilestones.id })
+    .from(schema.historyMilestones)
+    .limit(1);
+  if (existing.length > 0) return [];
+
+  const milestones = [
+    {
+      year: "2010",
+      title: "Fundación",
+      description:
+        "Centro Cristiano Berea nace con una visión clara: ser una iglesia fundamentada en la Palabra de Dios, comprometida con la enseñanza bíblica y la formación de discípulos. Un pequeño grupo de creyentes se reúne con el deseo de ver vidas transformadas por el evangelio.",
+      imageUrl: "/images/banner-quienes-somos.png",
+      displayOrder: 1,
+      status: "published",
+    },
+    {
+      year: "2013",
+      title: "Crecimiento y Consolidación",
+      description:
+        "La iglesia experimenta un crecimiento significativo. Se establecen los primeros ministerios y la congregación se fortalece. La Escuela de Líderes y la Escuela de Ministerios comienzan a formar a una nueva generación de siervos comprometidos con la obra de Dios.",
+      imageUrl: "/images/banner-ministerios.png",
+      displayOrder: 2,
+      status: "published",
+    },
+    {
+      year: "2016",
+      title: "Expansión Ministerial",
+      description:
+        "Se multiplican los ministerios de servicio y alcance comunitario. Las células de discipulado se convierten en el motor de la iglesia, llegando a diferentes colonias de Mexicali con el mensaje de esperanza y amor de Cristo.",
+      imageUrl: "/images/banner-formacion-biblica.png",
+      displayOrder: 3,
+      status: "published",
+    },
+    {
+      year: "2020",
+      title: "Fe en Tiempos de Prueba",
+      description:
+        "En medio de desafíos globales, la iglesia demuestra su resiliencia. La transmisión digital de servicios permite alcanzar a personas más allá de las fronteras de Mexicali. La comunidad se mantiene unida a través de la oración, los devocionales en línea y el cuidado pastoral.",
+      imageUrl: "/images/banner-devocionales.png",
+      displayOrder: 4,
+      status: "published",
+    },
+    {
+      year: "2024",
+      title: "Una Visión de Futuro",
+      description:
+        "Berea continúa su caminar con una visión renovada. El proyecto del nuevo auditorio representa un paso de fe hacia el futuro. La iglesia sigue creciendo, alcanzando más vidas y preparándose para lo que Dios tiene preparado.",
+      imageUrl: "/images/banner-eventos.png",
+      displayOrder: 5,
+      status: "published",
+    },
+  ];
+
+  const created: string[] = [];
+  for (const m of milestones) {
+    await db.insert(schema.historyMilestones).values(m);
+    created.push(m.title);
+  }
+  return created;
+}
 
 export {
   seedRoles,

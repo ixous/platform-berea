@@ -1,52 +1,107 @@
 import Link from "next/link";
-import { db } from "@/lib/db";
-import { navigation, navigationItems } from "@/lib/db/schema";
-import { eq, and, isNull } from "drizzle-orm";
+import { auth } from "@/lib/auth";
+import { hasPermission } from "@/lib/auth/rbac";
 import { AdminSidebarShell } from "./AdminSidebarShell";
 import { SidebarNavLink } from "./SidebarNavLink";
+import {
+  LayoutDashboard,
+  FileText,
+  ImageIcon,
+  MessageSquare,
+  ClipboardList,
+  BookOpen,
+  Calendar,
+  type LucideIcon,
+} from "lucide-react";
 
-const CMS_MENU_SLUG = "admin-menu";
-const FALLBACK_MENU_SLUG = "main-menu";
+interface SidebarItem {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+  permission?: string;
+}
+
+interface SidebarCategory {
+  name: string;
+  items: SidebarItem[];
+}
+
+const categories: SidebarCategory[] = [
+  {
+    name: "INICIO",
+    items: [{ label: "Dashboard", href: "/admin", icon: LayoutDashboard }],
+  },
+  {
+    name: "CONTENIDO",
+    items: [
+      { label: "Gestión de Contenido", href: "/admin/content", icon: FileText },
+      {
+        label: "Devocionales",
+        href: "/admin/content/devotionals",
+        icon: BookOpen,
+        permission: "devotionals.manage",
+      },
+      {
+        label: "Eventos",
+        href: "/admin/content/events",
+        icon: Calendar,
+        permission: "events.manage",
+      },
+    ],
+  },
+  {
+    name: "MULTIMEDIA",
+    items: [
+      {
+        label: "Biblioteca Multimedia",
+        href: "/admin/media",
+        icon: ImageIcon,
+        permission: "media.manage",
+      },
+    ],
+  },
+  {
+    name: "COMUNIDAD",
+    items: [
+      {
+        label: "Bandeja de Entrada",
+        href: "/admin/contact",
+        icon: MessageSquare,
+        permission: "contact-submissions.manage",
+      },
+      {
+        label: "Registros a Eventos",
+        href: "/admin/registrations",
+        icon: ClipboardList,
+        permission: "event-registrations.manage",
+      },
+    ],
+  },
+];
 
 export async function AdminSidebar() {
-  let menu = await db.select().from(navigation).where(eq(navigation.slug, CMS_MENU_SLUG)).limit(1);
+  const session = await auth();
 
-  if (menu.length === 0) {
-    menu = await db
-      .select()
-      .from(navigation)
-      .where(eq(navigation.slug, FALLBACK_MENU_SLUG))
-      .limit(1);
+  const visibleCategories: { name: string; items: SidebarItem[] }[] = [];
+
+  for (const cat of categories) {
+    const visibleItems: SidebarItem[] = [];
+    for (const item of cat.items) {
+      if (!item.permission) {
+        visibleItems.push(item);
+      } else if (session?.user) {
+        try {
+          const allowed = await hasPermission(item.permission);
+          if (allowed) visibleItems.push(item);
+        } catch {
+          // skip
+        }
+      }
+    }
+    if (visibleItems.length > 0) {
+      visibleCategories.push({ name: cat.name, items: visibleItems });
+    }
   }
-
-  if (menu.length === 0) {
-    return (
-      <AdminSidebarShell>
-        <div className="flex h-14 items-center border-b px-4">
-          <span className="text-sm font-semibold">CCB Admin</span>
-        </div>
-        <div className="flex-1 p-4">
-          <p className="text-sm text-muted-foreground">Menú no configurado</p>
-        </div>
-      </AdminSidebarShell>
-    );
-  }
-
-  const currentMenu = menu[0];
-
-  const items = await db
-    .select()
-    .from(navigationItems)
-    .where(
-      and(
-        eq(navigationItems.navigationId, currentMenu.id),
-        eq(navigationItems.status, "active"),
-        isNull(navigationItems.deletedAt)
-      )
-    )
-    .orderBy(navigationItems.displayOrder);
-
-  const isFallback = currentMenu.slug === FALLBACK_MENU_SLUG;
 
   return (
     <AdminSidebarShell>
@@ -55,19 +110,28 @@ export async function AdminSidebar() {
           CCB Admin
         </Link>
       </div>
-      <nav className="flex-1 space-y-1 overflow-y-auto p-3">
-        {items.map((item) => (
-          <SidebarNavLink key={item.id} href={item.url || "#"}>
-            {item.title}
-          </SidebarNavLink>
+      <nav className="flex-1 space-y-6 overflow-y-auto p-3">
+        {visibleCategories.map((cat) => (
+          <div key={cat.name}>
+            <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60">
+              {cat.name}
+            </p>
+            <div className="space-y-0.5">
+              {cat.items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <SidebarNavLink key={item.href} href={item.href}>
+                    <span className="flex items-center gap-3">
+                      <Icon className="h-4 w-4 shrink-0" />
+                      <span>{item.label}</span>
+                    </span>
+                  </SidebarNavLink>
+                );
+              })}
+            </div>
+          </div>
         ))}
       </nav>
-      {isFallback && (
-        <div className="border-t px-4 py-2 text-xs text-muted-foreground">
-          Menú: {FALLBACK_MENU_SLUG} (fallback). Cambiar a &quot;{CMS_MENU_SLUG}&quot; al sembrar
-          menú administrativo.
-        </div>
-      )}
     </AdminSidebarShell>
   );
 }
