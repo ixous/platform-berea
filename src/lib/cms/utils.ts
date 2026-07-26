@@ -13,7 +13,8 @@ const tableMap: Record<string, PgTable> = {
   auditorium: schema.auditorium,
   donations: schema.donations,
   contact: schema.contact,
-  leadership: schema.users,
+  leaders: schema.leaders,
+  historyMilestones: schema.historyMilestones,
 };
 
 export function getTable(entityType: string): PgTable {

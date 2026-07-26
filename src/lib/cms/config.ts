@@ -241,8 +241,9 @@ export const entityConfigs: Record<string, EntityDef> = {
     softDelete: true,
     statusField: "status",
     statusTransitions: {
-      active: ["inactive"],
-      inactive: ["active"],
+      draft: ["published", "archived"],
+      published: ["draft", "archived"],
+      archived: ["draft", "published"],
     },
     defaultSort: { field: "displayOrder", dir: "asc" },
     fields: [
@@ -250,6 +251,7 @@ export const entityConfigs: Record<string, EntityDef> = {
       { name: "slug", label: "Slug", type: "text", required: true },
       { name: "description", label: "Descripción", type: "textarea" },
       { name: "leader", label: "Líder", type: "text" },
+      { name: "imageUrl", label: "Imagen (URL)", type: "image" },
       { name: "schedule", label: "Horario", type: "text" },
       { name: "location", label: "Ubicación", type: "text" },
       { name: "contactInfo", label: "Información de contacto", type: "textarea" },
@@ -260,8 +262,9 @@ export const entityConfigs: Record<string, EntityDef> = {
         type: "select",
         required: true,
         options: [
-          { value: "active", label: "Activo" },
-          { value: "inactive", label: "Inactivo" },
+          { value: "draft", label: "Borrador" },
+          { value: "published", label: "Publicado" },
+          { value: "archived", label: "Archivado" },
         ],
       },
     ],

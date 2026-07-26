@@ -1,8 +1,9 @@
 import { db } from "@/lib/db";
 import { serviceMinistries } from "@/lib/db/schema";
-import { and, isNull, eq } from "drizzle-orm";
+import { and, isNull, eq, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
+import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { SectionHeading } from "@/components/public/SectionHeading";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
@@ -24,23 +25,9 @@ async function getServiceMinistries() {
   return db
     .select()
     .from(serviceMinistries)
-    .where(and(eq(serviceMinistries.status, "active"), isNull(serviceMinistries.deletedAt)))
-    .orderBy(serviceMinistries.displayOrder);
+    .where(and(eq(serviceMinistries.status, "published"), isNull(serviceMinistries.deletedAt)))
+    .orderBy(asc(serviceMinistries.displayOrder));
 }
-
-const knownServiceMinistries = [
-  "Alabanza",
-  "Niños",
-  "Varones",
-  "Danza",
-  "Multimedia",
-  "Sonido",
-  "Teatro",
-  "Ujieres",
-  "Intercesión",
-  "Seguridad",
-  "Maestras de Niños",
-];
 
 export default async function MinisteriosServicioPage() {
   const items = await getServiceMinistries();
@@ -52,18 +39,18 @@ export default async function MinisteriosServicioPage() {
         subtitle="Donde tus dones pueden marcar la diferencia."
       />
 
-      <ContentBlock variant="warm">
-        <ScrollReveal animation="fade-up">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-berea-border/40 bg-white shadow-sm">
-            <Heart className="h-10 w-10 text-berea-gold" />
-          </div>
-          <SectionHeading
-            title="Encuentra tu Lugar"
-            subtitle="Cada creyente tiene dones únicos. Nuestros ministerios de servicio son el espacio perfecto para ponerlos al servicio de Dios y la comunidad."
-          />
-        </ScrollReveal>
+      {items.length > 0 ? (
+        <ContentBlock variant="warm">
+          <ScrollReveal animation="fade-up">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-berea-border/40 bg-white shadow-sm">
+              <Heart className="h-10 w-10 text-berea-gold" />
+            </div>
+            <SectionHeading
+              title="Encuentra tu Lugar"
+              subtitle="Cada creyente tiene dones únicos. Nuestros ministerios de servicio son el espacio perfecto para ponerlos al servicio de Dios y la comunidad."
+            />
+          </ScrollReveal>
 
-        {items.length > 0 ? (
           <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-16">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((m) => (
@@ -73,6 +60,8 @@ export default async function MinisteriosServicioPage() {
                   icon={HandHeart}
                   title={m.name}
                   description={m.description}
+                  imageUrl={m.imageUrl ?? undefined}
+                  imageAlt={m.name}
                   meta={
                     m.leader ? (
                       <span className="flex items-center gap-1.5">
@@ -85,23 +74,16 @@ export default async function MinisteriosServicioPage() {
               ))}
             </div>
           </ScrollReveal>
-        ) : (
-          <>
-            <div className="mb-12 mt-16 text-center">
-              <p className="text-berea-muted">
-                Estos son algunos de los ministerios de servicio donde puedes participar:
-              </p>
-            </div>
-            <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-8">
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {knownServiceMinistries.map((name) => (
-                  <MediaCard key={name} variant="minimal" size="sm" title={name} />
-                ))}
-              </div>
-            </ScrollReveal>
-          </>
-        )}
-      </ContentBlock>
+        </ContentBlock>
+      ) : (
+        <ContentBlock variant="warm">
+          <EmptySection
+            title="Ministerios de Servicio"
+            message="Próximamente podrás conocer los ministerios de servicio donde puedes participar."
+            icon={HandHeart}
+          />
+        </ContentBlock>
+      )}
     </>
   );
 }

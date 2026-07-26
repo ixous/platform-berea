@@ -596,6 +596,9 @@ async function main() {
   const leaders = await seedLeaders();
   console.log(`  Leaders: ${leaders.length} creados`);
 
+  const svcMinistries = await seedServiceMinistries();
+  console.log(`  Service Ministries: ${svcMinistries.length} creados`);
+
   console.log("\n✅ Seeds completados.\n");
 }
 
@@ -705,6 +708,89 @@ async function seedLeaders() {
   for (const l of entries) {
     await db.insert(schema.leaders).values(l);
     created.push(l.name);
+  }
+  return created;
+}
+
+async function seedServiceMinistries() {
+  const existing = await db
+    .select({ id: schema.serviceMinistries.id })
+    .from(schema.serviceMinistries)
+    .limit(1);
+  if (existing.length > 0) return [];
+
+  const entries = [
+    {
+      name: "Alabanza",
+      slug: "alabanza",
+      description:
+        "Ministerio dedicado a la adoración a través de la música, guiando a la congregación en la presencia de Dios.",
+      leader: "Hno. Carlos López",
+      imageUrl: "",
+      schedule: "Ensayos: Sábados 4:00 PM",
+      location: "Templo Principal",
+      displayOrder: 1,
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      name: "Niños",
+      slug: "ninos",
+      description:
+        "Ministerio enfocado en la formación espiritual de los niños, enseñándoles los principios bíblicos de una manera divertida y creativa.",
+      leader: "Hna. Laura Martínez",
+      imageUrl: "",
+      schedule: "Domingos 10:00 AM",
+      location: "Edificio Infantil",
+      displayOrder: 2,
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      name: "Multimedia",
+      slug: "multimedia",
+      description:
+        "Ministerio responsable de la producción audiovisual, transmisión en vivo y contenido digital de la iglesia.",
+      leader: "Hno. Roberto Sánchez",
+      imageUrl: "",
+      schedule: "Reunión mensual primer sábado",
+      location: "Cabina de Sonido",
+      displayOrder: 3,
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      name: "Ujieres",
+      slug: "ujieres",
+      description:
+        "Ministerio de servicio encargado de la recepción y atención a los asistentes, asegurando un ambiente de orden y hospitalidad.",
+      leader: "Hna. Patricia Torres",
+      imageUrl: "",
+      schedule: "Domingos 8:00 AM",
+      location: "Templo Principal",
+      displayOrder: 4,
+      status: "published",
+      publishedAt: new Date(),
+    },
+    {
+      name: "Intercesión",
+      slug: "intercesion",
+      description:
+        "Ministerio dedicado a la oración e intercesión por la iglesia, la ciudad y las naciones.",
+      leader: "Ps. Juan Pérez",
+      imageUrl: "",
+      schedule: "Miércoles 6:00 AM",
+      location: "Sala de Oración",
+      displayOrder: 5,
+      status: "published",
+      publishedAt: new Date(),
+    },
+  ];
+
+  const created: string[] = [];
+  for (const m of entries) {
+    await db.insert(schema.serviceMinistries).values(m);
+    created.push(m.name);
   }
   return created;
 }
