@@ -108,71 +108,61 @@ export interface UploadResult {
 }
 
 export async function uploadMedia(formData: FormData): Promise<UploadResult> {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return { success: false, error: "No autorizado. Inicia sesión para subir archivos." };
-  }
-
-  const perm = await hasPermission("media.manage");
-  if (!perm) {
-    return { success: false, error: "No tienes permiso para subir archivos." };
-  }
-
-  if (!rateLimit(`upload:${session.user.id}`, { windowMs: 60_000, max: 20 })) {
-    return { success: false, error: "Demasiadas subidas. Espera un minuto." };
-  }
-
-  const file = formData.get("file") as File | null;
-  if (!file || file.size === 0) {
-    return { success: false, error: "No se seleccionó ningún archivo." };
-  }
-
-  if (file.size > MAX_FILE_SIZE) {
-    const maxMB = MAX_FILE_SIZE / (1024 * 1024);
-    return { success: false, error: `El archivo excede el tamaño máximo de ${maxMB} MB.` };
-  }
-
-  if (!ALLOWED_MIME_TYPES.has(file.type)) {
-    return { success: false, error: `El tipo de archivo "${file.type}" no está permitido.` };
-  }
-
-  const ext = getExtension(file.name);
-  if (!ext || !ALLOWED_EXTENSIONS.has(ext)) {
-    return { success: false, error: `La extensión ".${ext}" no está permitida.` };
-  }
-
-  const mimeError = validateFileType(file.type, file.name);
-  if (mimeError) {
-    return { success: false, error: mimeError };
-  }
-
-  const buffer = Buffer.from(await file.arrayBuffer());
-
-  if (!checkMagicBytes(buffer, ext)) {
-    return { success: false, error: "El contenido del archivo no coincide con su extensión." };
-  }
-
-  const sanitized = sanitizeFilename(file.name);
-  if (!sanitized) {
-    return { success: false, error: "El nombre del archivo no es válido." };
-  }
-
-  const key = generateFileKey(file.name);
-
-  let uploadResult: { key: string; url: string };
   try {
-    console.log("[Upload] Subiendo a R2...");
-    uploadResult = await uploadToR2({ body: buffer, key, contentType: file.type });
-    console.log("[Upload] R2 OK:", uploadResult.url);
-  } catch (err) {
-    console.error("[Upload] R2 error:", err);
-    return { success: false, error: "Error al subir el archivo. Inténtalo de nuevo." };
-  }
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, error: "No autorizado. Inicia sesión para subir archivos." };
+    }
 
-  const mediaType = detectMediaType(file.type);
+    const perm = await hasPermission("media.manage");
+    if (!perm) {
+      return { success: false, error: "No tienes permiso para subir archivos." };
+    }
 
-  try {
-    console.log("[Upload] Guardando en BD...");
+    if (!rateLimit(`upload:${session.user.id}`, { windowMs: 60_000, max: 20 })) {
+      return { success: false, error: "Demasiadas subidas. Espera un minuto." };
+    }
+
+    const file = formData.get("file") as File | null;
+    if (!file || file.size === 0) {
+      return { success: false, error: "No se seleccionó ningún archivo." };
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      const maxMB = MAX_FILE_SIZE / (1024 * 1024);
+      return { success: false, error: `El archivo excede el tamaño máximo de ${maxMB} MB.` };
+    }
+
+    if (!ALLOWED_MIME_TYPES.has(file.type)) {
+      return { success: false, error: `El tipo de archivo "${file.type}" no está permitido.` };
+    }
+
+    const ext = getExtension(file.name);
+    if (!ext || !ALLOWED_EXTENSIONS.has(ext)) {
+      return { success: false, error: `La extensión ".${ext}" no está permitida.` };
+    }
+
+    const mimeError = validateFileType(file.type, file.name);
+    if (mimeError) {
+      return { success: false, error: mimeError };
+    }
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    if (!checkMagicBytes(buffer, ext)) {
+      return { success: false, error: "El contenido del archivo no coincide con su extensión." };
+    }
+
+    const sanitized = sanitizeFilename(file.name);
+    if (!sanitized) {
+      return { success: false, error: "El nombre del archivo no es válido." };
+    }
+
+    const key = generateFileKey(file.name);
+
+    const uploadResult = await uploadToR2({ body: buffer, key, contentType: file.type });
+    const mediaType = detectMediaType(file.type);
+
     const [record] = await db
       .insert(media)
       .values({
@@ -186,8 +176,6 @@ export async function uploadMedia(formData: FormData): Promise<UploadResult> {
       })
       .returning({ id: media.id });
 
-    console.log("[Upload] BD OK, id:", record.id);
-
     await logAudit({
       userId: session.user.id,
       action: "MEDIA_UPLOAD",
@@ -196,12 +184,11 @@ export async function uploadMedia(formData: FormData): Promise<UploadResult> {
       details: `Archivo subido: ${sanitized} (${mediaType}, ${file.size} bytes)`,
     });
 
-    console.log("[Upload] Completado exitosamente");
-
     return { success: true, id: record.id, filename: sanitized, url: uploadResult.url };
   } catch (err) {
-    console.error("[Upload] DB error:", err);
-    return { success: false, error: "Error al guardar el registro en la base de datos." };
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[Upload] Error general:", msg);
+    return { success: false, error: `Error al subir imagen: ${msg}` };
   }
 }
 
