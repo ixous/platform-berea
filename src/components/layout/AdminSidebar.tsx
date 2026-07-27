@@ -14,6 +14,7 @@ import {
   Home,
   Book,
   Users,
+  Eye,
   type LucideIcon,
 } from "lucide-react";
 
@@ -34,6 +35,12 @@ const categories: SidebarCategory[] = [
     name: "INICIO",
     items: [
       { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+      {
+        label: "Editor Visual",
+        href: "/admin/editor",
+        icon: Eye,
+        permission: "homepage.manage",
+      },
       {
         label: "Personalizar Inicio",
         href: "/admin/homepage",
