@@ -17,7 +17,7 @@ export async function login(_prevState: { error: string }, formData: FormData) {
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
-    callbackUrl: formData.get("callbackUrl"),
+    callbackUrl: formData.get("callbackUrl") ?? undefined,
   });
 
   if (!parsed.success) {
