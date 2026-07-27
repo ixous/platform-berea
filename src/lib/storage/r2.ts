@@ -18,6 +18,9 @@ function getR2(): S3Client {
         secretAccessKey: R2_SECRET_ACCESS_KEY,
       },
       forcePathStyle: true,
+      requestHandler: {
+        requestTimeout: 30_000,
+      },
     });
   }
   return client;

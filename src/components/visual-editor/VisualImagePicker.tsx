@@ -22,16 +22,29 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
       if (!file) return;
 
       setUploading(true);
-      const formData = new FormData();
-      formData.set("file", file);
-      const result = await uploadMedia(formData);
+      setPreviewError(false);
 
-      if (result.success && result.id) {
-        onChange(result.filename || "");
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 60_000);
+
+      try {
+        const formData = new FormData();
+        formData.set("file", file);
+
+        const result = await uploadMedia(formData);
+
+        if (result.success && result.url) {
+          onChange(result.url);
+        } else if (result.error) {
+          console.error("[Upload] Error:", result.error);
+        }
+      } catch (err) {
+        console.error("[Upload] Exception:", err);
+      } finally {
+        clearTimeout(timeout);
+        setUploading(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
       }
-
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
     },
     [onChange]
   );

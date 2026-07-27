@@ -104,6 +104,7 @@ export interface UploadResult {
   id?: string;
   error?: string;
   filename?: string;
+  url?: string;
 }
 
 export async function uploadMedia(formData: FormData): Promise<UploadResult> {
@@ -189,7 +190,7 @@ export async function uploadMedia(formData: FormData): Promise<UploadResult> {
       details: `Archivo subido: ${sanitized} (${mediaType}, ${file.size} bytes)`,
     });
 
-    return { success: true, id: record.id, filename: sanitized };
+    return { success: true, id: record.id, filename: sanitized, url: uploadResult.url };
   } catch {
     return { success: false, error: "Error al guardar el registro en la base de datos." };
   }
