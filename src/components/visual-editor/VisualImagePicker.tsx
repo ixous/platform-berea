@@ -13,6 +13,7 @@ interface VisualImagePickerProps {
 export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [showMediaPicker, setShowMediaPicker] = useState(false);
   const [previewError, setPreviewError] = useState(false);
 
@@ -22,10 +23,8 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
       if (!file) return;
 
       setUploading(true);
+      setUploadError(null);
       setPreviewError(false);
-
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 60_000);
 
       try {
         const formData = new FormData();
@@ -35,13 +34,14 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
 
         if (result.success && result.url) {
           onChange(result.url);
-        } else if (result.error) {
-          console.error("[Upload] Error:", result.error);
+        } else {
+          setUploadError(result.error || "Error desconocido al subir la imagen.");
         }
       } catch (err) {
+        const msg = err instanceof Error ? err.message : "Error desconocido al subir la imagen.";
+        setUploadError(msg);
         console.error("[Upload] Exception:", err);
       } finally {
-        clearTimeout(timeout);
         setUploading(false);
         if (fileInputRef.current) fileInputRef.current.value = "";
       }
@@ -100,6 +100,21 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
               <Trash2 className="h-4 w-4" />
             </button>
           </div>
+        </div>
+      ) : uploadError ? (
+        <div className="flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-red-300 bg-red-50 px-4 py-6">
+          <p className="text-xs font-medium text-red-600">{uploadError}</p>
+          <button
+            type="button"
+            onClick={() => {
+              setUploadError(null);
+              fileInputRef.current?.click();
+            }}
+            className="inline-flex items-center gap-1 rounded-md bg-red-100 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200"
+          >
+            <Upload className="h-3 w-3" />
+            Intentar de nuevo
+          </button>
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-muted-foreground/20 bg-muted/10 px-4 py-6">

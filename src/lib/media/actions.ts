@@ -161,14 +161,18 @@ export async function uploadMedia(formData: FormData): Promise<UploadResult> {
 
   let uploadResult: { key: string; url: string };
   try {
+    console.log("[Upload] Subiendo a R2...");
     uploadResult = await uploadToR2({ body: buffer, key, contentType: file.type });
-  } catch {
+    console.log("[Upload] R2 OK:", uploadResult.url);
+  } catch (err) {
+    console.error("[Upload] R2 error:", err);
     return { success: false, error: "Error al subir el archivo. Inténtalo de nuevo." };
   }
 
   const mediaType = detectMediaType(file.type);
 
   try {
+    console.log("[Upload] Guardando en BD...");
     const [record] = await db
       .insert(media)
       .values({
@@ -182,6 +186,8 @@ export async function uploadMedia(formData: FormData): Promise<UploadResult> {
       })
       .returning({ id: media.id });
 
+    console.log("[Upload] BD OK, id:", record.id);
+
     await logAudit({
       userId: session.user.id,
       action: "MEDIA_UPLOAD",
@@ -190,8 +196,11 @@ export async function uploadMedia(formData: FormData): Promise<UploadResult> {
       details: `Archivo subido: ${sanitized} (${mediaType}, ${file.size} bytes)`,
     });
 
+    console.log("[Upload] Completado exitosamente");
+
     return { success: true, id: record.id, filename: sanitized, url: uploadResult.url };
-  } catch {
+  } catch (err) {
+    console.error("[Upload] DB error:", err);
     return { success: false, error: "Error al guardar el registro en la base de datos." };
   }
 }
