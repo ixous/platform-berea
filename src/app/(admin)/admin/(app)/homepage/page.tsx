@@ -6,10 +6,15 @@ import { homepageSettings, homepageSections } from "@/lib/db/schema";
 import { asc } from "drizzle-orm";
 import { PageHeader } from "@/components/shared/PageHeader";
 import Link from "next/link";
-import { Eye, EyeOff, ExternalLink } from "lucide-react";
-import { saveHomepageSettings, saveHomepageSections } from "@/lib/cms/homepage-actions";
+import { Eye, EyeOff, ExternalLink, LayoutDashboard } from "lucide-react";
+import {
+  saveHomepageSettings,
+  saveHomepageSections,
+  saveHomepageBlock,
+} from "@/lib/cms/homepage-actions";
+import { HomepageVisualClient } from "./homepage-visual-client";
 
-const TABS = ["hero", "welcome", "cta", "services", "sections"] as const;
+const TABS = ["visual", "hero", "welcome", "cta", "services", "sections"] as const;
 type Tab = (typeof TABS)[number];
 
 async function getSettings() {
@@ -30,16 +35,32 @@ export default async function HomepageAdminPage(props: {
   if (!allowed) redirect("/admin");
 
   const { tab: rawTab } = await props.searchParams;
-  const currentTab = TABS.includes(rawTab as Tab) ? (rawTab as Tab) : "hero";
+  const currentTab = TABS.includes(rawTab as Tab) ? (rawTab as Tab) : "visual";
+
+  const settings = await getSettings();
+  const initialData: Record<string, string> = settings
+    ? Object.fromEntries(Object.entries(settings).map(([k, v]) => [k, v === null ? "" : String(v)]))
+    : {};
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <PageHeader
         title="Personalizar Inicio"
         description="Administra todas las secciones de la página de inicio."
       />
       <nav className="flex gap-1 border-b">
-        {(["hero", "welcome", "services", "cta", "sections"] as const).map((t) => (
+        <Link
+          href="/admin/homepage?tab=visual"
+          className={`inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors ${
+            currentTab === "visual"
+              ? "border-b-2 border-primary text-primary"
+              : "border-b-2 border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <LayoutDashboard className="h-4 w-4" />
+          Editor Visual
+        </Link>
+        {(["hero", "welcome", "cta", "services", "sections"] as const).map((t) => (
           <Link
             key={t}
             href={`/admin/homepage?tab=${t}`}
@@ -62,9 +83,12 @@ export default async function HomepageAdminPage(props: {
         ))}
       </nav>
       <div>
-        {currentTab === "hero" && <HeroForm />}
-        {currentTab === "welcome" && <WelcomeForm />}
-        {currentTab === "cta" && <CtaForm />}
+        {currentTab === "visual" && (
+          <HomepageVisualClient initialData={initialData} onSaveBlock={saveHomepageBlock} />
+        )}
+        {currentTab === "hero" && <HeroForm settings={settings} />}
+        {currentTab === "welcome" && <WelcomeForm settings={settings} />}
+        {currentTab === "cta" && <CtaForm settings={settings} />}
         {currentTab === "services" && <ServicesPanel />}
         {currentTab === "sections" && <SectionsForm />}
       </div>
@@ -72,8 +96,8 @@ export default async function HomepageAdminPage(props: {
   );
 }
 
-async function HeroForm() {
-  const s = await getSettings();
+async function HeroForm({ settings }: { settings: Record<string, unknown> | null }) {
+  const s = settings as Record<string, string | null> | null;
   return (
     <SectionForm action={saveHomepageSettings}>
       <Field label="Tagline" name="heroTagline" defaultValue={s?.heroTagline ?? "BIENVENIDOS"} />
@@ -117,8 +141,8 @@ async function HeroForm() {
   );
 }
 
-async function WelcomeForm() {
-  const s = await getSettings();
+async function WelcomeForm({ settings }: { settings: Record<string, unknown> | null }) {
+  const s = settings as Record<string, string | null> | null;
   return (
     <SectionForm action={saveHomepageSettings}>
       <Field label="Título" name="welcomeTitle" defaultValue={s?.welcomeTitle ?? ""} />
@@ -144,8 +168,8 @@ async function WelcomeForm() {
   );
 }
 
-async function CtaForm() {
-  const s = await getSettings();
+async function CtaForm({ settings }: { settings: Record<string, unknown> | null }) {
+  const s = settings as Record<string, string | null> | null;
   return (
     <SectionForm action={saveHomepageSettings}>
       <Field label="Título" name="ctaTitle" defaultValue={s?.ctaTitle ?? ""} />

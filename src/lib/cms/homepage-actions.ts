@@ -41,6 +41,68 @@ const SETTINGS_FIELDS = [
   "ctaBackgroundImage",
 ];
 
+const BLOCK_FIELD_MAP: Record<string, string[]> = {
+  hero: [
+    "heroTagline",
+    "heroTitle",
+    "heroSubtitle",
+    "heroCtaText",
+    "heroCtaHref",
+    "heroSecondaryCtaText",
+    "heroSecondaryCtaHref",
+    "heroBackgroundImage",
+    "heroImageAlt",
+  ],
+  welcome: [
+    "welcomeTitle",
+    "welcomeDescription",
+    "welcomeCtaText",
+    "welcomeCtaHref",
+    "welcomeCtaSecondaryText",
+    "welcomeCtaSecondaryHref",
+  ],
+  cta: ["ctaTitle", "ctaDescription", "ctaButtonText", "ctaButtonHref", "ctaBackgroundImage"],
+};
+
+export async function saveHomepageBlock(blockKey: string, data: Record<string, string>) {
+  const session = await requireHomepageAuth();
+  if (!rateLimit(`homepage:save:${session.user.id}`, { windowMs: 60_000, max: 30 })) return;
+
+  const allowedFields = BLOCK_FIELD_MAP[blockKey];
+  if (!allowedFields) throw new Error(`Bloque desconocido: ${blockKey}`);
+
+  const updateData: Record<string, unknown> = {};
+  for (const field of allowedFields) {
+    if (field in data) updateData[field] = data[field];
+  }
+
+  try {
+    const [existing] = await db.select({ id: homepageSettings.id }).from(homepageSettings).limit(1);
+
+    if (existing) {
+      await db
+        .update(homepageSettings)
+        .set({ ...updateData, updatedAt: new Date() })
+        .where(eq(homepageSettings.id, existing.id));
+    } else {
+      await db.insert(homepageSettings).values(updateData as any);
+    }
+
+    await logAudit({
+      userId: session.user.id,
+      action: "HOMEPAGE_UPDATE",
+      resource: "homepage_settings",
+      details: `Bloque "${blockKey}" actualizado desde editor visual`,
+    });
+
+    revalidatePath("/");
+    revalidatePath("/admin/homepage");
+  } catch (err) {
+    console.error("[Homepage] Save block failed:", err);
+    throw new Error("Error al guardar el bloque.");
+  }
+}
+
 export async function saveHomepageSettings(formData: FormData) {
   const session = await requireHomepageAuth();
   if (!rateLimit(`homepage:save:${session.user.id}`, { windowMs: 60_000, max: 30 })) return;

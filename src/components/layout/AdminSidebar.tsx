@@ -64,7 +64,7 @@ const categories: SidebarCategory[] = [
     name: "MULTIMEDIA",
     items: [
       {
-        label: "Biblioteca Multimedia",
+        label: "Biblioteca de Medios",
         href: "/admin/media",
         icon: ImageIcon,
         permission: "media.manage",
