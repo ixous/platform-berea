@@ -2,7 +2,13 @@
 
 import { useState, useRef, useCallback } from "react";
 import { ImagePlus, Upload, Trash2, Loader2 } from "lucide-react";
-import { uploadMedia } from "@/lib/media/actions";
+interface UploadResult {
+  success: boolean;
+  id?: string;
+  error?: string;
+  filename?: string;
+  url?: string;
+}
 import { VisualMediaPickerDialog } from "./VisualMediaPickerDialog";
 
 interface VisualImagePickerProps {
@@ -30,7 +36,8 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
         const formData = new FormData();
         formData.set("file", file);
 
-        const result = await uploadMedia(formData);
+        const res = await fetch("/api/media", { method: "POST", body: formData });
+        const result: UploadResult = await res.json();
 
         if (result.success && result.url) {
           onChange(result.url);

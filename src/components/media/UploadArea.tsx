@@ -6,7 +6,14 @@ import { UploadButton } from "./UploadButton";
 import { UploadDropzone } from "./UploadDropzone";
 import { UploadProgress } from "./UploadProgress";
 import { UploadError } from "./UploadError";
-import { uploadMedia, type UploadResult } from "@/lib/media/actions";
+
+interface UploadResult {
+  success: boolean;
+  id?: string;
+  error?: string;
+  filename?: string;
+  url?: string;
+}
 
 export function UploadArea() {
   const router = useRouter();
@@ -29,7 +36,8 @@ export function UploadArea() {
         try {
           const formData = new FormData();
           formData.set("file", file);
-          const result = await uploadMedia(formData);
+          const res = await fetch("/api/media", { method: "POST", body: formData });
+          const result: UploadResult = await res.json();
           results.push(result);
         } catch {
           results.push({ success: false, error: `Error inesperado al subir "${file.name}".` });
