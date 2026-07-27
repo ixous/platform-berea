@@ -4,7 +4,13 @@ import { X, Save } from "lucide-react";
 import { useVisualEditor, type BlockConfig } from "./VisualEditorContext";
 import { VisualImagePicker } from "./VisualImagePicker";
 
-export function VisualEditorPanel({ blocks }: { blocks: BlockConfig[] }) {
+export function VisualEditorPanel({
+  blocks,
+  renderActions,
+}: {
+  blocks: BlockConfig[];
+  renderActions?: (blockKey: string, config: BlockConfig) => React.ReactNode;
+}) {
   const { selectedBlock, selectBlock, updateField, saveBlock, getBlockValues, saving } =
     useVisualEditor();
 
@@ -93,6 +99,7 @@ export function VisualEditorPanel({ blocks }: { blocks: BlockConfig[] }) {
           <Save className="h-4 w-4" />
           {saving ? "Guardando..." : "Guardar cambios"}
         </button>
+        {renderActions?.(selectedBlock, config)}
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ interface VisualEditorShellProps {
   blocks: BlockConfig[];
   initialData?: Record<string, string>;
   onSaveBlock: (blockKey: string, data: Record<string, string>) => Promise<void>;
+  panelRenderActions?: (blockKey: string, config: BlockConfig) => React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -15,6 +16,7 @@ export function VisualEditorShell({
   blocks,
   initialData,
   onSaveBlock,
+  panelRenderActions,
   children,
 }: VisualEditorShellProps) {
   return (
@@ -29,12 +31,12 @@ export function VisualEditorShell({
           data-editor-panel
           className="hidden w-80 shrink-0 overflow-hidden rounded-xl border bg-card shadow-sm lg:block"
         >
-          <VisualEditorPanel blocks={blocks} />
+          <VisualEditorPanel blocks={blocks} renderActions={panelRenderActions} />
         </div>
         <div className="fixed inset-0 z-50 flex lg:hidden" data-editor-panel>
           <div className="flex-1 bg-black/50" onClick={() => {}} />
           <div className="w-80 overflow-hidden border-l bg-card shadow-2xl">
-            <VisualEditorPanel blocks={blocks} />
+            <VisualEditorPanel blocks={blocks} renderActions={panelRenderActions} />
           </div>
         </div>
       </div>

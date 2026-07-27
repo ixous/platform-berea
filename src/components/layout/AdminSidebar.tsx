@@ -5,15 +5,10 @@ import { AdminSidebarShell } from "./AdminSidebarShell";
 import { SidebarNavLink } from "./SidebarNavLink";
 import {
   LayoutDashboard,
-  FileText,
   ImageIcon,
   MessageSquare,
   ClipboardList,
-  BookOpen,
-  Calendar,
   Home,
-  Book,
-  Users,
   Eye,
   type LucideIcon,
 } from "lucide-react";
@@ -50,24 +45,6 @@ const categories: SidebarCategory[] = [
     ],
   },
   {
-    name: "CONTENIDO",
-    items: [
-      { label: "Gestión de Contenido", href: "/admin/content", icon: FileText },
-      {
-        label: "Devocionales",
-        href: "/admin/content/devotionals",
-        icon: BookOpen,
-        permission: "devotionals.manage",
-      },
-      {
-        label: "Eventos",
-        href: "/admin/content/events",
-        icon: Calendar,
-        permission: "events.manage",
-      },
-    ],
-  },
-  {
     name: "MULTIMEDIA",
     items: [
       {
@@ -75,29 +52,6 @@ const categories: SidebarCategory[] = [
         href: "/admin/media",
         icon: ImageIcon,
         permission: "media.manage",
-      },
-    ],
-  },
-  {
-    name: "INSTITUCIONAL",
-    items: [
-      {
-        label: "Páginas Institucionales",
-        href: "/admin/content/institutionalPages",
-        icon: FileText,
-        permission: "pages.manage",
-      },
-      {
-        label: "Secciones",
-        href: "/admin/content/institutionalSections",
-        icon: Users,
-        permission: "pages.manage",
-      },
-      {
-        label: "Doctrinas",
-        href: "/admin/content/doctrines",
-        icon: Book,
-        permission: "pages.manage",
       },
     ],
   },

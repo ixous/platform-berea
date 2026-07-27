@@ -3,7 +3,9 @@
 import { useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 import { VisualEditorShell, VisualBlock, type BlockConfig } from "@/components/visual-editor";
+import type { BlockField } from "@/components/visual-editor/VisualEditorContext";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
 import { MediaCard } from "@/components/public/MediaCard";
@@ -30,6 +32,7 @@ import {
   saveContactInfo,
   saveDonationInfo,
   saveAnnualVision,
+  saveEntityBlock,
 } from "@/lib/cms/editor-actions";
 
 export interface PageEntry {
@@ -58,6 +61,68 @@ const BANNER_BLOCK = (): BlockConfig => ({
   ],
 });
 
+const ENTITY_EDIT_FIELDS: Record<string, BlockField[]> = {
+  leaders: [
+    { name: "name", label: "Nombre", type: "text" },
+    { name: "position", label: "Cargo", type: "text" },
+    { name: "biography", label: "Biografía", type: "textarea" },
+    { name: "imageUrl", label: "Fotografía", type: "image" },
+  ],
+  devotionals: [
+    { name: "title", label: "Título", type: "text" },
+    { name: "excerpt", label: "Extracto", type: "textarea" },
+    { name: "verse", label: "Versículo", type: "textarea" },
+  ],
+  events: [
+    { name: "title", label: "Título", type: "text" },
+    { name: "description", label: "Descripción", type: "textarea" },
+    { name: "time", label: "Hora", type: "text" },
+    { name: "location", label: "Ubicación", type: "text" },
+  ],
+  ministries: [
+    { name: "name", label: "Nombre", type: "text" },
+    { name: "description", label: "Descripción", type: "textarea" },
+    { name: "leader", label: "Líder", type: "text" },
+    { name: "schedule", label: "Horario", type: "text" },
+  ],
+  serviceMinistries: [
+    { name: "name", label: "Nombre", type: "text" },
+    { name: "description", label: "Descripción", type: "textarea" },
+    { name: "leader", label: "Líder", type: "text" },
+    { name: "imageUrl", label: "Imagen", type: "image" },
+  ],
+  cells: [
+    { name: "name", label: "Nombre", type: "text" },
+    { name: "leader", label: "Líder", type: "text" },
+    { name: "address", label: "Dirección", type: "text" },
+    { name: "description", label: "Descripción", type: "textarea" },
+  ],
+  biblicalPrograms: [
+    { name: "name", label: "Nombre", type: "text" },
+    { name: "description", label: "Descripción", type: "textarea" },
+    { name: "instructor", label: "Instructor", type: "text" },
+  ],
+  historyMilestones: [
+    { name: "title", label: "Título", type: "text" },
+    { name: "year", label: "Año", type: "text" },
+    { name: "description", label: "Descripción", type: "textarea" },
+    { name: "imageUrl", label: "Imagen", type: "image" },
+  ],
+  doctrines: [
+    { name: "title", label: "Título", type: "text" },
+    { name: "subtitle", label: "Subtítulo", type: "text" },
+    { name: "content", label: "Contenido", type: "textarea" },
+    { name: "imageUrl", label: "Imagen", type: "image" },
+  ],
+  institutionalSections: [
+    { name: "title", label: "Título", type: "text" },
+    { name: "content", label: "Contenido", type: "textarea" },
+    { name: "imageUrl", label: "Imagen", type: "image" },
+    { name: "buttonText", label: "Texto del botón", type: "text" },
+    { name: "buttonHref", label: "Enlace del botón", type: "text" },
+  ],
+};
+
 function renderBanner(blockKey: string, getVal: (key: string) => string) {
   return (
     <VisualBlock blockKey={blockKey} label="Banner">
@@ -66,39 +131,6 @@ function renderBanner(blockKey: string, getVal: (key: string) => string) {
         subtitle={getVal("subtitle") || undefined}
         backgroundImage={getVal("backgroundImage") || null}
       />
-    </VisualBlock>
-  );
-}
-
-function renderEntityCards(
-  items: EntityItem[],
-  entityTypeSlug: string,
-  label: string,
-  blockKey: string,
-  iconMap?: (item: EntityItem) => React.ReactNode
-) {
-  const IconComponent = iconMap ? undefined : Sparkles;
-
-  return (
-    <VisualBlock blockKey={blockKey} label={label}>
-      <ContentBlock variant="gold-mist">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((item) => (
-            <Link
-              key={item.id}
-              href={`/admin/content/${entityTypeSlug}/${item.id}`}
-              className="block"
-            >
-              <MediaCard
-                title={(item.title || item.name) ?? ""}
-                description={item.description ?? ""}
-                imageUrl={item.imageUrl ?? null}
-                icon={IconComponent}
-              />
-            </Link>
-          ))}
-        </div>
-      </ContentBlock>
     </VisualBlock>
   );
 }
@@ -263,19 +295,28 @@ function renderHomepage(getVal: (key: string) => string) {
 
 // ─── Institutional Page (Quienes Somos style) ──────
 
-function renderInstitutionalPage(getVal: (key: string) => string) {
+function renderInstitutionalPage(getVal: (key: string) => string, sections: EntityItem[]) {
   return (
     <>
       {renderBanner("banner", getVal)}
-      <VisualBlock blockKey="content" label="Contenido">
+      {sections.length > 0 && (
         <ContentBlock variant="gold-mist">
-          <ContentNarrow className="text-center">
-            <p className="text-lg leading-relaxed text-berea-muted">
-              Contenido de la página. Administra las secciones desde el gestor de contenido.
-            </p>
-          </ContentNarrow>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {sections.map((section) => {
+              const blockKey = `entity:institutionalSections:${section.id}`;
+              return (
+                <VisualBlock key={blockKey} blockKey={blockKey} label={section.title || "Sección"}>
+                  <MediaCard
+                    title={section.title ?? ""}
+                    description={String(section.content ?? "")}
+                    imageUrl={section.imageUrl ?? null}
+                  />
+                </VisualBlock>
+              );
+            })}
+          </div>
         </ContentBlock>
-      </VisualBlock>
+      )}
     </>
   );
 }
@@ -293,8 +334,24 @@ function renderHistory(getVal: (key: string) => string, milestones: EntityItem[]
           </ContentNarrow>
         </ContentBlock>
       </VisualBlock>
-      {milestones.length > 0 &&
-        renderEntityCards(milestones, "historyMilestones", "Hitos Históricos", "milestones")}
+      {milestones.length > 0 && (
+        <ContentBlock variant="gold-mist">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {milestones.map((item) => {
+              const blockKey = `entity:historyMilestones:${item.id}`;
+              return (
+                <VisualBlock key={blockKey} blockKey={blockKey} label={item.title || ""}>
+                  <MediaCard
+                    title={item.title ?? ""}
+                    description={item.description ?? ""}
+                    imageUrl={item.imageUrl ?? null}
+                  />
+                </VisualBlock>
+              );
+            })}
+          </div>
+        </ContentBlock>
+      )}
     </>
   );
 }
@@ -447,16 +504,6 @@ function renderVision(getVal: (key: string) => string, year?: number) {
 
 // ─── Entity List ────────────────────────────────────
 
-const ENTITY_LIST_BLOCK = (): BlockConfig => ({
-  key: "banner",
-  label: "Banner",
-  fields: [
-    { name: "title", label: "Título del banner", type: "text" },
-    { name: "subtitle", label: "Subtítulo del banner", type: "textarea" },
-    { name: "backgroundImage", label: "Imagen de fondo", type: "image" },
-  ],
-});
-
 const iconByEntity: Record<string, React.ReactNode> = {
   leaders: <Users className="h-5 w-5" />,
   ministries: <Church className="h-5 w-5" />,
@@ -472,18 +519,24 @@ function renderEntityList(
   items: EntityItem[],
   entityTypeSlug: string
 ) {
+  const baseFields = ENTITY_EDIT_FIELDS[entityTypeSlug];
+  if (!baseFields) {
+    return <>{renderBanner("banner", getVal)}</>;
+  }
+
   return (
     <>
       {renderBanner("banner", getVal)}
       {items.length > 0 && (
-        <VisualBlock blockKey="list" label="Lista">
-          <ContentBlock variant="gold-mist">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((item) => (
-                <Link
-                  key={item.id}
-                  href={`/admin/content/${entityTypeSlug}/${item.id}`}
-                  className="block"
+        <ContentBlock variant="gold-mist">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((item) => {
+              const blockKey = `entity:${entityTypeSlug}:${item.id}`;
+              return (
+                <VisualBlock
+                  key={blockKey}
+                  blockKey={blockKey}
+                  label={item.title || item.name || ""}
                 >
                   <MediaCard
                     title={(item.title || item.name) ?? ""}
@@ -491,11 +544,11 @@ function renderEntityList(
                     imageUrl={item.imageUrl ?? null}
                     icon={iconByEntity[entityTypeSlug] ? undefined : Sparkles}
                   />
-                </Link>
-              ))}
-            </div>
-          </ContentBlock>
-        </VisualBlock>
+                </VisualBlock>
+              );
+            })}
+          </div>
+        </ContentBlock>
       )}
     </>
   );
@@ -508,6 +561,57 @@ interface PageRenderConfig {
   extractInitial: (data: Record<string, unknown>) => Record<string, string>;
   onSave: (blockKey: string, data: Record<string, string>) => Promise<void>;
   render: (getVal: (key: string) => string, data: Record<string, unknown>) => React.ReactNode;
+  renderActions?: (blockKey: string, config: BlockConfig) => React.ReactNode;
+}
+
+function getEntityCmsType(slug: string): string {
+  const map: Record<string, string> = {
+    leaders: "leaders",
+    ministries: "ministries",
+    serviceMinistries: "serviceMinistries",
+    cells: "cells",
+    biblicalPrograms: "biblicalPrograms",
+    devotionals: "devotionals",
+    events: "events",
+    historyMilestones: "historyMilestones",
+    doctrines: "doctrines",
+    institutionalSections: "institutionalSections",
+  };
+  return map[slug] || slug;
+}
+
+function buildEntityBlocks(
+  items: EntityItem[],
+  entityTypeSlug: string,
+  baseFields: BlockField[]
+): BlockConfig[] {
+  return items.map((item) => {
+    const blockKey = `entity:${entityTypeSlug}:${item.id}`;
+    return {
+      key: blockKey,
+      label: (item.title || item.name || "Elemento") as string,
+      fields: baseFields.map((f) => ({
+        ...f,
+        name: `${blockKey}.${f.name}`,
+      })),
+    };
+  });
+}
+
+function extractEntityInitialData(
+  items: EntityItem[],
+  entityTypeSlug: string,
+  baseFields: BlockField[]
+): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const item of items) {
+    const blockKey = `entity:${entityTypeSlug}:${item.id}`;
+    for (const field of baseFields) {
+      const val = item[field.name];
+      result[`${blockKey}.${field.name}`] = val != null ? String(val) : "";
+    }
+  }
+  return result;
 }
 
 function buildPageConfig(entityType: string, slug: string): PageRenderConfig {
@@ -542,7 +646,8 @@ function buildPageConfig(entityType: string, slug: string): PageRenderConfig {
             await saveInstitutionalPageBanner(slug, _data);
           }
         },
-        render: (getVal) => renderInstitutionalPage(getVal),
+        render: (getVal, data) =>
+          renderInstitutionalPage(getVal, (data.sections as EntityItem[]) || []),
       };
 
     case "history":
@@ -641,9 +746,8 @@ function buildPageConfig(entityType: string, slug: string): PageRenderConfig {
       };
 
     default:
-      // Entity list pages
       return {
-        blocks: [ENTITY_LIST_BLOCK()],
+        blocks: [BANNER_BLOCK()],
         extractInitial: (data) => {
           const b = (data.banner as Record<string, string>) || {};
           return {
@@ -652,15 +756,84 @@ function buildPageConfig(entityType: string, slug: string): PageRenderConfig {
             backgroundImage: b.backgroundImage || "",
           };
         },
-        onSave: async () => {},
-        render: (getVal, data) =>
-          renderEntityList(
-            getVal,
-            (data.items as EntityItem[]) || [],
-            (data.entityTypeSlug as string) || ""
-          ),
+        onSave: async (_blockKey, _data) => {
+          if (_blockKey.startsWith("entity:")) {
+            const parts = _blockKey.split(":");
+            const eType = parts[1];
+            const eId = parts.slice(2).join(":");
+            const prefix = `${_blockKey}.`;
+            const cleanData: Record<string, string> = {};
+            for (const [key, value] of Object.entries(_data)) {
+              if (key.startsWith(prefix)) {
+                cleanData[key.slice(prefix.length)] = value;
+              }
+            }
+            await saveEntityBlock(getEntityCmsType(eType), eId, cleanData);
+          }
+        },
+        render: (_getVal, _data) => null,
       };
   }
+}
+
+function buildEntityPageConfig(
+  entityType: string,
+  slug: string,
+  items: EntityItem[],
+  entityTypeSlug: string
+): PageRenderConfig {
+  const baseFields = ENTITY_EDIT_FIELDS[entityTypeSlug] || [];
+
+  const staticBlocks: BlockConfig[] = [BANNER_BLOCK()];
+  const entityBlocks = buildEntityBlocks(items, entityTypeSlug, baseFields);
+  const allBlocks = [...staticBlocks, ...entityBlocks];
+
+  return {
+    blocks: allBlocks,
+    extractInitial: (data) => {
+      const b = (data.banner as Record<string, string>) || {};
+      const bannerData = {
+        title: b.title || "",
+        subtitle: b.subtitle || "",
+        backgroundImage: b.backgroundImage || "",
+      };
+      const entityData = extractEntityInitialData(items, entityTypeSlug, baseFields);
+      return { ...bannerData, ...entityData };
+    },
+    onSave: async (_blockKey, _data) => {
+      if (_blockKey === "banner") {
+        await saveInstitutionalPageBanner(slug, _data);
+      } else if (_blockKey.startsWith("entity:")) {
+        const parts = _blockKey.split(":");
+        const eType = parts[1];
+        const eId = parts.slice(2).join(":");
+        const prefix = `${_blockKey}.`;
+        const cleanData: Record<string, string> = {};
+        for (const [key, value] of Object.entries(_data)) {
+          if (key.startsWith(prefix)) {
+            cleanData[key.slice(prefix.length)] = value;
+          }
+        }
+        await saveEntityBlock(getEntityCmsType(eType), eId, cleanData);
+      }
+    },
+    render: (getVal, data) => renderEntityList(getVal, items, entityTypeSlug),
+    renderActions: (blockKey, config) => {
+      if (!blockKey.startsWith("entity:")) return null;
+      const entityTypeSlugFromKey = blockKey.split(":")[1];
+      const entityId = blockKey.split(":").slice(2).join(":");
+      return (
+        <Link
+          href={`/admin/content/${getEntityCmsType(entityTypeSlugFromKey)}/${entityId}`}
+          target="_blank"
+          className="mt-2 flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+        >
+          <ExternalLink className="h-3 w-3" />
+          Abrir editor avanzado
+        </Link>
+      );
+    },
+  };
 }
 
 // ─── Client Component ───────────────────────────────
@@ -680,10 +853,137 @@ export function EditorClient({
 }) {
   const router = useRouter();
 
-  const config = useMemo(
-    () => buildPageConfig(selectedEntityType, selectedSlug),
-    [selectedEntityType, selectedSlug]
-  );
+  const config = useMemo(() => {
+    const items = (pageData?.items as EntityItem[]) || [];
+    const entityTypeSlug = (pageData?.entityTypeSlug as string) || "";
+
+    if (items.length > 0 && entityTypeSlug && ENTITY_EDIT_FIELDS[entityTypeSlug]) {
+      return buildEntityPageConfig(selectedEntityType, selectedSlug, items, entityTypeSlug);
+    }
+
+    if (selectedEntityType === "history") {
+      const milestones = (pageData?.milestones as EntityItem[]) || [];
+      if (milestones.length > 0) {
+        const mSlug = "historyMilestones";
+        const mFields = ENTITY_EDIT_FIELDS[mSlug] || [];
+        const staticBlocks: BlockConfig[] = [
+          BANNER_BLOCK(),
+          {
+            key: "intro",
+            label: "Introducción",
+            fields: [{ name: "content", label: "Contenido introductorio", type: "textarea" }],
+          },
+        ];
+        const entityBlocks = buildEntityBlocks(milestones, mSlug, mFields);
+        return {
+          blocks: [...staticBlocks, ...entityBlocks],
+          extractInitial: (data: Record<string, unknown>) => {
+            const pageContent = (data.content as string) || "";
+            const banner = {
+              title: "Nuestra Historia",
+              subtitle: "Una historia de fe, crecimiento y propósito.",
+              backgroundImage: "/images/banner-berea.png",
+              content: pageContent,
+            };
+            const entityData = extractEntityInitialData(milestones, mSlug, mFields);
+            return { ...banner, ...entityData };
+          },
+          onSave: async (_blockKey: string, _data: Record<string, string>) => {
+            if (_blockKey === "intro") await savePageIntro("nuestra-historia", _data);
+            else if (_blockKey.startsWith("entity:")) {
+              const parts = _blockKey.split(":");
+              const eType = parts[1];
+              const eId = parts.slice(2).join(":");
+              const prefix = `${_blockKey}.`;
+              const cleanData: Record<string, string> = {};
+              for (const [key, value] of Object.entries(_data)) {
+                if (key.startsWith(prefix)) {
+                  cleanData[key.slice(prefix.length)] = value;
+                }
+              }
+              await saveEntityBlock(getEntityCmsType(eType), eId, cleanData);
+            }
+          },
+          render: (getVal: (key: string) => string, _data: Record<string, unknown>) =>
+            renderHistory(getVal, milestones),
+          renderActions: (blockKey: string) => {
+            if (!blockKey.startsWith("entity:")) return null;
+            const parts = blockKey.split(":");
+            const eId = parts.slice(2).join(":");
+            return (
+              <Link
+                href={`/admin/content/historyMilestones/${eId}`}
+                target="_blank"
+                className="mt-2 flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+              >
+                <ExternalLink className="h-3 w-3" />
+                Abrir editor avanzado
+              </Link>
+            );
+          },
+        };
+      }
+    }
+
+    if (selectedEntityType === "institutionalPage") {
+      const sections = (pageData?.sections as EntityItem[]) || [];
+      const instFields = ENTITY_EDIT_FIELDS["institutionalSections"] || [];
+      const entityBlocks = buildEntityBlocks(sections, "institutionalSections", instFields);
+      return {
+        blocks: [BANNER_BLOCK(), ...entityBlocks],
+        extractInitial: (data: Record<string, unknown>) => {
+          const b = (data.banner as Record<string, string>) || {};
+          const bannerData = {
+            title: b.title || "",
+            subtitle: b.subtitle || "",
+            backgroundImage: b.backgroundImage || "",
+          };
+          const entityData = extractEntityInitialData(
+            sections,
+            "institutionalSections",
+            instFields
+          );
+          return { ...bannerData, ...entityData };
+        },
+        onSave: async (_blockKey: string, _data: Record<string, string>) => {
+          if (_blockKey === "banner") {
+            await saveInstitutionalPageBanner(selectedSlug, _data);
+          } else if (_blockKey.startsWith("entity:")) {
+            const parts = _blockKey.split(":");
+            const eType = parts[1];
+            const eId = parts.slice(2).join(":");
+            const prefix = `${_blockKey}.`;
+            const cleanData: Record<string, string> = {};
+            for (const [key, value] of Object.entries(_data)) {
+              if (key.startsWith(prefix)) {
+                cleanData[key.slice(prefix.length)] = value;
+              }
+            }
+            await saveEntityBlock(getEntityCmsType(eType), eId, cleanData);
+          }
+        },
+        render: (getVal: (key: string) => string, _data: Record<string, unknown>) =>
+          renderInstitutionalPage(getVal, sections),
+        renderActions: (blockKey: string) => {
+          if (!blockKey.startsWith("entity:")) return null;
+          const parts = blockKey.split(":");
+          const eId = parts.slice(2).join(":");
+          return (
+            <Link
+              href={`/admin/content/institutionalSections/${eId}`}
+              target="_blank"
+              className="mt-2 flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+            >
+              <ExternalLink className="h-3 w-3" />
+              Abrir editor avanzado
+            </Link>
+          );
+        },
+      };
+    }
+
+    return buildPageConfig(selectedEntityType, selectedSlug);
+  }, [selectedEntityType, selectedSlug, pageData]);
 
   const initialData = useMemo(() => config.extractInitial(pageData), [config, pageData]);
 
@@ -734,7 +1034,12 @@ export function EditorClient({
         ))}
       </div>
 
-      <VisualEditorShell blocks={config.blocks} initialData={initialData} onSaveBlock={onSaveBlock}>
+      <VisualEditorShell
+        blocks={config.blocks}
+        initialData={initialData}
+        onSaveBlock={onSaveBlock}
+        panelRenderActions={config.renderActions}
+      >
         {config.render(getVal, pageData)}
       </VisualEditorShell>
     </div>

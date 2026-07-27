@@ -7,6 +7,7 @@ import { logAudit } from "@/lib/audit";
 import { rateLimit } from "@/lib/rate-limit";
 import { institutionalPages, pages, contact, donations, annualVision } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { updateEntity } from "./actions";
 
 async function requireEditorAuth() {
   const session = await auth();
@@ -15,6 +16,21 @@ async function requireEditorAuth() {
 }
 
 const ALLOWED_BANNER_FIELDS = ["bannerTitle", "bannerSubtitle", "bannerImage"] as const;
+
+export async function saveEntityBlock(
+  entityType: string,
+  id: string,
+  data: Record<string, string>
+) {
+  const session = await requireEditorAuth();
+  if (!rateLimit(`editor:entity:${session.user.id}`, { windowMs: 60_000, max: 60 })) return;
+
+  const result = await updateEntity(entityType, id, data as Record<string, unknown>);
+
+  revalidatePath("/admin/editor");
+
+  return result;
+}
 
 export async function saveInstitutionalPageBanner(slug: string, data: Record<string, string>) {
   const session = await requireEditorAuth();

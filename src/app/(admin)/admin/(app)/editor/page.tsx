@@ -5,6 +5,7 @@ import { hasPermission } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
 import {
   institutionalPages,
+  institutionalSections,
   pages,
   contact,
   donations,
@@ -18,6 +19,7 @@ import {
   events,
   historyMilestones,
   homepageSettings,
+  doctrines,
 } from "@/lib/db/schema";
 import { eq, and, isNull, asc, desc, gte } from "drizzle-orm";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -36,7 +38,7 @@ const ALL_PAGES: PageEntry[] = [
   {
     slug: "nuestra-doctrina",
     label: "Nuestra Doctrina",
-    entityType: "institutionalPage",
+    entityType: "doctrines-list",
     category: "Institucional",
   },
   { slug: "historia", label: "Historia", entityType: "history", category: "Institucional" },
@@ -92,6 +94,16 @@ async function fetchPageData(slug: string, entityType: string) {
         .where(eq(institutionalPages.slug, slug))
         .limit(1);
       if (!inst) return { banner: null, error: "Página no encontrada" };
+      const sections = await db
+        .select()
+        .from(institutionalSections)
+        .where(
+          and(
+            eq(institutionalSections.pageSlug, slug),
+            eq(institutionalSections.status, "published")
+          )
+        )
+        .orderBy(asc(institutionalSections.displayOrder));
       return {
         banner: {
           title: inst.bannerTitle || "",
@@ -99,6 +111,7 @@ async function fetchPageData(slug: string, entityType: string) {
           backgroundImage: inst.bannerImage || "",
         },
         page: inst,
+        sections,
       };
     }
     case "history": {
@@ -120,6 +133,22 @@ async function fetchPageData(slug: string, entityType: string) {
         },
         content: page?.content || "",
         milestones,
+      };
+    }
+    case "doctrines-list": {
+      const items = await db
+        .select()
+        .from(doctrines)
+        .where(eq(doctrines.status, "published"))
+        .orderBy(asc(doctrines.displayOrder));
+      return {
+        banner: {
+          title: "Nuestra Doctrina",
+          subtitle: "Fundamentos bíblicos de nuestra fe.",
+          backgroundImage: null,
+        },
+        items,
+        entityTypeSlug: "doctrines",
       };
     }
     case "leaders-list": {
