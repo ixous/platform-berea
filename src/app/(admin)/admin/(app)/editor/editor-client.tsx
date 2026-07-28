@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { VisualEditorShell, VisualBlock, type BlockConfig } from "@/components/visual-editor";
+import { useVisualEditor } from "@/components/visual-editor/VisualEditorContext";
+
 import type { BlockField } from "@/components/visual-editor/VisualEditorContext";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
@@ -866,6 +868,31 @@ function buildEntityPageConfig(
 
 // ─── Client Component ───────────────────────────────
 
+function LivePreview({
+  render,
+  pageData,
+  initialData,
+}: {
+  render: (getVal: (key: string) => string, data: Record<string, unknown>) => React.ReactNode;
+  pageData: Record<string, unknown>;
+  initialData: Record<string, string>;
+}) {
+  const { blockValues, blocks } = useVisualEditor();
+
+  const liveGetVal = useCallback(
+    (key: string): string => {
+      for (const block of blocks) {
+        const override = blockValues[block.key]?.[key];
+        if (override !== undefined && override !== "") return override;
+      }
+      return initialData[key] || "";
+    },
+    [blocks, blockValues, initialData]
+  );
+
+  return <>{render(liveGetVal, pageData)}</>;
+}
+
 export function EditorClient({
   pages,
   categories,
@@ -1028,11 +1055,6 @@ export function EditorClient({
     [config]
   );
 
-  const getVal = useCallback(
-    (key: string) => (initialData as Record<string, string>)[key] || "",
-    [initialData]
-  );
-
   const groupedPages = useMemo(() => {
     const groups: Record<string, PageEntry[]> = {};
     for (const cat of categories) groups[cat] = [];
@@ -1074,7 +1096,7 @@ export function EditorClient({
         onSaveBlock={onSaveBlock}
         panelRenderActions={config.renderActions}
       >
-        {config.render(getVal, pageData)}
+        <LivePreview render={config.render} pageData={pageData} initialData={initialData} />
       </VisualEditorShell>
     </div>
   );

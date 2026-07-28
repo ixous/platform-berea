@@ -16,6 +16,7 @@ export interface BlockConfig {
 
 interface VisualEditorState {
   selectedBlock: string | null;
+  blocks: BlockConfig[];
   blockValues: Record<string, Record<string, string>>;
   saving: boolean;
   selectBlock: (key: string | null) => void;
@@ -98,6 +99,7 @@ export function VisualEditorProvider({
     <VisualEditorContext.Provider
       value={{
         selectedBlock,
+        blocks,
         blockValues,
         saving: isPending,
         selectBlock,
