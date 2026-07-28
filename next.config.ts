@@ -4,10 +4,10 @@ const CSP_DIRECTIVES = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com",
   "style-src 'self' 'unsafe-inline' https://challenges.cloudflare.com",
-  "img-src 'self' data: blob: https://media.centrocristianoberea.org",
+  "img-src 'self' data: blob: https://media.centrocristianoberea.org https://*.r2.dev",
   "font-src 'self'",
   "connect-src 'self'",
-  "media-src 'self' https://media.centrocristianoberea.org",
+  "media-src 'self' https://media.centrocristianoberea.org https://*.r2.dev",
   "frame-src https://challenges.cloudflare.com",
   "object-src 'none'",
   "base-uri 'self'",
@@ -20,6 +20,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "media.centrocristianoberea.org",
+      },
+      {
+        protocol: "https",
+        hostname: "*.r2.dev",
       },
     ],
     formats: ["image/avif", "image/webp"],
