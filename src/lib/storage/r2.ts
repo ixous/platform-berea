@@ -1,38 +1,80 @@
+import { readFileSync, existsSync } from "fs";
+import { resolve } from "path";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
+function loadLocalEnvOnce(): void {
+  const envPath = resolveEnvPath();
+  if (!envPath) return;
+
+  const content = readFileSync(envPath, "utf-8");
+  for (const line of content.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#") || !trimmed.includes("=")) continue;
+    const eqIdx = trimmed.indexOf("=");
+    const key = trimmed.substring(0, eqIdx).trim();
+    let value = trimmed.substring(eqIdx + 1).trim();
+
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    if (!process.env[key]) {
+      process.env[key] = value;
+    }
+  }
+}
+
+loadLocalEnvOnce();
+
+function resolveEnvPath(): string | null {
+  const base = process.cwd();
+  const candidates = [resolve(base, ".env.local")];
+  for (const p of candidates) {
+    if (existsSync(p)) return p;
+  }
+  return null;
+}
+
+function readEnvFromFile(): Record<string, string> {
+  const result: Record<string, string> = {};
+  const envPath = resolveEnvPath();
+  if (!envPath) return result;
+  const content = readFileSync(envPath, "utf-8");
+  for (const line of content.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#") || !trimmed.includes("=")) continue;
+    const eqIdx = trimmed.indexOf("=");
+    const key = trimmed.substring(0, eqIdx).trim();
+    let value = trimmed.substring(eqIdx + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    result[key] = value;
+  }
+  return result;
+}
+
 async function readR2Env() {
-  // ════════════════════════════════════════════
-  // [6] TRACE: R2 Config — lectura de variables
-  // ════════════════════════════════════════════
+  let endpoint = process.env.CLOUDFLARE_R2_ENDPOINT;
+  let accessKeyId = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
+  let secretAccessKey = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
+  let bucket = process.env.MEDIA_BUCKET;
+  let publicUrl = process.env.MEDIA_PUBLIC_URL;
 
-  // Valores ANTES de dotenv
-  const before = {
-    endpoint: process.env.CLOUDFLARE_R2_ENDPOINT,
-    accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY_ID,
-    secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY ? "SET" : undefined,
-    bucket: process.env.MEDIA_BUCKET,
-    publicUrl: process.env.MEDIA_PUBLIC_URL,
-  };
-
-  try {
-    const dotenv = await import("dotenv");
-    dotenv.config({ path: ".env.local", override: true });
-  } catch {}
-
-  const endpoint = process.env.CLOUDFLARE_R2_ENDPOINT;
-  const accessKeyId = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
-  const secretAccessKey = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
-  const bucket = process.env.MEDIA_BUCKET;
-  const publicUrl = process.env.MEDIA_PUBLIC_URL;
-
-  console.log("[TRACE:6] R2 Config — valores ANTES de dotenv:", JSON.stringify(before));
-  console.log("[TRACE:6] R2 Config — valores DESPUÉS de dotenv:", {
-    endpoint: endpoint ? endpoint.substring(0, 30) + "..." : "MISSING",
-    accessKeyId: accessKeyId ? `[SET len=${accessKeyId.length}]` : "MISSING",
-    secretAccessKey: secretAccessKey ? `[SET len=${secretAccessKey.length}]` : "MISSING",
-    bucket: bucket || "MISSING",
-    publicUrl: publicUrl ? publicUrl.substring(0, 30) + "..." : "MISSING",
-  });
+  if (!endpoint || !accessKeyId || !secretAccessKey || !bucket || !publicUrl) {
+    const fallback = readEnvFromFile();
+    endpoint = endpoint || fallback.CLOUDFLARE_R2_ENDPOINT;
+    accessKeyId = accessKeyId || fallback.CLOUDFLARE_R2_ACCESS_KEY_ID;
+    secretAccessKey = secretAccessKey || fallback.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
+    bucket = bucket || fallback.MEDIA_BUCKET;
+    publicUrl = publicUrl || fallback.MEDIA_PUBLIC_URL;
+  }
 
   if (!endpoint || !accessKeyId || !secretAccessKey || !bucket || !publicUrl) {
     const missing = [
@@ -44,7 +86,6 @@ async function readR2Env() {
     ]
       .filter(Boolean)
       .join(", ");
-    console.log("[TRACE:6] FALTAN variables:", missing);
     throw new Error(`Faltan variables de entorno R2: ${missing}`);
   }
 
@@ -89,50 +130,16 @@ export async function uploadToR2({
   const r2 = await getR2();
   const { bucket, publicUrl } = await getR2Config();
 
-  // ════════════════════════════════════════════
-  // [7] TRACE: PutObjectCommand — ANTES de ejecutar
-  // ════════════════════════════════════════════
-  console.log("[TRACE:7] PutObjectCommand — preparando envío:", {
-    bucket,
-    key,
-    contentType,
-    bodySize: body.length,
-  });
-
-  let result;
-  try {
-    result = await r2.send(
-      new PutObjectCommand({
-        Bucket: bucket,
-        Key: key,
-        Body: body,
-        ContentType: contentType,
-        CacheControl: "public, max-age=31536000, immutable",
-      })
-    );
-    // ════════════════════════════════════════════
-    // [8] TRACE: PutObjectCommand — ÉXITO
-    // ════════════════════════════════════════════
-    console.log("[TRACE:8] PutObjectCommand — éxito:", {
-      statusCode: result.$metadata.httpStatusCode,
-      requestId: result.$metadata.requestId,
-      attempts: result.$metadata.attempts,
-    });
-  } catch (err) {
-    // ════════════════════════════════════════════
-    // [8] TRACE: PutObjectCommand — EXCEPCIÓN
-    // ════════════════════════════════════════════
-    const msg = err instanceof Error ? err.message : String(err);
-    const stack = err instanceof Error ? err.stack : "(no stack)";
-    console.log("[TRACE:8] PutObjectCommand — EXCEPCIÓN:");
-    console.log("[TRACE:8]   message:", msg);
-    console.log("[TRACE:8]   name:", err instanceof Error ? err.name : typeof err);
-    console.log("[TRACE:8]   code:", (err as { code?: string })?.code || "N/A");
-    console.log("[TRACE:8]   stack:", stack);
-    throw err;
-  }
+  await r2.send(
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: body,
+      ContentType: contentType,
+      CacheControl: "public, max-age=31536000, immutable",
+    })
+  );
 
   const url = `${publicUrl}/${key}`;
-  console.log("[TRACE:8] URL generada:", url);
   return { key, url };
 }
