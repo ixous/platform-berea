@@ -1091,6 +1091,7 @@ export function EditorClient({
       </div>
 
       <VisualEditorShell
+        key={selectedSlug}
         blocks={config.blocks}
         initialData={initialData}
         onSaveBlock={onSaveBlock}
