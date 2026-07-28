@@ -7,6 +7,15 @@ import { uploadToR2 } from "@/lib/storage/r2";
 import { hasPermission } from "@/lib/auth/rbac";
 import { logAudit } from "@/lib/audit";
 import { rateLimit } from "@/lib/rate-limit";
+import sharp from "sharp";
+
+const IMAGE_MIME_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/avif",
+]);
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -202,16 +211,60 @@ export async function POST(req: NextRequest) {
 
     const buffer = Buffer.from(await file.arrayBuffer());
     console.log("[TRACE:5] Buffer creado, tamaño:", buffer.length);
-    if (!checkMagicBytes(buffer, ext)) {
-      console.log("[TRACE:5] Magic bytes no coinciden para:", ext);
-      return NextResponse.json(
-        { success: false, error: "El contenido del archivo no coincide con su extensión." },
-        { status: 400 }
-      );
+
+    let finalBuffer = buffer;
+    let finalContentType = file.type;
+    let finalExt = ext;
+
+    if (IMAGE_MIME_TYPES.has(file.type)) {
+      try {
+        const meta = await sharp(buffer).metadata();
+        console.log(
+          "[TRACE:5] Imagen detectada — formato:",
+          meta.format,
+          "dimensiones:",
+          meta.width,
+          "x",
+          meta.height
+        );
+        const webpBuffer = Buffer.from(await sharp(buffer).webp({ quality: 85 }).toBuffer());
+        if (webpBuffer.length < buffer.length) {
+          finalBuffer = webpBuffer;
+          finalContentType = "image/webp";
+          finalExt = "webp";
+          console.log(
+            "[TRACE:5] Convertido a WebP:",
+            buffer.length,
+            "→",
+            webpBuffer.length,
+            "bytes (",
+            Math.round((1 - webpBuffer.length / buffer.length) * 100),
+            "% de reducción)"
+          );
+        } else {
+          console.log("[TRACE:5] WebP no reduce tamaño, se usa original");
+        }
+      } catch (convErr) {
+        console.log(
+          "[TRACE:5] Error al convertir a WebP, se usa original:",
+          convErr instanceof Error ? convErr.message : String(convErr)
+        );
+      }
+    } else {
+      if (!checkMagicBytes(buffer, ext)) {
+        console.log("[TRACE:5] Magic bytes no coinciden para:", ext);
+        return NextResponse.json(
+          { success: false, error: "El contenido del archivo no coincide con su extensión." },
+          { status: 400 }
+        );
+      }
     }
     console.log("[TRACE:5] Magic bytes OK");
 
-    const sanitized = sanitizeFilename(file.name);
+    const sanitized =
+      finalExt !== ext
+        ? sanitizeFilename(file.name).replace(/\.[^.]+$/, "") + "." + finalExt
+        : sanitizeFilename(file.name);
     console.log("[TRACE:5] Nombre sanitizado:", sanitized);
     if (!sanitized) {
       return NextResponse.json(
@@ -220,17 +273,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const key = generateFileKey(file.name);
+    const key = generateFileKey(sanitized);
     console.log("[TRACE:5] File key generado:", key);
 
     // ════════════════════════════════════════════
     // [5 → 6] TRACE: Antes de uploadToR2
     // ════════════════════════════════════════════
     console.log("[TRACE:5] Llamando uploadToR2...");
-    const uploadResult = await uploadToR2({ body: buffer, key, contentType: file.type });
+    const uploadResult = await uploadToR2({
+      body: finalBuffer,
+      key,
+      contentType: finalContentType,
+    });
     console.log("[TRACE:5 → 8] uploadToR2 completado:", JSON.stringify(uploadResult));
 
-    const mediaType = detectMediaType(file.type);
+    const mediaType = detectMediaType(finalContentType);
     console.log("[TRACE:9] DB insert — mediaType:", mediaType);
 
     const [record] = await db
@@ -238,8 +295,8 @@ export async function POST(req: NextRequest) {
       .values({
         filename: sanitized,
         originalName: file.name,
-        mimeType: file.type,
-        size: file.size,
+        mimeType: finalContentType,
+        size: finalBuffer.length,
         url: uploadResult.url,
         mediaType,
         uploadedBy: session.user.id,
