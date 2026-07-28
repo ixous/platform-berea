@@ -11,6 +11,43 @@ interface UploadResult {
 }
 import { VisualMediaPickerDialog } from "./VisualMediaPickerDialog";
 
+const MAX_CLIENT_SIZE = 4 * 1024 * 1024;
+
+function compressImage(file: File): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const MAX_DIM = 1920;
+      let { width, height } = img;
+      if (width > MAX_DIM || height > MAX_DIM) {
+        const ratio = Math.min(MAX_DIM / width, MAX_DIM / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return reject(new Error("Error al comprimir la imagen"));
+          resolve(new File([blob], file.name.replace(/\.[^.]+$/, ".jpg"), { type: "image/jpeg" }));
+        },
+        "image/jpeg",
+        0.85
+      );
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Error al cargar la imagen para compresión"));
+    };
+    img.src = url;
+  });
+}
+
 interface VisualImagePickerProps {
   value: string;
   onChange: (url: string) => void;
@@ -43,8 +80,16 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
       setPreviewError(false);
 
       try {
+        const compressed = file.size > MAX_CLIENT_SIZE ? await compressImage(file) : file;
+
+        console.log("[TRACE:2] VisualImagePicker — compresión:", {
+          original: file.size,
+          final: compressed.size,
+          saved: file.size - compressed.size,
+        });
+
         const formData = new FormData();
-        formData.set("file", file);
+        formData.set("file", compressed);
 
         // ════════════════════════════════════════════
         // [3] TRACE: FormData — campos enviados
