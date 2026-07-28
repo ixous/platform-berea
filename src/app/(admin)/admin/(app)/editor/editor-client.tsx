@@ -757,6 +757,11 @@ function buildPageConfig(entityType: string, slug: string): PageRenderConfig {
           };
         },
         onSave: async (_blockKey, _data) => {
+          console.log("[TRACE:10] buildPageConfig.onSave (default) — llamado", {
+            _blockKey,
+            _dataKeys: Object.keys(_data),
+            _data: JSON.stringify(_data),
+          });
           if (_blockKey.startsWith("entity:")) {
             const parts = _blockKey.split(":");
             const eType = parts[1];
@@ -768,6 +773,10 @@ function buildPageConfig(entityType: string, slug: string): PageRenderConfig {
                 cleanData[key.slice(prefix.length)] = value;
               }
             }
+            console.log(
+              "[TRACE:10] buildPageConfig.onSave — cleanData:",
+              JSON.stringify(cleanData)
+            );
             await saveEntityBlock(getEntityCmsType(eType), eId, cleanData);
           }
         },
@@ -801,7 +810,16 @@ function buildEntityPageConfig(
       return { ...bannerData, ...entityData };
     },
     onSave: async (_blockKey, _data) => {
+      console.log("[TRACE:10] buildEntityPageConfig.onSave — llamado", {
+        slug,
+        _blockKey,
+        _dataKeys: Object.keys(_data),
+        _data: JSON.stringify(_data),
+      });
       if (_blockKey === "banner") {
+        console.log(
+          "[TRACE:10] buildEntityPageConfig.onSave — es banner, llamando saveInstitutionalPageBanner"
+        );
         await saveInstitutionalPageBanner(slug, _data);
       } else if (_blockKey.startsWith("entity:")) {
         const parts = _blockKey.split(":");
@@ -814,6 +832,16 @@ function buildEntityPageConfig(
             cleanData[key.slice(prefix.length)] = value;
           }
         }
+        console.log(
+          "[TRACE:10] buildEntityPageConfig.onSave — cleanData:",
+          JSON.stringify(cleanData)
+        );
+        console.log(
+          "[TRACE:10] buildEntityPageConfig.onSave — entityType:",
+          getEntityCmsType(eType),
+          "id:",
+          eId
+        );
         await saveEntityBlock(getEntityCmsType(eType), eId, cleanData);
       }
     },
@@ -989,7 +1017,13 @@ export function EditorClient({
 
   const onSaveBlock = useCallback(
     async (blockKey: string, data: Record<string, string>) => {
+      console.log("[TRACE:10] editor-client — onSaveBlock llamado", {
+        blockKey,
+        dataKeys: Object.keys(data),
+        data: JSON.stringify(data),
+      });
       await config.onSave(blockKey, data);
+      console.log("[TRACE:10] editor-client — config.onSave completado");
     },
     [config]
   );

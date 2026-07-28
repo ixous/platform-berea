@@ -249,8 +249,17 @@ export async function updateEntity(
   id: string,
   data: Record<string, unknown>
 ): Promise<CmsActionResult> {
+  console.log("[TRACE:11] updateEntity — llamado", {
+    entityType,
+    id,
+    dataKeys: Object.keys(data),
+    data: JSON.stringify(data),
+  });
   const config = getEntityConfig(entityType);
-  if (!config) return { success: false, error: "Tipo de contenido no valido." };
+  if (!config) {
+    console.log("[TRACE:11] updateEntity — config no encontrado para:", entityType);
+    return { success: false, error: "Tipo de contenido no valido." };
+  }
 
   const session = await requireAuth(config.permission);
 
@@ -271,13 +280,18 @@ export async function updateEntity(
       } else {
         sanitizedData[field.name] = val;
       }
+    } else {
+      console.log("[TRACE:11] updateEntity — campo NO encontrado en data:", field.name);
     }
   }
 
   sanitizedData["updatedAt"] = new Date();
+  console.log("[TRACE:11] updateEntity — sanitizedData:", JSON.stringify(sanitizedData));
 
   try {
+    console.log("[TRACE:11] updateEntity — ejecutando db.update");
     await db.update(table).set(sanitizedData).where(eq(table.id, id));
+    console.log("[TRACE:11] updateEntity — db.update OK");
 
     await createVersion(entityType, id, session.user.id, sanitizedData, "Actualizacion");
     await logAudit({
@@ -290,9 +304,10 @@ export async function updateEntity(
 
     revalidatePath(`/admin/content/${entityType}`);
     revalidatePath(`/admin/content/${entityType}/${id}`);
+    console.log("[TRACE:11] updateEntity — éxito, retornando");
     return { success: true, id };
   } catch (err) {
-    console.error(`[CMS] Update ${entityType} failed:`, err);
+    console.error("[TRACE:11] updateEntity — EXCEPCIÓN en db.update:", err);
     return { success: false, error: "Error al actualizar el registro." };
   }
 }

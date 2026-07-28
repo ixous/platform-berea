@@ -109,32 +109,58 @@ function checkMagicBytes(buffer: Buffer, ext: string): boolean {
 }
 
 export async function POST(req: NextRequest) {
+  // ════════════════════════════════════════════
+  // [5] TRACE: Route Handler — request recibido
+  // ════════════════════════════════════════════
+  console.log("[TRACE:5] POST /api/media — request recibido", {
+    method: req.method,
+    url: req.url,
+    headers: Object.fromEntries(req.headers.entries()),
+  });
+
   try {
     const session = await auth();
     if (!session?.user?.id) {
+      console.log("[TRACE:5] Auth falló — no hay sesión");
       return NextResponse.json(
         { success: false, error: "No autorizado. Inicia sesión para subir archivos." },
         { status: 401 }
       );
     }
+    console.log("[TRACE:5] Auth OK — userId:", session.user.id);
 
     const perm = await hasPermission("media.manage");
     if (!perm) {
+      console.log("[TRACE:5] Permiso denegado — media.manage");
       return NextResponse.json(
         { success: false, error: "No tienes permiso para subir archivos." },
         { status: 403 }
       );
     }
+    console.log("[TRACE:5] Permiso OK — media.manage");
 
     if (!rateLimit(`upload:${session.user.id}`, { windowMs: 60_000, max: 20 })) {
+      console.log("[TRACE:5] Rate limit excedido");
       return NextResponse.json(
         { success: false, error: "Demasiadas subidas. Espera un minuto." },
         { status: 429 }
       );
     }
+    console.log("[TRACE:5] Rate limit OK");
 
+    // ════════════════════════════════════════════
+    // [5] TRACE: Parseo del formData
+    // ════════════════════════════════════════════
+    console.log("[TRACE:5] Parseando formData...");
     const formData = await req.formData();
+    console.log("[TRACE:5] formData parseado, entries:", [...formData.keys()].join(", "));
+
     const file = formData.get("file") as File | null;
+    console.log(
+      "[TRACE:5] file extraído:",
+      file ? `name=${file.name} size=${file.size} type=${file.type}` : "null"
+    );
+
     if (!file || file.size === 0) {
       return NextResponse.json(
         { success: false, error: "No se seleccionó ningún archivo." },
@@ -143,6 +169,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (file.size > MAX_FILE_SIZE) {
+      console.log("[TRACE:5] Archivo demasiado grande:", file.size, ">", MAX_FILE_SIZE);
       return NextResponse.json(
         {
           success: false,
@@ -151,31 +178,41 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+    console.log("[TRACE:5] Tamaño OK:", file.size);
 
     if (!ALLOWED_MIME_TYPES.has(file.type)) {
+      console.log("[TRACE:5] MIME no permitido:", file.type);
       return NextResponse.json(
         { success: false, error: `El tipo de archivo "${file.type}" no está permitido.` },
         { status: 400 }
       );
     }
+    console.log("[TRACE:5] MIME OK:", file.type);
 
     const ext = getExtension(file.name);
+    console.log("[TRACE:5] Extensión detectada:", ext);
     if (!ext || !ALLOWED_EXTENSIONS.has(ext)) {
+      console.log("[TRACE:5] Extensión no permitida:", ext);
       return NextResponse.json(
         { success: false, error: `La extensión ".${ext}" no está permitida.` },
         { status: 400 }
       );
     }
+    console.log("[TRACE:5] Extensión OK");
 
     const buffer = Buffer.from(await file.arrayBuffer());
+    console.log("[TRACE:5] Buffer creado, tamaño:", buffer.length);
     if (!checkMagicBytes(buffer, ext)) {
+      console.log("[TRACE:5] Magic bytes no coinciden para:", ext);
       return NextResponse.json(
         { success: false, error: "El contenido del archivo no coincide con su extensión." },
         { status: 400 }
       );
     }
+    console.log("[TRACE:5] Magic bytes OK");
 
     const sanitized = sanitizeFilename(file.name);
+    console.log("[TRACE:5] Nombre sanitizado:", sanitized);
     if (!sanitized) {
       return NextResponse.json(
         { success: false, error: "El nombre del archivo no es válido." },
@@ -184,8 +221,17 @@ export async function POST(req: NextRequest) {
     }
 
     const key = generateFileKey(file.name);
+    console.log("[TRACE:5] File key generado:", key);
+
+    // ════════════════════════════════════════════
+    // [5 → 6] TRACE: Antes de uploadToR2
+    // ════════════════════════════════════════════
+    console.log("[TRACE:5] Llamando uploadToR2...");
     const uploadResult = await uploadToR2({ body: buffer, key, contentType: file.type });
+    console.log("[TRACE:5 → 8] uploadToR2 completado:", JSON.stringify(uploadResult));
+
     const mediaType = detectMediaType(file.type);
+    console.log("[TRACE:9] DB insert — mediaType:", mediaType);
 
     const [record] = await db
       .insert(media)
@@ -200,6 +246,8 @@ export async function POST(req: NextRequest) {
       })
       .returning({ id: media.id });
 
+    console.log("[TRACE:9] DB insert OK — record id:", record.id);
+
     await logAudit({
       userId: session.user.id,
       action: "MEDIA_UPLOAD",
@@ -208,17 +256,37 @@ export async function POST(req: NextRequest) {
       details: `Archivo subido: ${sanitized} (${mediaType}, ${file.size} bytes)`,
     });
 
-    return NextResponse.json({
+    // ════════════════════════════════════════════
+    // [9] TRACE: Respuesta exitosa
+    // ════════════════════════════════════════════
+    const responseBody = {
       success: true,
       id: record.id,
       filename: sanitized,
       url: uploadResult.url,
-    });
+    };
+    console.log("[TRACE:9] Respuesta exitosa:", JSON.stringify(responseBody));
+    return NextResponse.json(responseBody);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    console.error("[API /api/media] Error subiendo archivo:", msg);
+    const stack = err instanceof Error ? err.stack : "(no stack)";
+    const akid = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
+    const sak = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
+    const r2ep = process.env.CLOUDFLARE_R2_ENDPOINT;
+    const bkt = process.env.MEDIA_BUCKET;
+    const diag = [
+      `AKID:${akid ? akid.length + "c" : "MISSING"}`,
+      `SAK:${sak ? sak.length + "c" : "MISSING"}`,
+      `EP:${r2ep ? "SET" : "MISSING"}`,
+      `BKT:${bkt || "MISSING"}`,
+    ].join(" | ");
+    console.log("[TRACE:5] EXCEPCIÓN capturada en POST handler:");
+    console.log("[TRACE:5] Error message:", msg);
+    console.log("[TRACE:5] Full stack:", stack);
+    console.log("[TRACE:5] Env diag:", diag);
+    console.error("[API /api/media] Error:", msg, diag);
     return NextResponse.json(
-      { success: false, error: `Error al subir archivo: ${msg}` },
+      { success: false, error: `Error al subir archivo: ${msg} [${diag}]` },
       { status: 500 }
     );
   }

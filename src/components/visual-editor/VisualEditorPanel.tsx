@@ -36,6 +36,10 @@ export function VisualEditorPanel({
   const values = getBlockValues(selectedBlock);
 
   const handleSave = () => {
+    console.log("[TRACE:10] VisualEditorPanel — handleSave() llamado", {
+      selectedBlock,
+      values: JSON.stringify(values),
+    });
     saveBlock(selectedBlock);
   };
 

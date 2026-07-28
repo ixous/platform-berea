@@ -15,17 +15,28 @@ async function requireEditorAuth() {
   return session;
 }
 
-const ALLOWED_BANNER_FIELDS = ["bannerTitle", "bannerSubtitle", "bannerImage"] as const;
+const BANNER_FIELD_MAP: Record<string, string> = {
+  title: "bannerTitle",
+  subtitle: "bannerSubtitle",
+  backgroundImage: "bannerImage",
+};
 
 export async function saveEntityBlock(
   entityType: string,
   id: string,
   data: Record<string, string>
 ) {
+  console.log("[TRACE:11] saveEntityBlock — llamado", {
+    entityType,
+    id,
+    data: JSON.stringify(data),
+  });
   const session = await requireEditorAuth();
   if (!rateLimit(`editor:entity:${session.user.id}`, { windowMs: 60_000, max: 60 })) return;
 
+  console.log("[TRACE:11] saveEntityBlock — llamando updateEntity");
   const result = await updateEntity(entityType, id, data as Record<string, unknown>);
+  console.log("[TRACE:11] saveEntityBlock — updateEntity resultado:", JSON.stringify(result));
 
   revalidatePath("/admin/editor");
 
@@ -33,13 +44,30 @@ export async function saveEntityBlock(
 }
 
 export async function saveInstitutionalPageBanner(slug: string, data: Record<string, string>) {
+  console.log("[TRACE:11] saveInstitutionalPageBanner — llamado", {
+    slug,
+    data: JSON.stringify(data),
+  });
   const session = await requireEditorAuth();
   if (!rateLimit(`editor:banner:${session.user.id}`, { windowMs: 60_000, max: 30 })) return;
 
   const updateData: Record<string, unknown> = {};
-  for (const field of ALLOWED_BANNER_FIELDS) {
-    if (field in data) updateData[field] = data[field];
+  for (const [blockField, dbField] of Object.entries(BANNER_FIELD_MAP)) {
+    if (blockField in data) {
+      updateData[dbField] = data[blockField];
+    } else {
+      console.log(
+        "[TRACE:11] saveInstitutionalPageBanner — campo NO encontrado en data:",
+        blockField,
+        "→",
+        dbField
+      );
+    }
   }
+  console.log(
+    "[TRACE:11] saveInstitutionalPageBanner — updateData construido:",
+    JSON.stringify(updateData)
+  );
   updateData.updatedAt = new Date();
 
   try {

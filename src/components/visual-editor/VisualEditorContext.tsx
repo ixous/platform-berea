@@ -79,9 +79,16 @@ export function VisualEditorProvider({
   const saveBlock = useCallback(
     async (blockKey: string) => {
       const data = getBlockValues(blockKey);
+      console.log("[TRACE:10] VisualEditorContext — saveBlock llamado", {
+        blockKey,
+        dataKeys: Object.keys(data),
+        data: JSON.stringify(data),
+      });
 
       startTransition(async () => {
+        console.log("[TRACE:10] VisualEditorContext — startTransition → onSaveBlock");
         await onSaveBlock(blockKey, data);
+        console.log("[TRACE:10] VisualEditorContext — onSaveBlock completado");
       });
     },
     [getBlockValues, onSaveBlock]

@@ -28,6 +28,16 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
       const file = e.target.files?.[0];
       if (!file) return;
 
+      // ════════════════════════════════════════════
+      // [2] TRACE: VisualImagePicker — archivo seleccionado
+      // ════════════════════════════════════════════
+      console.log("[TRACE:2] VisualImagePicker — archivo seleccionado", {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        lastModified: new Date(file.lastModified).toISOString(),
+      });
+
       setUploading(true);
       setUploadError(null);
       setPreviewError(false);
@@ -36,17 +46,46 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
         const formData = new FormData();
         formData.set("file", file);
 
+        // ════════════════════════════════════════════
+        // [3] TRACE: FormData — campos enviados
+        // ════════════════════════════════════════════
+        const formDebug: Record<string, string> = {};
+        formData.forEach((v, k) => {
+          formDebug[k] =
+            v instanceof File ? `[File] name=${v.name} size=${v.size} type=${v.type}` : String(v);
+        });
+        console.log("[TRACE:3] FormData — contenido:", JSON.stringify(formDebug, null, 2));
+
+        // ════════════════════════════════════════════
+        // [4] TRACE: fetch /api/media — antes de enviar
+        // ════════════════════════════════════════════
+        console.log("[TRACE:4] fetch /api/media — iniciando POST");
         const res = await fetch("/api/media", { method: "POST", body: formData });
+        console.log("[TRACE:4] fetch /api/media — respuesta recibida", {
+          status: res.status,
+          statusText: res.statusText,
+        });
+
         const result: UploadResult = await res.json();
+        console.log("[TRACE:4] fetch /api/media — JSON parseado:", JSON.stringify(result, null, 2));
 
         if (result.success && result.url) {
+          // ════════════════════════════════════════════
+          // [10] TRACE: onChange — URL recibida del API
+          // ════════════════════════════════════════════
+          console.log("[TRACE:10] VisualImagePicker → onChange(result.url):", result.url);
           onChange(result.url);
         } else {
+          console.log(
+            "[TRACE:10] VisualImagePicker — upload falló, error del servidor:",
+            result.error
+          );
           setUploadError(result.error || "Error desconocido al subir la imagen.");
         }
       } catch (err) {
         const msg = err instanceof Error ? err.message : "Error desconocido al subir la imagen.";
         setUploadError(msg);
+        console.log("[TRACE:4] fetch /api/media — EXCEPCIÓN en fetch:", msg);
         console.error("[Upload] Exception:", err);
       } finally {
         setUploading(false);
