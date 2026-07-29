@@ -157,11 +157,16 @@ async function fetchPageData(slug: string, entityType: string) {
         .from(leaders)
         .where(and(eq(leaders.status, "published"), isNull(leaders.deletedAt)))
         .orderBy(asc(leaders.displayOrder));
+      const [inst] = await db
+        .select()
+        .from(institutionalPages)
+        .where(eq(institutionalPages.slug, "liderazgo"))
+        .limit(1);
       return {
         banner: {
-          title: "Liderazgo",
-          subtitle: "Conoce a quienes guían nuestra iglesia.",
-          backgroundImage: null,
+          title: inst?.bannerTitle || "Liderazgo",
+          subtitle: inst?.bannerSubtitle || "Conoce a quienes guían nuestra iglesia.",
+          backgroundImage: inst?.bannerImage || null,
         },
         items: items.map((i) => ({ ...i, imageUrl: i.imageUrl ?? null })),
         entityTypeSlug: "leaders",

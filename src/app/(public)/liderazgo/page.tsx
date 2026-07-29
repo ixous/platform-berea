@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { leaders as leadersTable } from "@/lib/db/schema";
+import { institutionalPages, leaders as leadersTable } from "@/lib/db/schema";
 import { eq, and, isNull, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
@@ -30,10 +30,19 @@ async function getLeaders() {
 
 export default async function LiderazgoPage() {
   const leaders = await getLeaders();
+  const [page] = await db
+    .select()
+    .from(institutionalPages)
+    .where(eq(institutionalPages.slug, "liderazgo"))
+    .limit(1);
 
   return (
     <>
-      <PageBanner title="Liderazgo" subtitle="Conoce a quienes guían nuestra iglesia." />
+      <PageBanner
+        title={page?.bannerTitle || "Liderazgo"}
+        subtitle={page?.bannerSubtitle || "Conoce a quienes guían nuestra iglesia."}
+        backgroundImage={page?.bannerImage || "/images/banner-berea.png"}
+      />
 
       {leaders.length > 0 ? (
         <>
