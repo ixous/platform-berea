@@ -82,6 +82,11 @@ export async function saveInstitutionalPageBanner(slug: string, data: Record<str
         .update(institutionalPages)
         .set(updateData)
         .where(eq(institutionalPages.id, existing.id));
+    } else {
+      await db
+        .insert(institutionalPages)
+        .values({ slug, ...updateData } as typeof institutionalPages.$inferInsert)
+        .onConflictDoNothing({ target: institutionalPages.slug });
     }
 
     await logAudit({
