@@ -1138,9 +1138,6 @@ async function seedEvents() {
 }
 
 async function seedDevotionals() {
-  const existing = await db.select({ id: schema.devotionals.id }).from(schema.devotionals).limit(1);
-  if (existing.length > 0) return [];
-
   const author = await db.select({ id: schema.users.id }).from(schema.users).limit(1);
   if (author.length === 0) return [];
 
@@ -1190,8 +1187,15 @@ async function seedDevotionals() {
 
   const created: string[] = [];
   for (const d of entries) {
-    await db.insert(schema.devotionals).values(d);
-    created.push(d.title);
+    const [existing] = await db
+      .select({ id: schema.devotionals.id })
+      .from(schema.devotionals)
+      .where(eq(schema.devotionals.slug, d.slug))
+      .limit(1);
+    if (!existing) {
+      await db.insert(schema.devotionals).values(d);
+      created.push(d.title);
+    }
   }
   return created;
 }

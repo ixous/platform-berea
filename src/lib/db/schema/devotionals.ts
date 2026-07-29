@@ -19,6 +19,7 @@ export const devotionals = pgTable(
     verse: text("verse"),
     content: text("content").notNull(),
     excerpt: text("excerpt"),
+    imageUrl: varchar("image_url", { length: 500 }),
     featured: boolean("featured").notNull().default(false),
     featuredOrder: integer("featured_order").default(0),
     authorId: uuid("author_id")

@@ -74,6 +74,7 @@ const ENTITY_EDIT_FIELDS: Record<string, BlockField[]> = {
     { name: "title", label: "Título", type: "text" },
     { name: "excerpt", label: "Extracto", type: "textarea" },
     { name: "verse", label: "Versículo", type: "textarea" },
+    { name: "imageUrl", label: "Imagen", type: "image" },
   ],
   events: [
     { name: "title", label: "Título", type: "text" },

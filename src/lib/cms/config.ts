@@ -112,6 +112,7 @@ export const entityConfigs: Record<string, EntityDef> = {
       { name: "verse", label: "Versículo", type: "textarea", help: "Cita bíblica de referencia" },
       { name: "content", label: "Contenido", type: "textarea", required: true },
       { name: "excerpt", label: "Extracto", type: "textarea" },
+      { name: "imageUrl", label: "Imagen (URL)", type: "image" },
       {
         name: "featured",
         label: "Destacado en Inicio",

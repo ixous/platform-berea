@@ -72,7 +72,7 @@ export default async function DevocionalesPage() {
                     key={d.id}
                     title={d.title}
                     description={d.excerpt || d.verse}
-                    imageUrl={img?.mediaUrl || img?.thumbnailUrl}
+                    imageUrl={d.imageUrl || img?.mediaUrl || img?.thumbnailUrl}
                     href={`/devocionales/${d.slug}`}
                     category="Devocional"
                     meta={<p className="text-xs text-berea-muted italic">{d.verse}</p>}
