@@ -226,13 +226,7 @@ export function MediaCard({
 
       {showImageSection && !isHorizontal && (
         <div className="relative h-56 shrink-0 overflow-hidden sm:h-60">
-          {isIcon && Icon ? (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-berea-gold/5 via-berea-navy/5 to-berea-gold/5">
-              <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-berea-gold/10">
-                <Icon className="h-10 w-10 text-berea-gold" />
-              </div>
-            </div>
-          ) : imageUrl ? (
+          {imageUrl ? (
             <>
               <BereaImage
                 src={imageUrl}
@@ -249,6 +243,12 @@ export function MediaCard({
                 </span>
               )}
             </>
+          ) : isIcon && Icon ? (
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-berea-gold/5 via-berea-navy/5 to-berea-gold/5">
+              <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-berea-gold/10">
+                <Icon className="h-10 w-10 text-berea-gold" />
+              </div>
+            </div>
           ) : (
             <PlaceholderGradient title={title} />
           )}

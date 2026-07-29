@@ -7,8 +7,22 @@ import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { SectionHeading } from "@/components/public/SectionHeading";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
-import { HandHeart, Heart, Users } from "lucide-react";
+import { HandHeart, Heart, Users, Music, Monitor, DoorOpen } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import type { Metadata } from "next";
+
+const SERVICE_MINISTRY_ICONS: Record<string, LucideIcon> = {
+  alabanza: Music,
+  ninos: Heart,
+  multimedia: Monitor,
+  ujieres: DoorOpen,
+  intercesion: HandHeart,
+  danza: Music,
+};
+
+function getMinistryIcon(slug: string): LucideIcon {
+  return SERVICE_MINISTRY_ICONS[slug] || HandHeart;
+}
 
 export const metadata: Metadata = {
   title: "Ministerios de Servicio",
@@ -63,7 +77,7 @@ export default async function MinisteriosServicioPage() {
                 <MediaCard
                   key={m.id}
                   variant="icon"
-                  icon={HandHeart}
+                  icon={getMinistryIcon(m.slug)}
                   title={m.name}
                   description={m.description}
                   imageUrl={m.imageUrl ?? undefined}
