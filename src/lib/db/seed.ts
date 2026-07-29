@@ -829,12 +829,32 @@ async function seedServiceMinistries() {
       status: "published",
       publishedAt: new Date(),
     },
+    {
+      name: "Danza",
+      slug: "danza",
+      description:
+        "Ministerio de danza dedicado a la adoración a través del movimiento, expresando nuestro amor y gratitud a Dios con todo nuestro ser.",
+      leader: "",
+      imageUrl: "",
+      schedule: "",
+      location: "",
+      displayOrder: 6,
+      status: "published",
+      publishedAt: new Date(),
+    },
   ];
 
   const created: string[] = [];
   for (const m of entries) {
-    await db.insert(schema.serviceMinistries).values(m);
-    created.push(m.name);
+    const [existing] = await db
+      .select({ id: schema.serviceMinistries.id })
+      .from(schema.serviceMinistries)
+      .where(eq(schema.serviceMinistries.slug, m.slug))
+      .limit(1);
+    if (existing.length === 0) {
+      await db.insert(schema.serviceMinistries).values(m);
+      created.push(m.name);
+    }
   }
   return created;
 }
