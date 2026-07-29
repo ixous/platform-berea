@@ -165,7 +165,7 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
           </div>
         </div>
       ) : hasImage ? (
-        <div className="group relative overflow-hidden rounded-lg border bg-muted/20">
+        <div className="relative overflow-hidden rounded-lg border bg-muted/20">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={value}
@@ -173,11 +173,11 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
             className="h-32 w-full object-cover"
             onError={() => setPreviewError(true)}
           />
-          <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/0 transition-colors group-hover:bg-black/40">
+          <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/30">
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="rounded-md bg-white/90 p-2 text-xs font-medium text-foreground opacity-0 shadow transition-all hover:bg-white group-hover:opacity-100"
+              className="rounded-md bg-white/90 p-2 text-xs font-medium text-foreground shadow transition-all hover:bg-white"
               title="Reemplazar imagen"
             >
               <Upload className="h-4 w-4" />
@@ -185,7 +185,7 @@ export function VisualImagePicker({ value, onChange }: VisualImagePickerProps) {
             <button
               type="button"
               onClick={handleRemove}
-              className="rounded-md bg-red-500/90 p-2 text-xs font-medium text-white opacity-0 shadow transition-all hover:bg-red-500 group-hover:opacity-100"
+              className="rounded-md bg-red-500/90 p-2 text-xs font-medium text-white shadow transition-all hover:bg-red-500"
               title="Eliminar imagen"
             >
               <Trash2 className="h-4 w-4" />
