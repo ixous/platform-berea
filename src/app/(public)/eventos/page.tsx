@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { events } from "@/lib/db/schema";
+import { institutionalPages, events } from "@/lib/db/schema";
 import { and, isNull, eq, gte, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
@@ -50,13 +50,18 @@ export default async function EventosPage() {
     "event",
     items.map((e) => e.id)
   );
+  const [page] = await db
+    .select()
+    .from(institutionalPages)
+    .where(eq(institutionalPages.slug, "eventos"))
+    .limit(1);
 
   return (
     <>
       <PageBanner
-        title="Eventos"
-        subtitle="Mantente al día con nuestras actividades."
-        backgroundImage="/images/banner-eventos.png"
+        title={page?.bannerTitle || "Eventos"}
+        subtitle={page?.bannerSubtitle || "Mantente al día con nuestras actividades."}
+        backgroundImage={page?.bannerImage || "/images/banner-eventos.png"}
       />
 
       {items.length > 0 ? (

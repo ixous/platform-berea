@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { ministries } from "@/lib/db/schema";
+import { institutionalPages, ministries } from "@/lib/db/schema";
 import { and, isNull, eq, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
@@ -35,13 +35,18 @@ export default async function MinisteriosActivosPage() {
     "ministry",
     items.map((m) => m.id)
   );
+  const [page] = await db
+    .select()
+    .from(institutionalPages)
+    .where(eq(institutionalPages.slug, "ministerios-activos"))
+    .limit(1);
 
   return (
     <>
       <PageBanner
-        title="Ministerios Activos"
-        subtitle="Descubre tu lugar para servir."
-        backgroundImage="/images/banner-ministerios.png"
+        title={page?.bannerTitle || "Ministerios Activos"}
+        subtitle={page?.bannerSubtitle || "Descubre tu lugar para servir."}
+        backgroundImage={page?.bannerImage || "/images/banner-ministerios.png"}
       />
 
       {items.length > 0 ? (

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { devotionals } from "@/lib/db/schema";
+import { institutionalPages, devotionals } from "@/lib/db/schema";
 import { and, isNull, eq, desc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
@@ -36,13 +36,18 @@ export default async function DevocionalesPage() {
     "devotional",
     items.map((d) => d.id)
   );
+  const [page] = await db
+    .select()
+    .from(institutionalPages)
+    .where(eq(institutionalPages.slug, "devocionales"))
+    .limit(1);
 
   return (
     <>
       <PageBanner
-        title="Devocionales"
-        subtitle="Reflexiones bíblicas para tu crecimiento."
-        backgroundImage="/images/banner-devocionales.png"
+        title={page?.bannerTitle || "Devocionales"}
+        subtitle={page?.bannerSubtitle || "Reflexiones bíblicas para tu crecimiento."}
+        backgroundImage={page?.bannerImage || "/images/banner-devocionales.png"}
       />
 
       {items.length > 0 ? (

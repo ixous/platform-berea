@@ -944,7 +944,9 @@ export function EditorClient({
             return { ...banner, ...entityData };
           },
           onSave: async (_blockKey: string, _data: Record<string, string>) => {
-            if (_blockKey === "intro") await savePageIntro("nuestra-historia", _data);
+            if (_blockKey === "banner") {
+              await saveInstitutionalPageBanner("nuestra-historia", _data);
+            } else if (_blockKey === "intro") await savePageIntro("nuestra-historia", _data);
             else if (_blockKey.startsWith("entity:")) {
               const parts = _blockKey.split(":");
               const eType = parts[1];

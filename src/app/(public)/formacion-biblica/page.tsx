@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { biblicalPrograms } from "@/lib/db/schema";
+import { institutionalPages, biblicalPrograms } from "@/lib/db/schema";
 import { and, isNull, eq, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
@@ -33,13 +33,18 @@ export default async function FormacionBiblicaPage() {
     "biblical_program",
     programs.map((p) => p.id)
   );
+  const [page] = await db
+    .select()
+    .from(institutionalPages)
+    .where(eq(institutionalPages.slug, "formacion-biblica"))
+    .limit(1);
 
   return (
     <>
       <PageBanner
-        title="Formación Bíblica"
-        subtitle="Crece en el conocimiento de la Palabra."
-        backgroundImage="/images/banner-formacion-biblica.png"
+        title={page?.bannerTitle || "Formación Bíblica"}
+        subtitle={page?.bannerSubtitle || "Crece en el conocimiento de la Palabra."}
+        backgroundImage={page?.bannerImage || "/images/banner-formacion-biblica.png"}
       />
 
       {programs.length > 0 ? (

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { annualVision } from "@/lib/db/schema";
+import { institutionalPages, annualVision } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
@@ -32,10 +32,19 @@ async function getCurrentVision() {
 
 export default async function VisionAnualPage() {
   const vision = await getCurrentVision();
+  const [page] = await db
+    .select()
+    .from(institutionalPages)
+    .where(eq(institutionalPages.slug, "vision-anual"))
+    .limit(1);
 
   return (
     <>
-      <PageBanner title="Visión Anual" subtitle="Lo que Dios nos ha encomendado este año." />
+      <PageBanner
+        title={page?.bannerTitle || "Visión Anual"}
+        subtitle={page?.bannerSubtitle || "Lo que Dios nos ha encomendado este año."}
+        backgroundImage={page?.bannerImage || null}
+      />
 
       {vision ? (
         <ContentBlock variant="gold-mist">

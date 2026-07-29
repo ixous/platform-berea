@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { cells } from "@/lib/db/schema";
+import { institutionalPages, cells } from "@/lib/db/schema";
 import { and, isNull, eq, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
@@ -35,13 +35,18 @@ export default async function CelulasPage() {
     "cell",
     items.map((c) => c.id)
   );
+  const [page] = await db
+    .select()
+    .from(institutionalPages)
+    .where(eq(institutionalPages.slug, "celulas"))
+    .limit(1);
 
   return (
     <>
       <PageBanner
-        title="Células"
-        subtitle="Encuentra una célula cercana y crece en comunidad."
-        backgroundImage="/images/banner-celulas.png"
+        title={page?.bannerTitle || "Células"}
+        subtitle={page?.bannerSubtitle || "Encuentra una célula cercana y crece en comunidad."}
+        backgroundImage={page?.bannerImage || "/images/banner-celulas.png"}
       />
 
       {items.length > 0 ? (

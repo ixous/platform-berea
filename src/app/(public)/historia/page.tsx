@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { pages, historyMilestones } from "@/lib/db/schema";
+import { institutionalPages, pages, historyMilestones } from "@/lib/db/schema";
 import { eq, and, isNull, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
@@ -36,14 +36,23 @@ async function getMilestones() {
 }
 
 export default async function HistoriaPage() {
-  const [page, milestones] = await Promise.all([getPage(), getMilestones()]);
+  const [page, milestones, inst] = await Promise.all([
+    getPage(),
+    getMilestones(),
+    db
+      .select()
+      .from(institutionalPages)
+      .where(eq(institutionalPages.slug, "nuestra-historia"))
+      .limit(1)
+      .then((r) => r[0]),
+  ]);
 
   return (
     <>
       <PageBanner
-        title="Nuestra Historia"
-        subtitle="Una historia de fe, crecimiento y propósito."
-        backgroundImage="/images/banner-berea.png"
+        title={inst?.bannerTitle || "Nuestra Historia"}
+        subtitle={inst?.bannerSubtitle || "Una historia de fe, crecimiento y propósito."}
+        backgroundImage={inst?.bannerImage || "/images/banner-berea.png"}
       />
 
       <ContentBlock variant="gold-mist">

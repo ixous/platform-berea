@@ -125,8 +125,9 @@ async function fetchPageData(slug: string, entityType: string) {
         .from(historyMilestones)
         .where(and(eq(historyMilestones.status, "published"), isNull(historyMilestones.deletedAt)))
         .orderBy(asc(historyMilestones.displayOrder));
+      const hBanner = await fetchInstitutionalBanner("nuestra-historia");
       return {
-        banner: {
+        banner: hBanner || {
           title: "Nuestra Historia",
           subtitle: "Una historia de fe, crecimiento y propósito.",
           backgroundImage: "/images/banner-berea.png",
@@ -141,11 +142,12 @@ async function fetchPageData(slug: string, entityType: string) {
         .from(doctrines)
         .where(eq(doctrines.status, "published"))
         .orderBy(asc(doctrines.displayOrder));
+      const dBanner = await fetchInstitutionalBanner("nuestra-doctrina");
       return {
-        banner: {
+        banner: dBanner || {
           title: "Nuestra Doctrina",
           subtitle: "Fundamentos bíblicos de nuestra fe.",
-          backgroundImage: null,
+          backgroundImage: "/images/banner-doctrina.png",
         },
         items,
         entityTypeSlug: "doctrines",
@@ -178,8 +180,9 @@ async function fetchPageData(slug: string, entityType: string) {
         .from(ministries)
         .where(and(eq(ministries.status, "active"), isNull(ministries.deletedAt)))
         .orderBy(asc(ministries.displayOrder));
+      const mBanner = await fetchInstitutionalBanner("ministerios-activos");
       return {
-        banner: {
+        banner: mBanner || {
           title: "Ministerios Activos",
           subtitle: "Descubre tu lugar para servir.",
           backgroundImage: "/images/banner-ministerios.png",
@@ -194,11 +197,12 @@ async function fetchPageData(slug: string, entityType: string) {
         .from(serviceMinistries)
         .where(and(eq(serviceMinistries.status, "published"), isNull(serviceMinistries.deletedAt)))
         .orderBy(asc(serviceMinistries.displayOrder));
+      const smBanner = await fetchInstitutionalBanner("ministerios-de-servicio");
       return {
-        banner: {
+        banner: smBanner || {
           title: "Ministerios de Servicio",
           subtitle: "Donde tus dones pueden marcar la diferencia.",
-          backgroundImage: null,
+          backgroundImage: "/images/banner-berea.png",
         },
         items,
         entityTypeSlug: "serviceMinistries",
@@ -210,8 +214,9 @@ async function fetchPageData(slug: string, entityType: string) {
         .from(cells)
         .where(and(eq(cells.status, "active"), isNull(cells.deletedAt)))
         .orderBy(asc(cells.name));
+      const cBanner = await fetchInstitutionalBanner("celulas");
       return {
-        banner: {
+        banner: cBanner || {
           title: "Células",
           subtitle: "Encuentra una célula cercana y crece en comunidad.",
           backgroundImage: "/images/banner-celulas.png",
@@ -226,8 +231,9 @@ async function fetchPageData(slug: string, entityType: string) {
         .from(biblicalPrograms)
         .where(and(eq(biblicalPrograms.status, "published"), isNull(biblicalPrograms.deletedAt)))
         .orderBy(asc(biblicalPrograms.displayOrder));
+      const bpBanner = await fetchInstitutionalBanner("formacion-biblica");
       return {
-        banner: {
+        banner: bpBanner || {
           title: "Formación Bíblica",
           subtitle: "Crece en el conocimiento de la Palabra.",
           backgroundImage: "/images/banner-formacion-biblica.png",
@@ -243,8 +249,9 @@ async function fetchPageData(slug: string, entityType: string) {
         .where(and(eq(devotionals.status, "published"), isNull(devotionals.deletedAt)))
         .orderBy(desc(devotionals.publishedAt))
         .limit(20);
+      const dVBanner = await fetchInstitutionalBanner("devocionales");
       return {
-        banner: {
+        banner: dVBanner || {
           title: "Devocionales",
           subtitle: "Reflexiones bíblicas para tu crecimiento.",
           backgroundImage: "/images/banner-devocionales.png",
@@ -266,8 +273,9 @@ async function fetchPageData(slug: string, entityType: string) {
         )
         .orderBy(asc(events.startDate))
         .limit(20);
+      const eBanner = await fetchInstitutionalBanner("eventos");
       return {
-        banner: {
+        banner: eBanner || {
           title: "Eventos",
           subtitle: "Mantente al día con nuestras actividades.",
           backgroundImage: "/images/banner-eventos.png",
@@ -283,8 +291,9 @@ async function fetchPageData(slug: string, entityType: string) {
         .where(eq(annualVision.status, "published"))
         .orderBy(desc(annualVision.year))
         .limit(1);
+      const avBanner = await fetchInstitutionalBanner("vision-anual");
       return {
-        banner: {
+        banner: avBanner || {
           title: "Visión Anual",
           subtitle: "Lo que Dios nos ha encomendado este año.",
           backgroundImage: null,

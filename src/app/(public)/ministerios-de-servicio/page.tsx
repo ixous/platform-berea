@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { serviceMinistries } from "@/lib/db/schema";
+import { institutionalPages, serviceMinistries } from "@/lib/db/schema";
 import { and, isNull, eq, asc } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock } from "@/components/public/ContentBlock";
@@ -31,12 +31,18 @@ async function getServiceMinistries() {
 
 export default async function MinisteriosServicioPage() {
   const items = await getServiceMinistries();
+  const [page] = await db
+    .select()
+    .from(institutionalPages)
+    .where(eq(institutionalPages.slug, "ministerios-de-servicio"))
+    .limit(1);
 
   return (
     <>
       <PageBanner
-        title="Ministerios de Servicio"
-        subtitle="Donde tus dones pueden marcar la diferencia."
+        title={page?.bannerTitle || "Ministerios de Servicio"}
+        subtitle={page?.bannerSubtitle || "Donde tus dones pueden marcar la diferencia."}
+        backgroundImage={page?.bannerImage || "/images/banner-berea.png"}
       />
 
       {items.length > 0 ? (
