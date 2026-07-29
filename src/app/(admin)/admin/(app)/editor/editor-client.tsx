@@ -98,6 +98,7 @@ const ENTITY_EDIT_FIELDS: Record<string, BlockField[]> = {
     { name: "leader", label: "Líder", type: "text" },
     { name: "address", label: "Dirección", type: "text" },
     { name: "description", label: "Descripción", type: "textarea" },
+    { name: "imageUrl", label: "Imagen", type: "image" },
   ],
   biblicalPrograms: [
     { name: "name", label: "Nombre", type: "text" },

@@ -956,9 +956,6 @@ async function seedFiveMinistries() {
 }
 
 async function seedCells() {
-  const existing = await db.select({ id: schema.cells.id }).from(schema.cells).limit(1);
-  if (existing.length > 0) return [];
-
   const entries = [
     {
       name: "Célula de Fe y Esperanza",
@@ -1006,8 +1003,15 @@ async function seedCells() {
 
   const created: string[] = [];
   for (const c of entries) {
-    await db.insert(schema.cells).values(c);
-    created.push(c.name);
+    const [existing] = await db
+      .select({ id: schema.cells.id })
+      .from(schema.cells)
+      .where(eq(schema.cells.slug, c.slug))
+      .limit(1);
+    if (!existing) {
+      await db.insert(schema.cells).values(c);
+      created.push(c.name);
+    }
   }
   return created;
 }

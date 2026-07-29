@@ -15,6 +15,7 @@ export const cells = pgTable(
     city: varchar("city", { length: 100 }),
     locationMap: text("location_map"),
     description: text("description"),
+    imageUrl: varchar("image_url", { length: 500 }),
     capacity: integer("capacity"),
     status: varchar("status", { length: 20 }).notNull().default("active"),
     additionalInfo: text("additional_info"),

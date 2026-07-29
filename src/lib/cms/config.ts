@@ -397,6 +397,7 @@ export const entityConfigs: Record<string, EntityDef> = {
       { name: "city", label: "Ciudad", type: "text" },
       { name: "locationMap", label: "Mapa (URL)", type: "url" },
       { name: "description", label: "Descripción", type: "textarea" },
+      { name: "imageUrl", label: "Imagen (URL)", type: "image" },
       { name: "capacity", label: "Capacidad", type: "number" },
       { name: "additionalInfo", label: "Información adicional", type: "textarea" },
       {

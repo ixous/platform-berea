@@ -71,7 +71,7 @@ export default async function CelulasPage() {
                     key={c.id}
                     title={c.name}
                     description={c.description}
-                    imageUrl={img?.mediaUrl || img?.thumbnailUrl}
+                    imageUrl={c.imageUrl || img?.mediaUrl || img?.thumbnailUrl}
                     category={c.type || null}
                     meta={
                       <div className="space-y-1.5 text-xs text-berea-muted">

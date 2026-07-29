@@ -78,6 +78,13 @@
       "when": 1785052465427,
       "tag": "0010_rapid_ma_gnuci",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1785299166260,
+      "tag": "0011_hot_skin",
+      "breakpoints": true
     }
   ]
 }

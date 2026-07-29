@@ -1,0 +1,1 @@
+ALTER TABLE "cells" ADD COLUMN "image_url" varchar(500);
