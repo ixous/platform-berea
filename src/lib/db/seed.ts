@@ -42,7 +42,7 @@ async function seedRoles() {
       .where(eq(schema.roles.name, role.name))
       .limit(1);
 
-    if (existing.length === 0) {
+    if (!existing) {
       await db.insert(schema.roles).values(role);
       created.push(role.name);
     }
@@ -188,7 +188,7 @@ async function seedPermissions() {
       .where(eq(schema.permissions.slug, perm.slug))
       .limit(1);
 
-    if (existing.length === 0) {
+    if (!existing) {
       await db.insert(schema.permissions).values(perm);
       created.push(perm.slug);
     }
@@ -285,7 +285,7 @@ async function seedRolePermissions() {
         )
         .limit(1);
 
-      if (existing.length === 0) {
+      if (!existing) {
         await db.insert(schema.rolePermissions).values({ roleId, permissionId: permId });
         created++;
       }
@@ -365,7 +365,7 @@ async function seedSettings() {
       .where(eq(schema.settings.key, setting.key))
       .limit(1);
 
-    if (existing.length === 0) {
+    if (!existing) {
       await db.insert(schema.settings).values(setting);
       created.push(setting.key);
     }
@@ -397,7 +397,7 @@ async function seedNavigation() {
       .where(eq(schema.navigation.slug, menu.slug))
       .limit(1);
 
-    if (existing.length === 0) {
+    if (!existing) {
       await db.insert(schema.navigation).values(menu);
       created.push(menu.slug);
     }
@@ -489,7 +489,7 @@ async function seedPages() {
       .where(eq(schema.pages.slug, page.slug))
       .limit(1);
 
-    if (existing.length === 0) {
+    if (!existing) {
       await db.insert(schema.pages).values({
         ...page,
         publishedAt: page.status === "published" ? new Date() : null,
@@ -551,7 +551,7 @@ async function seedAdminNavigationItems() {
       )
       .limit(1);
 
-    if (existing.length === 0) {
+    if (!existing) {
       await db.insert(schema.navigationItems).values({
         ...item,
         navigationId: adminMenu[0].id,
@@ -851,7 +851,7 @@ async function seedServiceMinistries() {
       .from(schema.serviceMinistries)
       .where(eq(schema.serviceMinistries.slug, m.slug))
       .limit(1);
-    if (existing.length === 0) {
+    if (!existing) {
       await db.insert(schema.serviceMinistries).values(m);
       created.push(m.name);
     }
@@ -1267,7 +1267,7 @@ async function seedHomepageData() {
       .from(schema.homepageSections)
       .where(eq(schema.homepageSections.sectionKey, sd.sectionKey))
       .limit(1);
-    if (existing.length === 0) {
+    if (!existing) {
       await db.insert(schema.homepageSections).values(sd);
       sectionsCount++;
     }
@@ -1310,7 +1310,7 @@ async function seedHomepageData() {
       .from(schema.homepageServices)
       .where(eq(schema.homepageServices.title, svc.title))
       .limit(1);
-    if (existing.length === 0) {
+    if (!existing) {
       await db.insert(schema.homepageServices).values(svc);
       servicesCount++;
     }
@@ -1397,7 +1397,7 @@ async function seedInstitutionalPages() {
       .from(schema.institutionalPages)
       .where(eq(schema.institutionalPages.slug, entry.slug))
       .limit(1);
-    if (existing.length === 0) {
+    if (!existing) {
       await db.insert(schema.institutionalPages).values(entry);
       created.push(entry.slug);
     }

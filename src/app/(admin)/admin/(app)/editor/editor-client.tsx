@@ -779,7 +779,7 @@ function buildPageConfig(entityType: string, slug: string): PageRenderConfig {
               "[TRACE:10] buildPageConfig.onSave — cleanData:",
               JSON.stringify(cleanData)
             );
-            await saveEntityBlock(getEntityCmsType(eType), eId, cleanData);
+            await saveEntityBlock(getEntityCmsType(eType), eId, cleanData, slug);
           }
         },
         render: (_getVal, _data) => null,
@@ -844,7 +844,7 @@ function buildEntityPageConfig(
           "id:",
           eId
         );
-        await saveEntityBlock(getEntityCmsType(eType), eId, cleanData);
+        await saveEntityBlock(getEntityCmsType(eType), eId, cleanData, slug);
       }
     },
     render: (getVal, data) => renderEntityList(getVal, items, entityTypeSlug),
@@ -958,7 +958,7 @@ export function EditorClient({
                   cleanData[key.slice(prefix.length)] = value;
                 }
               }
-              await saveEntityBlock(getEntityCmsType(eType), eId, cleanData);
+              await saveEntityBlock(getEntityCmsType(eType), eId, cleanData, "nuestra-historia");
             }
           },
           render: (getVal: (key: string) => string, _data: Record<string, unknown>) =>
@@ -1016,7 +1016,7 @@ export function EditorClient({
                 cleanData[key.slice(prefix.length)] = value;
               }
             }
-            await saveEntityBlock(getEntityCmsType(eType), eId, cleanData);
+            await saveEntityBlock(getEntityCmsType(eType), eId, cleanData, selectedSlug);
           }
         },
         render: (getVal: (key: string) => string, _data: Record<string, unknown>) =>

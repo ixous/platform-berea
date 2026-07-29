@@ -24,11 +24,13 @@ const BANNER_FIELD_MAP: Record<string, string> = {
 export async function saveEntityBlock(
   entityType: string,
   id: string,
-  data: Record<string, string>
+  data: Record<string, string>,
+  pageSlug?: string
 ) {
   console.log("[TRACE:11] saveEntityBlock — llamado", {
     entityType,
     id,
+    pageSlug,
     data: JSON.stringify(data),
   });
   const session = await requireEditorAuth();
@@ -39,6 +41,9 @@ export async function saveEntityBlock(
   console.log("[TRACE:11] saveEntityBlock — updateEntity resultado:", JSON.stringify(result));
 
   revalidatePath("/admin/editor");
+  if (pageSlug) {
+    revalidatePath(`/${pageSlug}`);
+  }
 
   return result;
 }
