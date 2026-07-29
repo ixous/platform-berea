@@ -59,6 +59,7 @@ export function BereaImage({
         sizes={sizes || "100vw"}
         placeholder="blur"
         blurDataURL={PLACEHOLDER}
+        quality={90}
       />
     );
   }
@@ -74,6 +75,7 @@ export function BereaImage({
       sizes={sizes}
       placeholder="blur"
       blurDataURL={PLACEHOLDER}
+      quality={90}
     />
   );
 }

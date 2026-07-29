@@ -19,7 +19,7 @@ function compressImage(file: File): Promise<File> {
     const url = URL.createObjectURL(file);
     img.onload = () => {
       URL.revokeObjectURL(url);
-      const MAX_DIM = 1920;
+      const MAX_DIM = 2560;
       let { width, height } = img;
       if (width > MAX_DIM || height > MAX_DIM) {
         const ratio = Math.min(MAX_DIM / width, MAX_DIM / height);
@@ -37,7 +37,7 @@ function compressImage(file: File): Promise<File> {
           resolve(new File([blob], file.name.replace(/\.[^.]+$/, ".jpg"), { type: "image/jpeg" }));
         },
         "image/jpeg",
-        0.85
+        0.92
       );
     };
     img.onerror = () => {

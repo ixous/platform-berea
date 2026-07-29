@@ -227,7 +227,7 @@ export async function POST(req: NextRequest) {
           "x",
           meta.height
         );
-        const webpBuffer = Buffer.from(await sharp(buffer).webp({ quality: 85 }).toBuffer());
+        const webpBuffer = Buffer.from(await sharp(buffer).webp({ quality: 90 }).toBuffer());
         if (webpBuffer.length < buffer.length) {
           finalBuffer = webpBuffer;
           finalContentType = "image/webp";
