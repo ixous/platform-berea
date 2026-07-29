@@ -42,7 +42,7 @@ export default async function MinisteriosServicioPage() {
       <PageBanner
         title={page?.bannerTitle || "Ministerios de Servicio"}
         subtitle={page?.bannerSubtitle || "Donde tus dones pueden marcar la diferencia."}
-        backgroundImage={page?.bannerImage || "/images/banner-berea.png"}
+        backgroundImage={page?.bannerImage || null}
       />
 
       {items.length > 0 ? (

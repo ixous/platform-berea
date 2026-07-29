@@ -202,7 +202,7 @@ async function fetchPageData(slug: string, entityType: string) {
         banner: smBanner || {
           title: "Ministerios de Servicio",
           subtitle: "Donde tus dones pueden marcar la diferencia.",
-          backgroundImage: "/images/banner-berea.png",
+          backgroundImage: null,
         },
         items,
         entityTypeSlug: "serviceMinistries",
