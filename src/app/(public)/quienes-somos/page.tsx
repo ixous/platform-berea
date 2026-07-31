@@ -122,13 +122,13 @@ export default async function QuienesSomosPage() {
                         i % 2 === 1 ? "lg:flex-row-reverse" : ""
                       }`}
                     >
-                      <div className="hidden lg:absolute lg:left-1/2 lg:flex lg:-translate-x-1/2 lg:items-center lg:justify-center">
+                      <div className="hidden lg:absolute lg:left-1/2 lg:z-10 lg:flex lg:-translate-x-1/2 lg:items-center lg:justify-center">
                         <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-berea-gold/30 bg-white shadow-md">
                           <span className="text-sm font-bold text-berea-gold">{m.year}</span>
                         </div>
                       </div>
 
-                      <div className="lg:w-1/2">
+                      <div className={`lg:w-1/2 ${i % 2 === 1 ? "lg:pl-8" : "lg:pr-8"}`}>
                         <MediaCard
                           title={m.title}
                           description={m.description}
@@ -138,7 +138,9 @@ export default async function QuienesSomosPage() {
                           badge={m.year}
                         />
                       </div>
-                      <div className="hidden lg:block lg:w-1/2" />
+                      <div
+                        className={`hidden lg:block lg:w-1/2 ${i % 2 === 1 ? "lg:pr-8" : "lg:pl-8"}`}
+                      />
                     </div>
                   </ScrollReveal>
                 ))}
@@ -151,7 +153,7 @@ export default async function QuienesSomosPage() {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.15),transparent_60%)]" />
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(201,162,39,0.06),transparent_50%)]" />
             </div>
-            <ContentBlock className="relative">
+            <ContentBlock variant="navy-warm" className="relative">
               <ScrollReveal animation="fade-up">
                 <ContentNarrow className="text-center">
                   <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-lg">
