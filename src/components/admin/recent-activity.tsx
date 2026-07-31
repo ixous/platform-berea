@@ -23,7 +23,6 @@ const resourceLabels: Record<string, string> = {
   "service-ministries": "ministerio de servicio",
   "biblical-programs": "programa bíblico",
   cells: "célula",
-  "annual-vision": "visión anual",
   auditorium: "auditorio",
   donations: "donación",
   contact: "contacto",

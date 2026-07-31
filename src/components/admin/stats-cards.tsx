@@ -7,7 +7,6 @@ import {
   serviceMinistries,
   biblicalPrograms,
   cells,
-  annualVision,
   contactSubmissions,
   eventRegistrations,
   media,
@@ -41,12 +40,10 @@ async function getStats() {
     draftDevos,
     draftEvents,
     draftPrograms,
-    draftVision,
     publishedPages,
     publishedDevos,
     publishedEvents,
     publishedPrograms,
-    publishedVision,
     activeMinistries,
     activeService,
     activeCells,
@@ -82,12 +79,6 @@ async function getStats() {
     run(
       db
         .select({ value: sql<number>`COUNT(*)::int` })
-        .from(annualVision)
-        .where(eq(annualVision.status, "draft"))
-    ),
-    run(
-      db
-        .select({ value: sql<number>`COUNT(*)::int` })
         .from(pages)
         .where(eq(pages.status, "published"))
     ),
@@ -108,12 +99,6 @@ async function getStats() {
         .select({ value: sql<number>`COUNT(*)::int` })
         .from(biblicalPrograms)
         .where(and(eq(biblicalPrograms.status, "published"), isNull(biblicalPrograms.deletedAt)))
-    ),
-    run(
-      db
-        .select({ value: sql<number>`COUNT(*)::int` })
-        .from(annualVision)
-        .where(eq(annualVision.status, "published"))
     ),
     run(
       db
@@ -162,13 +147,12 @@ async function getStats() {
   ]);
 
   return {
-    drafts: draftPages + draftDevos + draftEvents + draftPrograms + draftVision,
+    drafts: draftPages + draftDevos + draftEvents + draftPrograms,
     published:
       publishedPages +
       publishedDevos +
       publishedEvents +
       publishedPrograms +
-      publishedVision +
       activeMinistries +
       activeService +
       activeCells,

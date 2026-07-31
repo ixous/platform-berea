@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";
 import { rateLimit } from "@/lib/rate-limit";
-import { institutionalPages, pages, contact, donations, annualVision } from "@/lib/db/schema";
+import { institutionalPages, pages, contact, donations } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { updateEntity } from "./actions";
 
@@ -48,7 +48,11 @@ export async function saveEntityBlock(
   return result;
 }
 
-export async function saveInstitutionalPageBanner(slug: string, data: Record<string, string>) {
+export async function saveInstitutionalPageBanner(
+  slug: string,
+  data: Record<string, string>,
+  revalidateSlug?: string
+) {
   console.log("[TRACE:11] saveInstitutionalPageBanner — llamado", {
     slug,
     data: JSON.stringify(data),
@@ -102,14 +106,18 @@ export async function saveInstitutionalPageBanner(slug: string, data: Record<str
       details: `Banner actualizado: "${slug}"`,
     });
 
-    revalidatePath(`/${slug}`);
+    revalidatePath(`/${revalidateSlug || slug}`);
     revalidatePath("/admin/editor");
   } catch (err) {
     console.error("[Editor] Save banner failed:", err);
   }
 }
 
-export async function savePageIntro(slug: string, data: Record<string, string>) {
+export async function savePageIntro(
+  slug: string,
+  data: Record<string, string>,
+  revalidateSlug?: string
+) {
   const session = await requireEditorAuth();
   if (!rateLimit(`editor:page:${session.user.id}`, { windowMs: 60_000, max: 30 })) return;
 
@@ -137,7 +145,7 @@ export async function savePageIntro(slug: string, data: Record<string, string>) 
       details: `Contenido actualizado: "${slug}"`,
     });
 
-    revalidatePath(`/${slug}`);
+    revalidatePath(`/${revalidateSlug || slug}`);
     revalidatePath("/admin/editor");
   } catch (err) {
     console.error("[Editor] Save page content failed:", err);
@@ -207,40 +215,5 @@ export async function saveDonationInfo(data: Record<string, string>) {
     revalidatePath("/admin/editor");
   } catch (err) {
     console.error("[Editor] Save donation failed:", err);
-  }
-}
-
-export async function saveAnnualVision(data: Record<string, string>) {
-  const session = await requireEditorAuth();
-  if (!rateLimit(`editor:vision:${session.user.id}`, { windowMs: 60_000, max: 30 })) return;
-
-  try {
-    const [existing] = await db
-      .select({ id: annualVision.id })
-      .from(annualVision)
-      .where(eq(annualVision.status, "published"))
-      .limit(1);
-
-    const updateData: Record<string, unknown> = { updatedAt: new Date() };
-    const allowed = ["name", "verse", "description"] as const;
-    for (const field of allowed) {
-      if (field in data) updateData[field] = data[field];
-    }
-
-    if (existing) {
-      await db.update(annualVision).set(updateData).where(eq(annualVision.id, existing.id));
-    }
-
-    await logAudit({
-      userId: session.user.id,
-      action: "EDITOR_UPDATE_VISION",
-      resource: "annual_vision",
-      details: "Visión anual actualizada",
-    });
-
-    revalidatePath("/vision-anual");
-    revalidatePath("/admin/editor");
-  } catch (err) {
-    console.error("[Editor] Save vision failed:", err);
   }
 }

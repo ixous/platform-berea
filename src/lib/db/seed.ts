@@ -114,11 +114,6 @@ async function seedPermissions() {
       description: "Crear, editar, publicar y eliminar células.",
     },
     {
-      name: "Manage Annual Vision",
-      slug: "annual-vision.manage",
-      description: "Crear, editar y publicar la visión anual.",
-    },
-    {
       name: "Manage Auditorium",
       slug: "auditorium.manage",
       description: "Administrar el contenido del módulo del Nuevo Auditorio.",
@@ -216,7 +211,6 @@ async function seedRolePermissions() {
       "service-ministries.manage",
       "biblical-programs.manage",
       "cells.manage",
-      "annual-vision.manage",
       "auditorium.manage",
       "donations.manage",
       "contact.manage",
@@ -473,7 +467,6 @@ async function seedPages() {
   const pagesList = [
     { title: "Inicio", slug: "inicio", status: "published" as const },
     { title: "Quienes Somos", slug: "quienes-somos", status: "draft" as const },
-    { title: "Nuestra Historia", slug: "nuestra-historia", status: "draft" as const },
     { title: "Nuestra Doctrina", slug: "nuestra-doctrina", status: "draft" as const },
     { title: "Ministerios Activos", slug: "ministerios-activos", status: "draft" as const },
     { title: "Ministerios de Servicio", slug: "ministerios-de-servicio", status: "draft" as const },
@@ -481,7 +474,6 @@ async function seedPages() {
     { title: "Celulas", slug: "celulas", status: "draft" as const },
     { title: "Devocionales", slug: "devocionales", status: "draft" as const },
     { title: "Eventos", slug: "eventos", status: "draft" as const },
-    { title: "Vision Anual", slug: "vision-anual", status: "draft" as const },
     { title: "Nuevo Auditorio Berea", slug: "nuevo-auditorio-berea", status: "draft" as const },
     { title: "Donaciones", slug: "donaciones", status: "draft" as const },
     { title: "Contacto", slug: "contacto", status: "draft" as const },
@@ -605,9 +597,6 @@ async function main() {
   const milestones = await seedHistoryMilestones();
   console.log(`  History Milestones: ${milestones.length} creados`);
 
-  const leaders = await seedLeaders();
-  console.log(`  Leaders: ${leaders.length} creados`);
-
   const svcMinistries = await seedServiceMinistries();
   console.log(`  Service Ministries: ${svcMinistries.length} creados`);
 
@@ -716,48 +705,6 @@ async function seedHistoryMilestones() {
   for (const m of milestones) {
     await db.insert(schema.historyMilestones).values(m);
     created.push(m.title);
-  }
-  return created;
-}
-
-async function seedLeaders() {
-  const existing = await db.select({ id: schema.leaders.id }).from(schema.leaders).limit(1);
-  if (existing.length > 0) return [];
-
-  const entries = [
-    {
-      name: "Ps. Juan Pérez",
-      position: "Pastor Principal",
-      biography: "Liderando la iglesia con dedicación y amor desde su fundación.",
-      imageUrl: "",
-      displayOrder: 1,
-      status: "published",
-      publishedAt: new Date(),
-    },
-    {
-      name: "Ps. María García",
-      position: "Pastora Asociada",
-      biography: "Apoyando el crecimiento espiritual de la congregación.",
-      imageUrl: "",
-      displayOrder: 2,
-      status: "published",
-      publishedAt: new Date(),
-    },
-    {
-      name: "Hno. Carlos López",
-      position: "Líder de Alabanza",
-      biography: "Guiando al equipo de adoración con pasión y excelencia.",
-      imageUrl: "",
-      displayOrder: 3,
-      status: "published",
-      publishedAt: new Date(),
-    },
-  ];
-
-  const created: string[] = [];
-  for (const l of entries) {
-    await db.insert(schema.leaders).values(l);
-    created.push(l.name);
   }
   return created;
 }

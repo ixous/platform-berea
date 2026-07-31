@@ -414,42 +414,6 @@ export const entityConfigs: Record<string, EntityDef> = {
     ],
   },
 
-  annualVision: {
-    entityType: "annualVision",
-    schemaTable: "annualVision",
-    displayName: "Visión Anual",
-    pluralName: "Visión Anual",
-    permission: "annual-vision.manage",
-    icon: "Eye",
-    listSearchFields: ["name", "verse", "description"],
-    listColumns: ["name", "year", "status"],
-    softDelete: false,
-    statusField: "status",
-    statusTransitions: {
-      draft: ["published", "archived"],
-      published: ["draft", "archived"],
-      archived: ["draft", "published"],
-    },
-    defaultSort: { field: "year", dir: "desc" },
-    fields: [
-      { name: "name", label: "Nombre", type: "text", required: true },
-      { name: "verse", label: "Versículo", type: "textarea" },
-      { name: "description", label: "Descripción", type: "textarea" },
-      { name: "year", label: "Año", type: "number", required: true },
-      {
-        name: "status",
-        label: "Estado",
-        type: "select",
-        required: true,
-        options: [
-          { value: "draft", label: "Borrador" },
-          { value: "published", label: "Publicado" },
-          { value: "archived", label: "Archivado" },
-        ],
-      },
-    ],
-  },
-
   auditorium: {
     entityType: "auditorium",
     schemaTable: "auditorium",
@@ -597,47 +561,6 @@ export const entityConfigs: Record<string, EntityDef> = {
       { name: "title", label: "Título", type: "text", required: true },
       { name: "description", label: "Descripción", type: "textarea", required: true },
       { name: "imageUrl", label: "Imagen (URL)", type: "image" },
-      { name: "displayOrder", label: "Orden", type: "number" },
-      {
-        name: "status",
-        label: "Estado",
-        type: "select",
-        required: true,
-        options: [
-          { value: "draft", label: "Borrador" },
-          { value: "published", label: "Publicado" },
-          { value: "archived", label: "Archivado" },
-        ],
-      },
-    ],
-  },
-
-  leaders: {
-    entityType: "leaders",
-    schemaTable: "leaders",
-    displayName: "Líder",
-    pluralName: "Liderazgo",
-    permission: "pages.manage",
-    icon: "Users",
-    listSearchFields: ["name", "position"],
-    listColumns: ["name", "position", "status", "displayOrder"],
-    softDelete: true,
-    statusField: "status",
-    statusTransitions: {
-      draft: ["published", "archived"],
-      published: ["draft", "archived"],
-      archived: ["draft", "published"],
-    },
-    defaultSort: { field: "displayOrder", dir: "asc" },
-    fields: [
-      { name: "name", label: "Nombre", type: "text", required: true },
-      { name: "position", label: "Cargo", type: "text", required: true },
-      {
-        name: "biography",
-        label: "Biografía",
-        type: "textarea",
-      },
-      { name: "imageUrl", label: "Fotografía (URL)", type: "image" },
       { name: "displayOrder", label: "Orden", type: "number" },
       {
         name: "status",

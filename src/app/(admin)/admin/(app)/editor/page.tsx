@@ -6,18 +6,14 @@ import { db } from "@/lib/db";
 import {
   institutionalPages,
   institutionalSections,
-  pages,
   contact,
   donations,
-  annualVision,
-  leaders,
   ministries,
   serviceMinistries,
   cells,
   biblicalPrograms,
   devotionals,
   events,
-  historyMilestones,
   homepageSettings,
   doctrines,
 } from "@/lib/db/schema";
@@ -41,8 +37,6 @@ const ALL_PAGES: PageEntry[] = [
     entityType: "doctrines-list",
     category: "Institucional",
   },
-  { slug: "historia", label: "Historia", entityType: "history", category: "Institucional" },
-  { slug: "liderazgo", label: "Liderazgo", entityType: "leaders-list", category: "Institucional" },
   {
     slug: "ministerios-de-servicio",
     label: "Ministerios de Servicio",
@@ -69,12 +63,6 @@ const ALL_PAGES: PageEntry[] = [
     category: "Contenido",
   },
   { slug: "eventos", label: "Eventos", entityType: "events-list", category: "Contenido" },
-  {
-    slug: "vision-anual",
-    label: "Visión Anual",
-    entityType: "annual-vision",
-    category: "Institucional",
-  },
   { slug: "contacto", label: "Contacto", entityType: "contact", category: "Comunidad" },
   { slug: "donaciones", label: "Donaciones", entityType: "donations", category: "Principal" },
 ];
@@ -114,28 +102,6 @@ async function fetchPageData(slug: string, entityType: string) {
         sections,
       };
     }
-    case "history": {
-      const [page] = await db
-        .select()
-        .from(pages)
-        .where(eq(pages.slug, "nuestra-historia"))
-        .limit(1);
-      const milestones = await db
-        .select()
-        .from(historyMilestones)
-        .where(and(eq(historyMilestones.status, "published"), isNull(historyMilestones.deletedAt)))
-        .orderBy(asc(historyMilestones.displayOrder));
-      const hBanner = await fetchInstitutionalBanner("nuestra-historia");
-      return {
-        banner: hBanner || {
-          title: "Nuestra Historia",
-          subtitle: "Una historia de fe, crecimiento y propósito.",
-          backgroundImage: "/images/banner-berea.png",
-        },
-        content: page?.content || "",
-        milestones,
-      };
-    }
     case "doctrines-list": {
       const items = await db
         .select()
@@ -151,27 +117,6 @@ async function fetchPageData(slug: string, entityType: string) {
         },
         items,
         entityTypeSlug: "doctrines",
-      };
-    }
-    case "leaders-list": {
-      const items = await db
-        .select()
-        .from(leaders)
-        .where(and(eq(leaders.status, "published"), isNull(leaders.deletedAt)))
-        .orderBy(asc(leaders.displayOrder));
-      const [inst] = await db
-        .select()
-        .from(institutionalPages)
-        .where(eq(institutionalPages.slug, "liderazgo"))
-        .limit(1);
-      return {
-        banner: {
-          title: inst?.bannerTitle || "Liderazgo",
-          subtitle: inst?.bannerSubtitle || "Conoce a quienes guían nuestra iglesia.",
-          backgroundImage: inst?.bannerImage || null,
-        },
-        items: items.map((i) => ({ ...i, imageUrl: i.imageUrl ?? null })),
-        entityTypeSlug: "leaders",
       };
     }
     case "ministries-list": {
@@ -282,23 +227,6 @@ async function fetchPageData(slug: string, entityType: string) {
         },
         items,
         entityTypeSlug: "events",
-      };
-    }
-    case "annual-vision": {
-      const [vision] = await db
-        .select()
-        .from(annualVision)
-        .where(eq(annualVision.status, "published"))
-        .orderBy(desc(annualVision.year))
-        .limit(1);
-      const avBanner = await fetchInstitutionalBanner("vision-anual");
-      return {
-        banner: avBanner || {
-          title: "Visión Anual",
-          subtitle: "Lo que Dios nos ha encomendado este año.",
-          backgroundImage: null,
-        },
-        vision: vision ?? null,
       };
     }
     case "contact": {
