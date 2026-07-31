@@ -13,6 +13,15 @@ import type { Metadata } from "next";
 
 const icons = [Book, Infinity, Heart, Wind, ShieldCheck, Church];
 
+const symbolicImages = [
+  "/images/doctrina/biblia.png",
+  "/images/doctrina/dios.png",
+  "/images/doctrina/jesucristo.png",
+  "/images/doctrina/espiritu-santo.png",
+  "/images/doctrina/salvacion.png",
+  "/images/doctrina/iglesia.png",
+];
+
 export async function generateMetadata(): Promise<Metadata> {
   const [page] = await db
     .select()
@@ -90,6 +99,8 @@ export default async function DoctrinaPage() {
                 key={p.id}
                 variant="icon"
                 icon={icons[i % icons.length]}
+                imageUrl={p.imageUrl || symbolicImages[i % symbolicImages.length]}
+                imageAlt={p.title}
                 title={p.title}
                 description={p.subtitle || p.content || ""}
               />
