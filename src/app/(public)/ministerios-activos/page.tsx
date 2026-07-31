@@ -7,6 +7,7 @@ import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
+import { MINISTRY_IMAGES } from "@/lib/public/symbolic-images";
 import { Users, MapPin, Clock, Church } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -73,7 +74,7 @@ export default async function MinisteriosActivosPage() {
                     key={m.id}
                     title={m.name}
                     description={m.description}
-                    imageUrl={img?.mediaUrl || img?.thumbnailUrl}
+                    imageUrl={img?.mediaUrl || img?.thumbnailUrl || MINISTRY_IMAGES[m.slug]}
                     category="Ministerio"
                     meta={
                       <div className="space-y-1.5 text-xs text-berea-muted">

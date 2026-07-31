@@ -9,6 +9,7 @@ import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { SectionHeading } from "@/components/public/SectionHeading";
 import { SectionSeparator } from "@/components/public/SectionSeparator";
 import { EmptySection } from "@/components/public/EmptySection";
+import { SECTION_IMAGES } from "@/lib/public/symbolic-images";
 import { Heart } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -93,7 +94,8 @@ export default async function QuienesSomosPage() {
                 key={section.id}
                 title={section.title || ""}
                 description={section.content || ""}
-                imageUrl={section.imageUrl ?? null}
+                imageUrl={section.imageUrl || SECTION_IMAGES[section.title || ""]}
+                imageAlt={section.title || ""}
               />
             ))}
           </div>

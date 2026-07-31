@@ -14,6 +14,7 @@ import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
 import { MediaCard } from "@/components/public/MediaCard";
 import { SectionSeparator } from "@/components/public/SectionSeparator";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
+import { MINISTRY_IMAGES } from "@/lib/public/symbolic-images";
 import {
   ArrowRight,
   CalendarDays,
@@ -26,6 +27,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -97,11 +99,11 @@ async function getHomepageData() {
   return { settings, sections, services, featuredEvents, featuredMinistries, featuredDevotionals };
 }
 
-const iconMap: Record<string, React.ReactNode> = {
-  Sparkles: <Sparkles className="h-5 w-5" />,
-  CalendarDays: <CalendarDays className="h-5 w-5" />,
-  BookOpen: <BookOpen className="h-5 w-5" />,
-  Church: <Church className="h-5 w-5" />,
+const iconMap: Record<string, LucideIcon> = {
+  Sparkles,
+  CalendarDays,
+  BookOpen,
+  Church,
 };
 
 export default async function HomePage() {
@@ -193,7 +195,7 @@ export default async function HomePage() {
                   <MediaCard
                     key={svc.id}
                     variant="icon"
-                    icon={svc.icon && iconMap[svc.icon] ? undefined : Sparkles}
+                    icon={iconMap[svc.icon ?? ""] || Sparkles}
                     title={svc.title}
                     description={
                       svc.description ||
@@ -285,6 +287,8 @@ export default async function HomePage() {
                     icon={Church}
                     title={m.name}
                     description={m.description}
+                    imageUrl={MINISTRY_IMAGES[m.slug]}
+                    imageAlt={m.name}
                     href="/ministerios-activos"
                   />
                 ))}

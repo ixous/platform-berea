@@ -7,6 +7,7 @@ import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
+import { EVENT_IMAGES, EVENT_FALLBACK } from "@/lib/public/symbolic-images";
 import { CalendarDays, Clock, MapPin, Calendar } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -86,7 +87,12 @@ export default async function EventosPage() {
                     key={event.id}
                     title={event.title}
                     description={event.description || event.additionalInfo}
-                    imageUrl={img?.mediaUrl || img?.thumbnailUrl}
+                    imageUrl={
+                      img?.mediaUrl ||
+                      img?.thumbnailUrl ||
+                      EVENT_IMAGES[event.slug] ||
+                      EVENT_FALLBACK
+                    }
                     href={`/eventos/${event.slug}`}
                     category={event.eventType || "Evento"}
                     meta={

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, BookOpen, Quote } from "lucide-react";
 import { BereaImage } from "@/components/public/BereaImage";
+import { DEVOTIONAL_IMAGES, DEVOTIONAL_FALLBACK } from "@/lib/public/symbolic-images";
 import type { Metadata } from "next";
 
 interface Props {
@@ -53,11 +54,12 @@ export default async function DevocionalDetallePage({ params }: Props) {
   if (!item) notFound();
 
   const readTime = estimateReadTime(item.content);
+  const heroImage = item.imageUrl || DEVOTIONAL_IMAGES[item.slug] || DEVOTIONAL_FALLBACK;
 
   return (
     <article>
       <div className="relative h-64 overflow-hidden bg-gradient-to-br from-berea-navy via-berea-navy to-berea-navy/90 sm:h-80 lg:h-96">
-        <BereaImage src={null} alt="" fill className="opacity-40" priority />
+        <BereaImage src={heroImage} alt="" fill className="opacity-40" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-berea-navy via-berea-navy/60 to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.15),transparent_60%)]" />
 

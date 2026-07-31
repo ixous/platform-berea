@@ -7,6 +7,7 @@ import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
+import { DEVOTIONAL_IMAGES, DEVOTIONAL_FALLBACK } from "@/lib/public/symbolic-images";
 import { BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -72,7 +73,13 @@ export default async function DevocionalesPage() {
                     key={d.id}
                     title={d.title}
                     description={d.excerpt || d.verse}
-                    imageUrl={d.imageUrl || img?.mediaUrl || img?.thumbnailUrl}
+                    imageUrl={
+                      d.imageUrl ||
+                      img?.mediaUrl ||
+                      img?.thumbnailUrl ||
+                      DEVOTIONAL_IMAGES[d.slug] ||
+                      DEVOTIONAL_FALLBACK
+                    }
                     href={`/devocionales/${d.slug}`}
                     category="Devocional"
                     meta={<p className="text-xs text-berea-muted italic">{d.verse}</p>}

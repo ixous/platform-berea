@@ -7,6 +7,7 @@ import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { SectionHeading } from "@/components/public/SectionHeading";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
+import { SERVICE_MINISTRY_IMAGES } from "@/lib/public/symbolic-images";
 import { HandHeart, Heart, Users, Music, Monitor, DoorOpen } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Metadata } from "next";
@@ -80,7 +81,7 @@ export default async function MinisteriosServicioPage() {
                   icon={getMinistryIcon(m.slug)}
                   title={m.name}
                   description={m.description}
-                  imageUrl={m.imageUrl ?? undefined}
+                  imageUrl={m.imageUrl || SERVICE_MINISTRY_IMAGES[m.slug]}
                   imageAlt={m.name}
                   meta={
                     m.leader ? (

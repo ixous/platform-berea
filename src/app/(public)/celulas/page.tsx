@@ -7,6 +7,7 @@ import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
+import { CELL_IMAGES } from "@/lib/public/symbolic-images";
 import { MapPin, Clock, User, Home } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -71,7 +72,9 @@ export default async function CelulasPage() {
                     key={c.id}
                     title={c.name}
                     description={c.description}
-                    imageUrl={c.imageUrl || img?.mediaUrl || img?.thumbnailUrl}
+                    imageUrl={
+                      c.imageUrl || img?.mediaUrl || img?.thumbnailUrl || CELL_IMAGES[c.slug]
+                    }
                     category={c.type || null}
                     meta={
                       <div className="space-y-1.5 text-xs text-berea-muted">

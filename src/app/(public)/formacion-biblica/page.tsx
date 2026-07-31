@@ -7,6 +7,7 @@ import { EmptySection } from "@/components/public/EmptySection";
 import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
+import { PROGRAM_IMAGES } from "@/lib/public/symbolic-images";
 import { User, Layers, Clock, GraduationCap } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -69,7 +70,7 @@ export default async function FormacionBiblicaPage() {
                     key={p.id}
                     title={p.name}
                     description={p.description}
-                    imageUrl={img?.mediaUrl || img?.thumbnailUrl}
+                    imageUrl={img?.mediaUrl || img?.thumbnailUrl || PROGRAM_IMAGES[p.slug]}
                     category={p.modality || "Programa"}
                     meta={
                       <div className="space-y-1.5 text-xs text-berea-muted">
