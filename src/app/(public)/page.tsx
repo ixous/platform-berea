@@ -339,7 +339,7 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,162,39,0.15),transparent_60%)]" />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(201,162,39,0.06),transparent_50%)]" />
           </div>
-          <ContentBlock className="relative">
+          <ContentBlock variant="navy-warm" className="relative">
             <ScrollReveal animation="fade-up">
               <ContentNarrow className="text-center">
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-lg">

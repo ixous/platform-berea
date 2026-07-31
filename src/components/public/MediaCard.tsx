@@ -275,8 +275,8 @@ export function MediaCard({
         </div>
       )}
 
-      {!isProfile && !isMinimal && (
-        <div className={`flex flex-1 flex-col ${styles.padding} transition-all duration-300 motion-reduce:transition-none group-hover:pb-9`}>
+      {!isProfile && (
+        <div className={`flex flex-1 flex-col ${isMinimal ? "" : styles.padding} transition-all duration-300 motion-reduce:transition-none group-hover:pb-9`}>
           <MediaCardContent
             title={title}
             description={description}
