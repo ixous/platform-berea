@@ -3,11 +3,11 @@ import { donations, institutionalPages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { PageBanner } from "@/components/public/PageBanner";
 import { ContentBlock, ContentNarrow } from "@/components/public/ContentBlock";
-import { MediaCard } from "@/components/public/MediaCard";
 import { SectionHeading } from "@/components/public/SectionHeading";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { EmptySection } from "@/components/public/EmptySection";
-import { Heart, Building, CreditCard, ArrowRight } from "lucide-react";
+import { BankInfoCard } from "@/components/public/BankInfoCard";
+import { Heart, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -71,47 +71,22 @@ export default async function DonacionesPage() {
 
             {bankData.length > 0 && (
               <>
-                <ScrollReveal animation="fade-up" className="mt-8">
-                  <div className="mx-auto flex items-center gap-4 text-center justify-center">
+                <ScrollReveal animation="fade-up" className="mt-12">
+                  <div className="mx-auto flex items-center justify-center gap-4">
                     <div className="h-px w-12 bg-gradient-to-r from-transparent to-berea-gold/30" />
                     <span className="text-sm font-semibold uppercase tracking-widest text-berea-gold">
                       Transferencia Bancaria
                     </span>
                     <div className="h-px w-12 bg-gradient-to-l from-transparent to-berea-gold/30" />
                   </div>
+                  <p className="mx-auto mt-4 max-w-md text-center text-sm leading-relaxed text-berea-muted">
+                    Realiza tu ofrenda directamente a nuestra cuenta bancaria. Copia los datos y
+                    transfiere desde tu banca en línea.
+                  </p>
                 </ScrollReveal>
 
-                <ScrollReveal animation="stagger" staggerItems delay={150} className="mt-10">
-                  <div className="grid gap-6 sm:grid-cols-2">
-                    {bankData.map((b, i) => (
-                      <MediaCard
-                        key={i}
-                        variant="icon"
-                        icon={i % 2 === 0 ? Building : CreditCard}
-                        title={b.bank || "Banco"}
-                        meta={
-                          <div className="space-y-1.5">
-                            {b.account && (
-                              <p className="flex items-center gap-2">
-                                <span className="font-medium text-berea-navy">Cuenta:</span>
-                                <span className="text-berea-muted font-mono text-xs">
-                                  {b.account}
-                                </span>
-                              </p>
-                            )}
-                            {b.clabe && (
-                              <p className="flex items-center gap-2">
-                                <span className="font-medium text-berea-navy">CLABE:</span>
-                                <span className="text-berea-muted font-mono text-xs break-all">
-                                  {b.clabe}
-                                </span>
-                              </p>
-                            )}
-                          </div>
-                        }
-                      />
-                    ))}
-                  </div>
+                <ScrollReveal animation="fade-up" className="mt-10">
+                  <BankInfoCard banks={bankData} />
                 </ScrollReveal>
               </>
             )}
