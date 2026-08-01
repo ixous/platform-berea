@@ -511,28 +511,22 @@ async function seedAdminNavigationItems() {
   const items = [
     { title: "Dashboard", url: "/admin", linkType: "internal" as const, displayOrder: 1 },
     {
-      title: "Gestión de Contenido",
-      url: "/admin/content",
+      title: "Editor Visual",
+      url: "/admin/editor",
       linkType: "internal" as const,
       displayOrder: 2,
     },
     {
-      title: "Biblioteca Multimedia",
+      title: "Biblioteca de Medios",
       url: "/admin/media",
       linkType: "internal" as const,
       displayOrder: 3,
     },
     {
-      title: "Bandeja de Entrada",
-      url: "/admin/contact",
+      title: "Configuración",
+      url: "/admin/settings",
       linkType: "internal" as const,
       displayOrder: 4,
-    },
-    {
-      title: "Registros a Eventos",
-      url: "/admin/registrations",
-      linkType: "internal" as const,
-      displayOrder: 5,
     },
   ];
 

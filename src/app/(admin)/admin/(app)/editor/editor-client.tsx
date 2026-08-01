@@ -1,9 +1,7 @@
 "use client";
 
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { ExternalLink } from "lucide-react";
 import { VisualEditorShell, VisualBlock, type BlockConfig } from "@/components/visual-editor";
 import { useVisualEditor } from "@/components/visual-editor/VisualEditorContext";
 
@@ -25,6 +23,9 @@ import {
   GraduationCap,
   HandHeart,
   ArrowRight,
+  Clock,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import {
   saveInstitutionalPageBanner,
@@ -115,6 +116,17 @@ const ENTITY_EDIT_FIELDS: Record<string, BlockField[]> = {
     { name: "buttonText", label: "Texto del botón", type: "text" },
     { name: "buttonHref", label: "Enlace del botón", type: "text" },
   ],
+  homepageServices: [
+    { name: "title", label: "Título", type: "text" },
+    { name: "day", label: "Día", type: "text" },
+    { name: "time", label: "Hora", type: "text" },
+    { name: "description", label: "Descripción", type: "textarea" },
+    { name: "link", label: "Enlace", type: "text" },
+  ],
+  homepageSections: [
+    { name: "title", label: "Título", type: "text" },
+    { name: "subtitle", label: "Subtítulo", type: "textarea" },
+  ],
 };
 
 function renderBanner(blockKey: string, getVal: (key: string) => string) {
@@ -191,7 +203,43 @@ const HP_DEFAULTS: Record<string, string> = {
   ctaButtonHref: "/contacto",
 };
 
-function renderHomepage(getVal: (key: string) => string) {
+function SectionToggle({ sectionKey, visible }: { sectionKey: string; visible: boolean }) {
+  const router = useRouter();
+  const [pending, setPending] = useState(false);
+
+  return (
+    <button
+      type="button"
+      disabled={pending}
+      onClick={async () => {
+        setPending(true);
+        try {
+          const { toggleHomepageSection } = await import("@/lib/cms/homepage-actions");
+          await toggleHomepageSection(sectionKey, !visible);
+          router.refresh();
+        } catch {
+          // ignore
+        } finally {
+          setPending(false);
+        }
+      }}
+      className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50"
+    >
+      {visible ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+      {visible ? "Ocultar en el sitio" : "Mostrar en el sitio"}
+    </button>
+  );
+}
+
+function renderHomepage(getVal: (key: string) => string, data: Record<string, unknown>) {
+  const services = (data.homepageServices as EntityItem[]) || [];
+  const sections = (data.homepageSections as EntityItem[]) || [];
+
+  const isVisible = (key: string) => {
+    const s = sections.find((sec) => sec.sectionKey === key);
+    return s ? Boolean(s.visible) : true;
+  };
+
   return (
     <>
       <VisualBlock blockKey="hero" label="Hero">
@@ -238,51 +286,121 @@ function renderHomepage(getVal: (key: string) => string) {
         </section>
       </VisualBlock>
 
-      <VisualBlock blockKey="welcome" label="Bienvenida">
-        <ContentBlock variant="gold-mist">
-          <ContentNarrow className="text-center">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-berea-border/40 bg-white shadow-sm">
-              <Heart className="h-10 w-10 text-berea-gold" />
-            </div>
-            <h2 className="mt-8 text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl lg:text-5xl">
-              {getVal("welcomeTitle")}
-            </h2>
-            <p className="mx-auto mt-8 max-w-3xl text-pretty text-lg leading-relaxed text-berea-muted">
-              {getVal("welcomeDescription")}
-            </p>
-            <div className="mt-12 flex flex-wrap justify-center gap-4">
-              {getVal("welcomeCtaText") && (
-                <span className="inline-flex items-center gap-2 rounded-xl bg-berea-navy px-7 py-3.5 text-sm font-semibold text-white">
-                  <Users className="h-4 w-4" />
-                  {getVal("welcomeCtaText")}
-                </span>
-              )}
-            </div>
-          </ContentNarrow>
-        </ContentBlock>
-      </VisualBlock>
-
-      <VisualBlock blockKey="cta" label="CTA Final">
-        <section className="relative overflow-hidden bg-section-navy-warm">
-          <ContentBlock className="relative">
+      {isVisible("welcome") && (
+        <VisualBlock blockKey="welcome" label="Bienvenida">
+          <ContentBlock variant="gold-mist">
             <ContentNarrow className="text-center">
-              <h2 className="text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-                {getVal("ctaTitle")}
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-berea-border/40 bg-white shadow-sm">
+                <Heart className="h-10 w-10 text-berea-gold" />
+              </div>
+              <h2 className="mt-8 text-balance text-3xl font-bold tracking-tight text-berea-navy sm:text-4xl lg:text-5xl">
+                {getVal("welcomeTitle")}
               </h2>
-              <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
-                {getVal("ctaDescription")}
+              <p className="mx-auto mt-8 max-w-3xl text-pretty text-lg leading-relaxed text-berea-muted">
+                {getVal("welcomeDescription")}
               </p>
               <div className="mt-12 flex flex-wrap justify-center gap-4">
-                {getVal("ctaButtonText") && (
-                  <span className="inline-flex items-center gap-2 rounded-xl bg-berea-gold px-7 py-3.5 text-sm font-semibold text-white">
-                    {getVal("ctaButtonText")}
+                {getVal("welcomeCtaText") && (
+                  <span className="inline-flex items-center gap-2 rounded-xl bg-berea-navy px-7 py-3.5 text-sm font-semibold text-white">
+                    <Users className="h-4 w-4" />
+                    {getVal("welcomeCtaText")}
                   </span>
                 )}
               </div>
             </ContentNarrow>
           </ContentBlock>
-        </section>
-      </VisualBlock>
+        </VisualBlock>
+      )}
+
+      {services.length > 0 && (
+        <ContentBlock variant="warm">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {services.map((svc) => {
+              const blockKey = `entity:homepageServices:${svc.id}`;
+              const g = (key: string) => getVal(`${blockKey}.${key}`);
+              return (
+                <VisualBlock
+                  key={blockKey}
+                  blockKey={blockKey}
+                  label={(svc.title as string) || "Servicio"}
+                >
+                  <MediaCard
+                    variant="icon"
+                    icon={Clock}
+                    title={g("title")}
+                    description={
+                      g("description") ||
+                      (g("day") && g("time") ? `${g("day")} ${g("time")}` : undefined)
+                    }
+                  >
+                    {g("day") && g("time") && (
+                      <p className="mt-8 text-xs text-berea-muted">
+                        {g("day")} &middot; {g("time")}
+                      </p>
+                    )}
+                  </MediaCard>
+                </VisualBlock>
+              );
+            })}
+          </div>
+        </ContentBlock>
+      )}
+
+      {sections.map((section) => {
+        const sectionKey = String(section.sectionKey);
+        if (sectionKey === "welcome" || sectionKey === "cta") return null;
+        const blockKey = `entity:homepageSections:${sectionKey}`;
+        const visible = Boolean(section.visible);
+        return (
+          <VisualBlock
+            key={blockKey}
+            blockKey={blockKey}
+            label={((section.title as string) || sectionKey) + " (Sección)"}
+          >
+            <section className={`border-b py-12 ${visible ? "" : "opacity-50"}`}>
+              <ContentNarrow className="text-center">
+                <h2 className="text-2xl font-bold tracking-tight text-berea-navy">
+                  {getVal(`${blockKey}.title`) || sectionKey}
+                </h2>
+                {getVal(`${blockKey}.subtitle`) && (
+                  <p className="mt-2 text-berea-muted">{getVal(`${blockKey}.subtitle`)}</p>
+                )}
+                <span
+                  className={`mt-4 inline-block rounded-full px-3 py-1 text-xs font-medium ${
+                    visible ? "bg-emerald-100 text-emerald-700" : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {visible ? "Visible en el sitio" : "Oculto en el sitio"}
+                </span>
+              </ContentNarrow>
+            </section>
+          </VisualBlock>
+        );
+      })}
+
+      {isVisible("cta") && (
+        <VisualBlock blockKey="cta" label="CTA Final">
+          <section className="relative overflow-hidden bg-section-navy-warm">
+            <ContentBlock className="relative">
+              <ContentNarrow className="text-center">
+                <h2 className="text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                  {getVal("ctaTitle")}
+                </h2>
+                <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
+                  {getVal("ctaDescription")}
+                </p>
+                <div className="mt-12 flex flex-wrap justify-center gap-4">
+                  {getVal("ctaButtonText") && (
+                    <span className="inline-flex items-center gap-2 rounded-xl bg-berea-gold px-7 py-3.5 text-sm font-semibold text-white">
+                      {getVal("ctaButtonText")}
+                    </span>
+                  )}
+                </div>
+              </ContentNarrow>
+            </ContentBlock>
+          </section>
+        </VisualBlock>
+      )}
     </>
   );
 }
@@ -427,6 +545,7 @@ const iconByEntity: Record<string, React.ReactNode> = {
   biblicalPrograms: <GraduationCap className="h-5 w-5" />,
   devotionals: <BookOpen className="h-5 w-5" />,
   events: <CalendarDays className="h-5 w-5" />,
+  homepageServices: <Clock className="h-5 w-5" />,
 };
 
 function renderEntityList(
@@ -528,21 +647,86 @@ function extractEntityInitialData(
   return result;
 }
 
-function buildPageConfig(entityType: string, slug: string): PageRenderConfig {
+function buildPageConfig(
+  entityType: string,
+  slug: string,
+  pageData?: Record<string, unknown>
+): PageRenderConfig {
   switch (entityType) {
-    case "homepage":
+    case "homepage": {
+      const services = ((pageData?.homepageServices as EntityItem[]) || []) as EntityItem[];
+      const sections = ((pageData?.homepageSections as EntityItem[]) || []) as EntityItem[];
+      const svcFields = ENTITY_EDIT_FIELDS["homepageServices"] || [];
+      const secFields = ENTITY_EDIT_FIELDS["homepageSections"] || [];
+      const svcBlocks = buildEntityBlocks(services, "homepageServices", svcFields);
+      const secBlocks = sections.map((section) => {
+        const blockKey = `entity:homepageSections:${section.sectionKey}`;
+        return {
+          key: blockKey,
+          label: ((section.title as string) || String(section.sectionKey)) + " (Sección)",
+          fields: secFields.map((f) => ({ ...f, name: `${blockKey}.${f.name}` })),
+        };
+      });
+      const sectionVisibleMap: Record<string, boolean> = {};
+      for (const s of sections) {
+        sectionVisibleMap[String(s.sectionKey)] = Boolean(s.visible);
+      }
+
       return {
-        blocks: HOMEPAGE_BLOCKS,
+        blocks: [...HOMEPAGE_BLOCKS, ...svcBlocks, ...secBlocks],
         extractInitial: (data) => {
           const settings = (data.settings || {}) as Record<string, string>;
-          return { ...HP_DEFAULTS, ...settings };
+          const svcData = extractEntityInitialData(services, "homepageServices", svcFields);
+          const secData: Record<string, string> = {};
+          for (const section of sections) {
+            const blockKey = `entity:homepageSections:${section.sectionKey}`;
+            for (const f of secFields) {
+              const val = section[f.name];
+              secData[`${blockKey}.${f.name}`] = val != null ? String(val) : "";
+            }
+          }
+          return { ...HP_DEFAULTS, ...settings, ...svcData, ...secData };
         },
         onSave: async (_blockKey, _data) => {
-          const { saveHomepageBlock } = await import("@/lib/cms/homepage-actions");
-          await saveHomepageBlock(_blockKey, _data);
+          if (_blockKey.startsWith("entity:homepageServices:")) {
+            const parts = _blockKey.split(":");
+            const eId = parts.slice(2).join(":");
+            const prefix = `${_blockKey}.`;
+            const cleanData: Record<string, string> = {};
+            for (const [key, value] of Object.entries(_data)) {
+              if (key.startsWith(prefix)) cleanData[key.slice(prefix.length)] = value;
+            }
+            await saveEntityBlock("homepageServices", eId, cleanData);
+          } else if (_blockKey.startsWith("entity:homepageSections:")) {
+            const sectionKey = _blockKey.split(":")[2];
+            const prefix = `${_blockKey}.`;
+            const cleanData: Record<string, string> = {};
+            for (const [key, value] of Object.entries(_data)) {
+              if (key.startsWith(prefix)) cleanData[key.slice(prefix.length)] = value;
+            }
+            const { saveHomepageSection } = await import("@/lib/cms/homepage-actions");
+            await saveHomepageSection(sectionKey, cleanData);
+          } else {
+            const { saveHomepageBlock } = await import("@/lib/cms/homepage-actions");
+            await saveHomepageBlock(_blockKey, _data);
+          }
         },
-        render: (getVal) => renderHomepage(getVal),
+        render: (getVal, data) => renderHomepage(getVal, data),
+        renderActions: (blockKey) => {
+          if (!blockKey.startsWith("entity:homepageSections:")) return null;
+          const sectionKey = blockKey.split(":")[2];
+          const visible = sectionVisibleMap[sectionKey] ?? true;
+          return (
+            <div className="mt-3 border-t pt-3">
+              <p className="mb-1 text-xs text-muted-foreground">
+                {visible ? "Sección visible en el sitio" : "Sección oculta en el sitio"}
+              </p>
+              <SectionToggle sectionKey={sectionKey} visible={visible} />
+            </div>
+          );
+        },
       };
+    }
 
     case "institutionalPage":
       return {
@@ -716,21 +900,6 @@ function buildEntityPageConfig(
       }
     },
     render: (getVal, data) => renderEntityList(getVal, items, entityTypeSlug),
-    renderActions: (blockKey, config) => {
-      if (!blockKey.startsWith("entity:")) return null;
-      const entityTypeSlugFromKey = blockKey.split(":")[1];
-      const entityId = blockKey.split(":").slice(2).join(":");
-      return (
-        <Link
-          href={`/admin/content/${getEntityCmsType(entityTypeSlugFromKey)}/${entityId}`}
-          target="_blank"
-          className="mt-2 flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
-        >
-          <ExternalLink className="h-3 w-3" />
-          Abrir editor avanzado
-        </Link>
-      );
-    },
   };
 }
 
@@ -776,7 +945,7 @@ export function EditorClient({
 }) {
   const router = useRouter();
 
-  const config = useMemo(() => {
+  const config = useMemo((): PageRenderConfig => {
     const items = (pageData?.items as EntityItem[]) || [];
     const entityTypeSlug = (pageData?.entityTypeSlug as string) || "";
 
@@ -823,25 +992,10 @@ export function EditorClient({
         },
         render: (getVal: (key: string) => string, _data: Record<string, unknown>) =>
           renderInstitutionalPage(getVal, sections),
-        renderActions: (blockKey: string) => {
-          if (!blockKey.startsWith("entity:")) return null;
-          const parts = blockKey.split(":");
-          const eId = parts.slice(2).join(":");
-          return (
-            <Link
-              href={`/admin/content/institutionalSections/${eId}`}
-              target="_blank"
-              className="mt-2 flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
-            >
-              <ExternalLink className="h-3 w-3" />
-              Abrir editor avanzado
-            </Link>
-          );
-        },
       };
     }
 
-    return buildPageConfig(selectedEntityType, selectedSlug);
+    return buildPageConfig(selectedEntityType, selectedSlug, pageData);
   }, [selectedEntityType, selectedSlug, pageData]);
 
   const initialData = useMemo(() => config.extractInitial(pageData), [config, pageData]);

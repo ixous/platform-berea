@@ -96,7 +96,6 @@ export async function saveHomepageBlock(blockKey: string, data: Record<string, s
     });
 
     revalidatePath("/");
-    revalidatePath("/admin/homepage");
   } catch (err) {
     console.error("[Homepage] Save block failed:", err);
     throw new Error("Error al guardar el bloque.");
@@ -133,7 +132,6 @@ export async function saveHomepageSettings(formData: FormData) {
     });
 
     revalidatePath("/");
-    revalidatePath("/admin/homepage");
   } catch (err) {
     console.error("[Homepage] Save settings failed:", err);
   }
@@ -169,8 +167,77 @@ export async function saveHomepageSections(formData: FormData) {
     });
 
     revalidatePath("/");
-    revalidatePath("/admin/homepage");
   } catch (err) {
     console.error("[Homepage] Save sections failed:", err);
+  }
+}
+
+export async function saveHomepageSection(sectionKey: string, data: Record<string, string>) {
+  const session = await requireHomepageAuth();
+  if (!rateLimit(`homepage:section:${session.user.id}`, { windowMs: 60_000, max: 30 })) return;
+
+  const allowedFields = ["title", "subtitle"];
+  const updateData: Record<string, unknown> = {};
+  for (const field of allowedFields) {
+    if (field in data) updateData[field] = data[field];
+  }
+
+  try {
+    const [existing] = await db
+      .select({ id: homepageSections.id })
+      .from(homepageSections)
+      .where(eq(homepageSections.sectionKey, sectionKey))
+      .limit(1);
+
+    if (existing) {
+      await db
+        .update(homepageSections)
+        .set({ ...updateData, updatedAt: new Date() })
+        .where(eq(homepageSections.id, existing.id));
+    }
+
+    await logAudit({
+      userId: session.user.id,
+      action: "HOMEPAGE_SECTIONS",
+      resource: "homepage_sections",
+      details: `Sección "${sectionKey}" actualizada desde editor visual`,
+    });
+
+    revalidatePath("/");
+  } catch (err) {
+    console.error("[Homepage] Save section failed:", err);
+    throw new Error("Error al guardar la sección.");
+  }
+}
+
+export async function toggleHomepageSection(sectionKey: string, visible: boolean) {
+  const session = await requireHomepageAuth();
+  if (!rateLimit(`homepage:section:${session.user.id}`, { windowMs: 60_000, max: 30 })) return;
+
+  try {
+    const [existing] = await db
+      .select({ id: homepageSections.id })
+      .from(homepageSections)
+      .where(eq(homepageSections.sectionKey, sectionKey))
+      .limit(1);
+
+    if (existing) {
+      await db
+        .update(homepageSections)
+        .set({ visible, updatedAt: new Date() })
+        .where(eq(homepageSections.id, existing.id));
+    }
+
+    await logAudit({
+      userId: session.user.id,
+      action: "HOMEPAGE_SECTIONS",
+      resource: "homepage_sections",
+      details: `Sección "${sectionKey}" ${visible ? "mostrada" : "ocultada"} desde editor visual`,
+    });
+
+    revalidatePath("/");
+  } catch (err) {
+    console.error("[Homepage] Toggle section failed:", err);
+    throw new Error("Error al actualizar la sección.");
   }
 }

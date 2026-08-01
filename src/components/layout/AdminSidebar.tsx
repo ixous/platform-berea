@@ -3,15 +3,7 @@ import { auth } from "@/lib/auth";
 import { hasPermission } from "@/lib/auth/rbac";
 import { AdminSidebarShell } from "./AdminSidebarShell";
 import { SidebarNavLink } from "./SidebarNavLink";
-import {
-  LayoutDashboard,
-  ImageIcon,
-  MessageSquare,
-  ClipboardList,
-  Home,
-  Eye,
-  type LucideIcon,
-} from "lucide-react";
+import { LayoutDashboard, Eye, ImageIcon, Settings, type LucideIcon } from "lucide-react";
 
 interface SidebarItem {
   label: string;
@@ -20,81 +12,42 @@ interface SidebarItem {
   permission?: string;
 }
 
-interface SidebarCategory {
-  name: string;
-  items: SidebarItem[];
-}
-
-const categories: SidebarCategory[] = [
+const items: SidebarItem[] = [
+  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   {
-    name: "INICIO",
-    items: [
-      { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-      {
-        label: "Editor Visual",
-        href: "/admin/editor",
-        icon: Eye,
-        permission: "homepage.manage",
-      },
-      {
-        label: "Personalizar Inicio",
-        href: "/admin/homepage",
-        icon: Home,
-        permission: "homepage.manage",
-      },
-    ],
+    label: "Editor Visual",
+    href: "/admin/editor",
+    icon: Eye,
+    permission: "homepage.manage",
   },
   {
-    name: "MULTIMEDIA",
-    items: [
-      {
-        label: "Biblioteca de Medios",
-        href: "/admin/media",
-        icon: ImageIcon,
-        permission: "media.manage",
-      },
-    ],
+    label: "Biblioteca de Medios",
+    href: "/admin/media",
+    icon: ImageIcon,
+    permission: "media.manage",
   },
   {
-    name: "COMUNIDAD",
-    items: [
-      {
-        label: "Bandeja de Entrada",
-        href: "/admin/contact",
-        icon: MessageSquare,
-        permission: "contact-submissions.manage",
-      },
-      {
-        label: "Registros a Eventos",
-        href: "/admin/registrations",
-        icon: ClipboardList,
-        permission: "event-registrations.manage",
-      },
-    ],
+    label: "Configuración",
+    href: "/admin/settings",
+    icon: Settings,
+    permission: "settings.manage",
   },
 ];
 
 export async function AdminSidebar() {
   const session = await auth();
 
-  const visibleCategories: { name: string; items: SidebarItem[] }[] = [];
-
-  for (const cat of categories) {
-    const visibleItems: SidebarItem[] = [];
-    for (const item of cat.items) {
-      if (!item.permission) {
-        visibleItems.push(item);
-      } else if (session?.user) {
-        try {
-          const allowed = await hasPermission(item.permission);
-          if (allowed) visibleItems.push(item);
-        } catch {
-          // skip
-        }
+  const visibleItems: SidebarItem[] = [];
+  for (const item of items) {
+    if (!item.permission) {
+      visibleItems.push(item);
+    } else if (session?.user) {
+      try {
+        const allowed = await hasPermission(item.permission);
+        if (allowed) visibleItems.push(item);
+      } catch {
+        // skip
       }
-    }
-    if (visibleItems.length > 0) {
-      visibleCategories.push({ name: cat.name, items: visibleItems });
     }
   }
 
@@ -105,27 +58,18 @@ export async function AdminSidebar() {
           CCB Admin
         </Link>
       </div>
-      <nav className="flex-1 space-y-6 overflow-y-auto p-3">
-        {visibleCategories.map((cat) => (
-          <div key={cat.name}>
-            <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60">
-              {cat.name}
-            </p>
-            <div className="space-y-0.5">
-              {cat.items.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <SidebarNavLink key={item.href} href={item.href}>
-                    <span className="flex items-center gap-3">
-                      <Icon className="h-4 w-4 shrink-0" />
-                      <span>{item.label}</span>
-                    </span>
-                  </SidebarNavLink>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+      <nav className="flex-1 space-y-1 overflow-y-auto p-3">
+        {visibleItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <SidebarNavLink key={item.href} href={item.href}>
+              <span className="flex items-center gap-3">
+                <Icon className="h-4 w-4 shrink-0" />
+                <span>{item.label}</span>
+              </span>
+            </SidebarNavLink>
+          );
+        })}
       </nav>
     </AdminSidebarShell>
   );

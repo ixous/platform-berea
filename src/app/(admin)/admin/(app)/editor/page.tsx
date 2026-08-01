@@ -15,6 +15,8 @@ import {
   devotionals,
   events,
   homepageSettings,
+  homepageServices,
+  homepageSections,
   doctrines,
 } from "@/lib/db/schema";
 import { eq, and, isNull, asc, desc, gte } from "drizzle-orm";
@@ -73,7 +75,21 @@ async function fetchPageData(slug: string, entityType: string) {
   switch (entityType) {
     case "homepage": {
       const [settings] = await db.select().from(homepageSettings).limit(1);
-      return { banner: null, settings: settings ?? {} };
+      const services = await db
+        .select()
+        .from(homepageServices)
+        .where(and(eq(homepageServices.status, "published"), isNull(homepageServices.deletedAt)))
+        .orderBy(asc(homepageServices.displayOrder));
+      const sections = await db
+        .select()
+        .from(homepageSections)
+        .orderBy(asc(homepageSections.displayOrder));
+      return {
+        banner: null,
+        settings: settings ?? {},
+        homepageServices: services,
+        homepageSections: sections,
+      };
     }
     case "institutionalPage": {
       const [inst] = await db
