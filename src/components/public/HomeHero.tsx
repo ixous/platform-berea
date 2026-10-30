@@ -36,11 +36,11 @@ export function HomeHero({
               </p>
             </div>
           )}
-          <h1 className="text-balance text-[clamp(2.2rem,4.8vw,4.5rem)] font-extrabold leading-[1.03] tracking-tight">
+          <h1 className="text-balance text-[clamp(2.6rem,6.5vw,5.8rem)] font-extrabold leading-[1.02] tracking-[-0.02em]">
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-white/85 sm:text-lg">
+            <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-white/85 sm:text-xl">
               {subtitle}
             </p>
           )}

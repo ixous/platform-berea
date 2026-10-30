@@ -17,7 +17,7 @@ export function ConnectWithBerea() {
             <p className="site-gold-pulse text-xs font-semibold uppercase tracking-[0.22em] text-site-gold">
               Siguientes pasos
             </p>
-            <h2 className="mt-5 font-display text-balance text-[clamp(1.9rem,4vw,3.1rem)] font-medium leading-tight tracking-[-0.02em] text-site-ink">
+            <h2 className="mt-5 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em] text-site-ink">
               Conecta con Berea
             </h2>
             <p className="mt-6 text-pretty text-lg leading-relaxed text-site-muted">
@@ -50,7 +50,7 @@ export function ConnectWithBerea() {
                   className="site-card-glow group flex flex-1 flex-col justify-between gap-6 rounded-2xl border border-site-line bg-site-paper p-7 shadow-sm transition-colors hover:border-site-gold/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold sm:p-9"
                 >
                   <div>
-                    <h3 className="font-display text-2xl font-medium tracking-[-0.01em] text-site-ink transition-colors group-hover:text-site-gold">
+                    <h3 className="font-display text-2xl font-bold tracking-[-0.01em] text-site-ink transition-colors group-hover:text-site-gold">
                       {item.title}
                     </h3>
                     <p className="mt-3 max-w-lg text-pretty leading-relaxed text-site-muted">

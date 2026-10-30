@@ -68,9 +68,6 @@ export default async function HomePage() {
           "Un lugar para conocer a Cristo, crecer en Su Palabra y servir con propósito."
         }
         primaryCta={HERO_PRIMARY_CTA}
-        // TODO(cms): heroCtaHref del CMS apunta a rutas anteriores; el destino
-        // se mapea aquí a /conocenos hasta actualizar el contenido administrado.
-        secondaryCta={{ label: settings?.heroCtaText || "Conócenos", href: "/conocenos" }}
         clips={HERO_CLIPS}
         poster={settings?.heroBackgroundImage || HERO_POSTER_FALLBACK}
       />

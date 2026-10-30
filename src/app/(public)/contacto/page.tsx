@@ -80,7 +80,7 @@ export default async function ContactoPage() {
         <div className="relative mx-auto w-full max-w-[76rem] px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
             <Reveal>
-              <h2 className="font-display text-3xl font-medium tracking-[-0.01em] text-site-ink">
+              <h2 className="font-display text-3xl font-bold tracking-[-0.01em] text-site-ink">
                 {info?.churchName || "Información de contacto"}
               </h2>
 
@@ -197,7 +197,7 @@ export default async function ContactoPage() {
                 className="site-card-glow h-fit rounded-3xl border border-site-line bg-site-paper p-8 shadow-sm sm:p-10"
                 id="contact-form"
               >
-                <h2 className="font-display text-2xl font-medium text-site-ink">
+                <h2 className="font-display text-2xl font-bold text-site-ink">
                   {info?.ctaTitle || "Envíanos un mensaje"}
                 </h2>
                 {info?.ctaDescription && (

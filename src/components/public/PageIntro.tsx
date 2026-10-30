@@ -15,11 +15,11 @@ export function PageIntro({ title, subtitle }: PageIntroProps) {
         <Reveal>
           <div className="max-w-3xl">
             <span className="site-gold-pulse block h-px w-10 bg-site-gold" aria-hidden="true" />
-            <h1 className="mt-7 font-display text-balance text-[clamp(2.3rem,5.5vw,4.2rem)] font-medium leading-[1.06] tracking-[-0.02em]">
+            <h1 className="mt-7 font-display text-balance text-[clamp(2.6rem,6.5vw,5.6rem)] font-bold leading-[1.04] tracking-[-0.03em]">
               {title}
             </h1>
             {subtitle && (
-              <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-white/75">
+              <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/75 sm:text-xl">
                 {subtitle}
               </p>
             )}

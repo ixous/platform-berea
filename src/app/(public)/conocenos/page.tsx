@@ -114,7 +114,14 @@ export default async function ConocenosPage() {
                           className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
                         />
                       ) : (
-                        <div className="h-full w-full bg-site-cream" />
+                        <div className="relative h-full w-full overflow-hidden bg-site-ink">
+                          <div className="site-aurora-ink" aria-hidden="true" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="font-display text-2xl font-bold tracking-[0.3em] text-site-gold/40">
+                              CCB
+                            </span>
+                          </div>
+                        </div>
                       )}
                       <div className="site-sheen" aria-hidden="true" />
                     </div>
@@ -124,7 +131,7 @@ export default async function ConocenosPage() {
                     <p className="site-gold-pulse font-display text-sm font-medium tracking-[0.2em] text-site-gold">
                       {String(i + 1).padStart(2, "0")}
                     </p>
-                    <h2 className="mt-4 font-display text-balance text-[clamp(1.9rem,4vw,3.2rem)] font-medium leading-tight tracking-[-0.01em] text-site-ink">
+                    <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em] text-site-ink">
                       {section.title}
                     </h2>
                     <span className="mt-5 block h-px w-12 bg-site-gold" aria-hidden="true" />
@@ -156,7 +163,7 @@ export default async function ConocenosPage() {
                 <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
                   Lo que creemos
                 </p>
-                <h2 className="mt-4 font-display text-balance text-[clamp(1.9rem,4vw,3.2rem)] font-medium leading-tight tracking-[-0.01em]">
+                <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em]">
                   Nuestras creencias
                 </h2>
                 <p className="mt-5 max-w-xl text-pretty leading-relaxed text-white/65">
@@ -207,7 +214,7 @@ export default async function ConocenosPage() {
                 <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
                   Nuestra historia
                 </p>
-                <h2 className="mt-4 font-display text-balance text-[clamp(1.9rem,4vw,3.2rem)] font-medium leading-tight tracking-[-0.01em] text-site-ink">
+                <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em] text-site-ink">
                   Caminando con Dios
                 </h2>
               </div>
@@ -245,7 +252,7 @@ export default async function ConocenosPage() {
                 <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
                   Comunidad
                 </p>
-                <h2 className="mt-4 font-display text-balance text-[clamp(1.9rem,4vw,3.2rem)] font-medium leading-tight tracking-[-0.01em] text-site-ink">
+                <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em] text-site-ink">
                   Hay un lugar para ti
                 </h2>
                 <p className="mt-5 max-w-xl text-pretty leading-relaxed text-site-muted">
@@ -275,12 +282,19 @@ export default async function ConocenosPage() {
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             />
                           ) : (
-                            <div className="h-full w-full bg-site-cream" />
+                            <div className="relative h-full w-full overflow-hidden bg-site-ink">
+                              <div className="site-aurora-ink" aria-hidden="true" />
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <span className="font-display text-2xl font-bold tracking-[0.3em] text-site-gold/40">
+                                  CCB
+                                </span>
+                              </div>
+                            </div>
                           )}
                           <div className="site-sheen" aria-hidden="true" />
                         </div>
                         <div className="p-7">
-                          <h4 className="font-display text-2xl font-medium text-site-ink">
+                          <h4 className="font-display text-2xl font-bold text-site-ink">
                             {m.name}
                           </h4>
                           {m.description && (
@@ -323,12 +337,19 @@ export default async function ConocenosPage() {
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             />
                           ) : (
-                            <div className="h-full w-full bg-site-cream" />
+                            <div className="relative h-full w-full overflow-hidden bg-site-ink">
+                              <div className="site-aurora-ink" aria-hidden="true" />
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <span className="font-display text-2xl font-bold tracking-[0.3em] text-site-gold/40">
+                                  CCB
+                                </span>
+                              </div>
+                            </div>
                           )}
                           <div className="site-sheen" aria-hidden="true" />
                         </div>
                         <div className="p-7">
-                          <h4 className="font-display text-2xl font-medium text-site-ink">
+                          <h4 className="font-display text-2xl font-bold text-site-ink">
                             {m.name}
                           </h4>
                           {m.description && (
@@ -371,12 +392,19 @@ export default async function ConocenosPage() {
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             />
                           ) : (
-                            <div className="h-full w-full bg-site-cream" />
+                            <div className="relative h-full w-full overflow-hidden bg-site-ink">
+                              <div className="site-aurora-ink" aria-hidden="true" />
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <span className="font-display text-2xl font-bold tracking-[0.3em] text-site-gold/40">
+                                  CCB
+                                </span>
+                              </div>
+                            </div>
                           )}
                           <div className="site-sheen" aria-hidden="true" />
                         </div>
                         <div className="p-7">
-                          <h4 className="font-display text-2xl font-medium text-site-ink">
+                          <h4 className="font-display text-2xl font-bold text-site-ink">
                             {c.name}
                           </h4>
                           {c.description && (
@@ -436,7 +464,7 @@ export default async function ConocenosPage() {
                         <BereaImage src={leader.imageUrl} alt={leader.name} fill sizes="112px" />
                       </div>
                     )}
-                    <h3 className="mt-5 font-display text-2xl font-medium text-site-ink">
+                    <h3 className="mt-5 font-display text-2xl font-bold text-site-ink">
                       {leader.name}
                     </h3>
                     <p className="mt-1 text-sm font-bold uppercase tracking-wider text-site-gold">
@@ -454,7 +482,7 @@ export default async function ConocenosPage() {
               <article className="relative mt-10 max-w-3xl overflow-hidden rounded-3xl bg-site-ink p-10 text-white">
                 <div className="site-aurora-ink" aria-hidden="true" />
                 <div className="relative">
-                  <h3 className="font-display text-3xl font-medium">{PASTORS.name}</h3>
+                  <h3 className="font-display text-3xl font-bold">{PASTORS.name}</h3>
                   <p className="mt-4 leading-relaxed text-white/70">{PASTORS.verse}</p>
                 </div>
               </article>

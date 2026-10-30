@@ -35,7 +35,7 @@ export function EditorialIntro({ title, description, cta }: EditorialIntroProps)
           <p className="site-gold-pulse text-xs font-semibold uppercase tracking-[0.22em] text-site-gold">
             Comunidad
           </p>
-          <h2 className="mt-5 font-display text-balance text-[clamp(1.9rem,4vw,3.1rem)] font-medium leading-tight tracking-[-0.02em] text-site-ink">
+          <h2 className="mt-5 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em] text-site-ink">
             {title}
           </h2>
           <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-site-muted">
