@@ -15,7 +15,6 @@ export interface SiteNavItem {
 // existente apunta a las rutas actuales y se revisará después de aprobar
 // el nuevo mapa del sitio).
 export const SITE_NAV: SiteNavItem[] = [
-  { label: "Visítanos", href: "/visita" },
   { label: "Conócenos", href: "/conocenos" },
   { label: "Eventos", href: "/eventos" },
   { label: "Contacto", href: "/contacto" },

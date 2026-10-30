@@ -6,7 +6,6 @@ import { VisitStrip } from "@/components/public/VisitStrip";
 import { EditorialIntro } from "@/components/public/EditorialIntro";
 import { ConnectWithBerea } from "@/components/public/ConnectWithBerea";
 import { UpcomingEventsSection } from "@/components/public/UpcomingEventsSection";
-import { FinalInvitation } from "@/components/public/FinalInvitation";
 import { HERO_PRIMARY_CTA, HERO_CLIPS, HERO_POSTER_FALLBACK } from "@/lib/public/site-navigation";
 import type { Metadata } from "next";
 
@@ -98,18 +97,6 @@ export default async function HomePage() {
 
       {isSectionVisible(sections, "events") && upcomingEvents.length > 0 && (
         <UpcomingEventsSection events={upcomingEvents} />
-      )}
-
-      {isSectionVisible(sections, "cta") && (
-        <FinalInvitation
-          title={settings?.ctaTitle || "Visítanos"}
-          description={
-            settings?.ctaDescription ||
-            "Nos encantaría recibirte en nuestra iglesia. Ven tal como eres y descubre una comunidad que te amará y te apoyará en tu caminar con Cristo."
-          }
-          // TODO(cms): el destino se mapea a /visita hasta actualizar ctaButtonHref.
-          cta={{ label: settings?.ctaButtonText || "Planea tu visita", href: "/visita" }}
-        />
       )}
     </>
   );
