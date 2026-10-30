@@ -596,3 +596,40 @@
   opacity: 1;
   transform: none;
 }
+
+/* ============================================================================
+   PROTOTIPO "BEREA EDITORIAL" — sistema visual público nuevo
+   Se añade al final SIN modificar lo anterior: el panel admin (shadcn/oklch)
+   no usa estas variables ni estas clases, por lo que no se ve afectado.
+   ========================================================================== */
+
+@theme inline {
+  --color-site-ink: var(--site-ink);
+  --color-site-ink-soft: var(--site-ink-soft);
+  --color-site-gold: var(--site-gold);
+  --color-site-gold-soft: var(--site-gold-soft);
+  --color-site-cream: var(--site-cream);
+  --color-site-paper: var(--site-paper);
+  --color-site-line: var(--site-line);
+  --color-site-text: var(--site-text);
+  --color-site-muted: var(--site-muted);
+  --font-display: var(--font-bodoni-moda, var(--font-fraunces));
+}
+
+/* En las rutas públicas el cuerpo usa Manrope (equivalente libre de la sans
+   de Passion City); Geist sigue activo en el layout raíz y en el admin. */
+.site-root {
+  font-family: var(--font-manrope), var(--font-sans);
+}
+
+:root {
+  --site-ink: #0a1428;
+  --site-ink-soft: #13223f;
+  --site-gold: #c9a227;
+  --site-gold-soft: #e0bf55;
+  --site-cream: #f6f3ea;
+  --site-paper: #fdfcf8;
+  --site-line: #e4dfd2;
+  --site-text: #1b2333;
+  --site-muted: #5b6572;
+}
