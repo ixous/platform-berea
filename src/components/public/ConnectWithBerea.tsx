@@ -29,7 +29,7 @@ export function ConnectWithBerea() {
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
           <Reveal>
-            <div className="group relative aspect-[4/3] overflow-hidden rounded-3xl sm:aspect-[4/5] lg:aspect-auto lg:min-h-full">
+            <div className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-site-ink sm:aspect-[4/5] lg:aspect-auto lg:min-h-full">
               <BereaImage
                 src={CONNECT_IMAGE.src}
                 alt={CONNECT_IMAGE.alt}

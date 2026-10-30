@@ -18,7 +18,7 @@ export function EditorialIntro({ title, description, cta }: EditorialIntroProps)
 
       <div className="relative mx-auto grid w-full max-w-[76rem] items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-8 lg:py-28">
         <Reveal className="order-2 lg:order-1">
-          <div className="group relative aspect-[4/3] overflow-hidden rounded-3xl lg:aspect-[4/5]">
+          <div className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-site-ink lg:aspect-[4/5]">
             <BereaImage
               src={EDITORIAL_IMAGE.src}
               alt={EDITORIAL_IMAGE.alt}

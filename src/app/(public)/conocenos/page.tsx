@@ -104,7 +104,7 @@ export default async function ConocenosPage() {
                   className="grid items-center gap-10 border-b border-site-line py-16 last:border-b-0 lg:grid-cols-2 lg:gap-20 lg:py-24"
                 >
                   <Reveal className={reversed ? "lg:order-2" : ""}>
-                    <div className="group relative aspect-[4/3] overflow-hidden rounded-3xl">
+                    <div className="group relative aspect-[4/3] overflow-hidden bg-site-ink rounded-3xl">
                       {imageSrc ? (
                         <BereaImage
                           src={imageSrc}
@@ -272,7 +272,7 @@ export default async function ConocenosPage() {
                   {activeMinistries.map((m, i) => (
                     <Reveal key={m.id} delay={(i % 3) * 120}>
                       <article className="site-card-glow group overflow-hidden rounded-3xl border border-site-line bg-white">
-                        <div className="relative aspect-[16/9] overflow-hidden">
+                        <div className="relative aspect-[16/9] overflow-hidden bg-site-ink">
                           {MINISTRY_IMAGES[m.slug] ? (
                             <BereaImage
                               src={MINISTRY_IMAGES[m.slug]}
@@ -327,7 +327,7 @@ export default async function ConocenosPage() {
                   {serviceAreas.map((m, i) => (
                     <Reveal key={m.id} delay={(i % 3) * 120}>
                       <article className="site-card-glow group overflow-hidden rounded-3xl border border-site-line bg-white">
-                        <div className="relative aspect-[16/9] overflow-hidden">
+                        <div className="relative aspect-[16/9] overflow-hidden bg-site-ink">
                           {SERVICE_MINISTRY_IMAGES[m.slug] ? (
                             <BereaImage
                               src={SERVICE_MINISTRY_IMAGES[m.slug]}
@@ -382,7 +382,7 @@ export default async function ConocenosPage() {
                   {cellGroups.map((c, i) => (
                     <Reveal key={c.id} delay={(i % 3) * 120}>
                       <article className="site-card-glow group overflow-hidden rounded-3xl border border-site-line bg-white">
-                        <div className="relative aspect-[16/9] overflow-hidden">
+                        <div className="relative aspect-[16/9] overflow-hidden bg-site-ink">
                           {CELL_IMAGES[c.slug] ? (
                             <BereaImage
                               src={CELL_IMAGES[c.slug]}
@@ -460,7 +460,7 @@ export default async function ConocenosPage() {
                     className="site-card-glow rounded-3xl border border-site-line bg-site-paper p-8 text-center"
                   >
                     {leader.imageUrl && (
-                      <div className="relative mx-auto aspect-square w-28 overflow-hidden rounded-full">
+                      <div className="relative mx-auto aspect-square w-28 overflow-hidden bg-site-ink rounded-full">
                         <BereaImage src={leader.imageUrl} alt={leader.name} fill sizes="112px" />
                       </div>
                     )}
