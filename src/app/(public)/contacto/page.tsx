@@ -2,10 +2,10 @@ import { db } from "@/lib/db";
 import { contact, institutionalPages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { PageIntro } from "@/components/public/PageIntro";
+import { VisitStrip } from "@/components/public/VisitStrip";
 import { Reveal } from "@/components/public/Reveal";
 import { ContactForm } from "@/components/public/ContactForm";
-import { MapPin, Clock, Phone, Mail, Globe, Camera, Music, Video } from "lucide-react";
-import Link from "next/link";
+import { MapPin, Phone, Mail, Globe, Camera, Music, Video } from "lucide-react";
 import type { Metadata } from "next";
 
 const socialIcons: Record<string, typeof Globe> = {
@@ -72,6 +72,13 @@ export default async function ContactoPage() {
         subtitle={page.bannerSubtitle || "Nos encantaría saber de ti."}
       />
 
+      <VisitStrip
+        schedules={schedules}
+        address={info?.address}
+        mapUrl={info?.mapUrl}
+        scheduleNote={info?.scheduleNote}
+      />
+
       <section className="relative overflow-hidden bg-site-cream">
         <div className="site-aurora" aria-hidden="true" />
         <div className="site-orb left-[-130px] top-[-100px]" aria-hidden="true" />
@@ -80,7 +87,7 @@ export default async function ContactoPage() {
         <div className="relative mx-auto w-full max-w-[76rem] px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
             <Reveal>
-              <h2 className="font-display text-3xl font-bold tracking-[-0.01em] text-site-ink">
+              <h2 className="font-display text-3xl font-extrabold tracking-[-0.02em] text-site-ink">
                 {info?.churchName || "Información de contacto"}
               </h2>
 
@@ -167,29 +174,6 @@ export default async function ContactoPage() {
                   </div>
                 </div>
               )}
-
-              {schedules.length > 0 && (
-                <div className="mt-10 rounded-2xl border border-site-line bg-white p-7">
-                  <div className="flex items-center gap-3">
-                    <Clock className="h-5 w-5 text-site-gold" />
-                    <h3 className="text-lg font-semibold text-site-ink">Horarios</h3>
-                  </div>
-                  <div className="mt-5 space-y-3">
-                    {schedules.map((h, i) => (
-                      <div key={i} className="flex items-center justify-between gap-4 text-sm">
-                        <span className="font-medium text-site-ink">{h.day}</span>
-                        <span className="text-site-muted">{h.time}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <Link
-                    href="/visita"
-                    className="mt-5 inline-block text-sm font-semibold text-site-ink underline decoration-site-gold/60 decoration-2 underline-offset-4 transition-colors hover:text-site-gold"
-                  >
-                    Planear mi visita
-                  </Link>
-                </div>
-              )}
             </Reveal>
 
             <Reveal delay={150}>
@@ -197,7 +181,7 @@ export default async function ContactoPage() {
                 className="site-card-glow h-fit rounded-3xl border border-site-line bg-site-paper p-8 shadow-sm sm:p-10"
                 id="contact-form"
               >
-                <h2 className="font-display text-2xl font-bold text-site-ink">
+                <h2 className="font-display text-2xl font-extrabold text-site-ink">
                   {info?.ctaTitle || "Envíanos un mensaje"}
                 </h2>
                 {info?.ctaDescription && (

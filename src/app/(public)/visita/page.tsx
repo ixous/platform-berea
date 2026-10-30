@@ -64,7 +64,9 @@ export default async function VisitaPage() {
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
             <Reveal delay={120}>
               <div className="site-card-glow h-full rounded-2xl border border-site-line bg-site-paper p-8 shadow-sm">
-                <h2 className="font-display text-2xl font-bold text-site-ink">Dónde estamos</h2>
+                <h2 className="font-display text-2xl font-extrabold text-site-ink">
+                  Dónde estamos
+                </h2>
                 <div className="mt-6 space-y-5 text-site-muted">
                   <p className="flex items-start gap-3">
                     <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-site-gold" aria-hidden="true" />
@@ -111,7 +113,7 @@ export default async function VisitaPage() {
                 <div className="site-aurora-ink" aria-hidden="true" />
                 <div className="site-orb right-[-110px] top-[-90px]" aria-hidden="true" />
                 <div className="relative">
-                  <h2 className="font-display text-2xl font-bold">Antes de venir</h2>
+                  <h2 className="font-display text-2xl font-extrabold">Antes de venir</h2>
                   <ul className="mt-6 space-y-4">
                     {VISIT_INTRO.whatToExpect.map((item) => (
                       <li key={item} className="flex items-start gap-3 text-white/80">

@@ -1,48 +1,42 @@
 import { db } from "@/lib/db";
-import {
-  institutionalSections,
-  historyMilestones,
-  doctrines,
-  ministries,
-  serviceMinistries,
-  cells,
-  leaders,
-} from "@/lib/db/schema";
-import { eq, and, isNull, asc } from "drizzle-orm";
+import { institutionalSections, historyMilestones, doctrines } from "@/lib/db/schema";
+import { and, eq, isNull, asc } from "drizzle-orm";
 import { PageIntro } from "@/components/public/PageIntro";
 import { BereaImage } from "@/components/public/BereaImage";
 import { Reveal } from "@/components/public/Reveal";
-import { BookOpen, Clock, MapPin, User } from "lucide-react";
-import { KNOW_INTRO, PASTORS } from "@/lib/public/site-navigation";
-import {
-  SECTION_IMAGES,
-  MINISTRY_IMAGES,
-  SERVICE_MINISTRY_IMAGES,
-  CELL_IMAGES,
-} from "@/lib/public/symbolic-images";
+import { BookOpen } from "lucide-react";
+import { KNOW_INTRO } from "@/lib/public/site-navigation";
+import { SECTION_IMAGES } from "@/lib/public/symbolic-images";
 import type { Metadata } from "next";
+
+const PASTORAL_TEAM = [
+  {
+    name: "Julio Cesar Villanueva",
+    role: "Pastor",
+    initials: "JV",
+    description: "Liderando la iglesia con dedicación y amor desde su fundación.",
+  },
+  {
+    name: "Claudia Davila",
+    role: "Esposa del Pastor",
+    initials: "CD",
+    description: "Apoyando el crecimiento espiritual y la vida en comunidad de la congregación.",
+  },
+];
 
 export const metadata: Metadata = {
   title: "Conócenos",
   description:
-    "Conoce la identidad, creencias y comunidad de Centro Cristiano Berea en Mexicali, Baja California.",
+    "Conoce la identidad, creencias y pastoral de Centro Cristiano Berea en Mexicali, Baja California.",
   openGraph: {
     title: "Conócenos | Centro Cristiano Berea",
     description:
-      "Conoce la identidad, creencias y comunidad de Centro Cristiano Berea en Mexicali, Baja California.",
+      "Conoce la identidad, creencias y pastoral de Centro Cristiano Berea en Mexicali, Baja California.",
   },
 };
 
 export default async function ConocenosPage() {
-  const [
-    sections,
-    milestones,
-    doctrinalPoints,
-    activeMinistries,
-    serviceAreas,
-    cellGroups,
-    leadersList,
-  ] = await Promise.all([
+  const [sections, milestones, doctrinalPoints] = await Promise.all([
     db
       .select()
       .from(institutionalSections)
@@ -60,30 +54,7 @@ export default async function ConocenosPage() {
       .from(doctrines)
       .where(eq(doctrines.status, "published"))
       .orderBy(asc(doctrines.displayOrder)),
-    db
-      .select()
-      .from(ministries)
-      .where(and(eq(ministries.status, "active"), isNull(ministries.deletedAt)))
-      .orderBy(asc(ministries.displayOrder)),
-    db
-      .select()
-      .from(serviceMinistries)
-      .where(and(eq(serviceMinistries.status, "published"), isNull(serviceMinistries.deletedAt)))
-      .orderBy(asc(serviceMinistries.displayOrder)),
-    db
-      .select()
-      .from(cells)
-      .where(and(eq(cells.status, "active"), isNull(cells.deletedAt)))
-      .orderBy(asc(cells.name)),
-    db
-      .select()
-      .from(leaders)
-      .where(and(eq(leaders.status, "published"), isNull(leaders.deletedAt)))
-      .orderBy(asc(leaders.displayOrder)),
   ]);
-
-  const communityEmpty =
-    activeMinistries.length === 0 && serviceAreas.length === 0 && cellGroups.length === 0;
 
   return (
     <>
@@ -131,7 +102,7 @@ export default async function ConocenosPage() {
                     <p className="site-gold-pulse font-display text-sm font-medium tracking-[0.2em] text-site-gold">
                       {String(i + 1).padStart(2, "0")}
                     </p>
-                    <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em] text-site-ink">
+                    <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-site-ink">
                       {section.title}
                     </h2>
                     <span className="mt-5 block h-px w-12 bg-site-gold" aria-hidden="true" />
@@ -163,7 +134,7 @@ export default async function ConocenosPage() {
                 <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
                   Lo que creemos
                 </p>
-                <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em]">
+                <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-extrabold leading-[1.05] tracking-[-0.03em]">
                   Nuestras creencias
                 </h2>
                 <p className="mt-5 max-w-xl text-pretty leading-relaxed text-white/65">
@@ -214,7 +185,7 @@ export default async function ConocenosPage() {
                 <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
                   Nuestra historia
                 </p>
-                <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em] text-site-ink">
+                <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-site-ink">
                   Caminando con Dios
                 </h2>
               </div>
@@ -241,253 +212,46 @@ export default async function ConocenosPage() {
         </section>
       )}
 
-      {!communityEmpty && (
-        <section id="comunidad" className="relative scroll-mt-24 overflow-hidden bg-site-paper">
-          <div className="site-aurora" aria-hidden="true" />
-          <div className="site-orb site-orb-blue left-[-130px] top-[-120px]" aria-hidden="true" />
-
-          <div className="relative mx-auto w-full max-w-[76rem] px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-            <Reveal>
-              <div className="max-w-2xl">
-                <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
-                  Comunidad
-                </p>
-                <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em] text-site-ink">
-                  Hay un lugar para ti
-                </h2>
-                <p className="mt-5 max-w-xl text-pretty leading-relaxed text-site-muted">
-                  Descubre las áreas donde puedes crecer y servir con los dones que Dios te ha dado.
-                </p>
-              </div>
-            </Reveal>
-
-            {activeMinistries.length > 0 && (
-              <div className="mt-16">
-                <Reveal>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.18em] text-site-muted">
-                    Ministerios
-                  </h3>
-                </Reveal>
-                <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {activeMinistries.map((m, i) => (
-                    <Reveal key={m.id} delay={(i % 3) * 120}>
-                      <article className="site-card-glow group overflow-hidden rounded-3xl border border-site-line bg-white">
-                        <div className="relative aspect-[16/9] overflow-hidden bg-site-ink">
-                          {MINISTRY_IMAGES[m.slug] ? (
-                            <BereaImage
-                              src={MINISTRY_IMAGES[m.slug]}
-                              alt=""
-                              fill
-                              className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            />
-                          ) : (
-                            <div className="relative h-full w-full overflow-hidden bg-site-ink">
-                              <div className="site-aurora-ink" aria-hidden="true" />
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="font-display text-2xl font-bold tracking-[0.3em] text-site-gold/40">
-                                  CCB
-                                </span>
-                              </div>
-                            </div>
-                          )}
-                          <div className="site-sheen" aria-hidden="true" />
-                        </div>
-                        <div className="p-7">
-                          <h4 className="font-display text-2xl font-bold text-site-ink">
-                            {m.name}
-                          </h4>
-                          {m.description && (
-                            <p className="mt-2 text-sm leading-relaxed text-site-muted">
-                              {m.description}
-                            </p>
-                          )}
-                          {m.schedule && (
-                            <p className="mt-4 flex items-center gap-2 text-xs font-medium text-site-muted">
-                              <Clock className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
-                              {m.schedule}
-                            </p>
-                          )}
-                        </div>
-                      </article>
-                    </Reveal>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {serviceAreas.length > 0 && (
-              <div className="mt-20">
-                <Reveal>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.18em] text-site-muted">
-                    Áreas de servicio
-                  </h3>
-                </Reveal>
-                <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {serviceAreas.map((m, i) => (
-                    <Reveal key={m.id} delay={(i % 3) * 120}>
-                      <article className="site-card-glow group overflow-hidden rounded-3xl border border-site-line bg-white">
-                        <div className="relative aspect-[16/9] overflow-hidden bg-site-ink">
-                          {SERVICE_MINISTRY_IMAGES[m.slug] ? (
-                            <BereaImage
-                              src={SERVICE_MINISTRY_IMAGES[m.slug]}
-                              alt=""
-                              fill
-                              className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            />
-                          ) : (
-                            <div className="relative h-full w-full overflow-hidden bg-site-ink">
-                              <div className="site-aurora-ink" aria-hidden="true" />
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="font-display text-2xl font-bold tracking-[0.3em] text-site-gold/40">
-                                  CCB
-                                </span>
-                              </div>
-                            </div>
-                          )}
-                          <div className="site-sheen" aria-hidden="true" />
-                        </div>
-                        <div className="p-7">
-                          <h4 className="font-display text-2xl font-bold text-site-ink">
-                            {m.name}
-                          </h4>
-                          {m.description && (
-                            <p className="mt-2 text-sm leading-relaxed text-site-muted">
-                              {m.description}
-                            </p>
-                          )}
-                          {m.leader && (
-                            <p className="mt-4 flex items-center gap-2 text-xs font-medium text-site-muted">
-                              <User className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
-                              {m.leader}
-                            </p>
-                          )}
-                        </div>
-                      </article>
-                    </Reveal>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {cellGroups.length > 0 && (
-              <div className="mt-20">
-                <Reveal>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.18em] text-site-muted">
-                    Células
-                  </h3>
-                </Reveal>
-                <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {cellGroups.map((c, i) => (
-                    <Reveal key={c.id} delay={(i % 3) * 120}>
-                      <article className="site-card-glow group overflow-hidden rounded-3xl border border-site-line bg-white">
-                        <div className="relative aspect-[16/9] overflow-hidden bg-site-ink">
-                          {CELL_IMAGES[c.slug] ? (
-                            <BereaImage
-                              src={CELL_IMAGES[c.slug]}
-                              alt=""
-                              fill
-                              className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            />
-                          ) : (
-                            <div className="relative h-full w-full overflow-hidden bg-site-ink">
-                              <div className="site-aurora-ink" aria-hidden="true" />
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="font-display text-2xl font-bold tracking-[0.3em] text-site-gold/40">
-                                  CCB
-                                </span>
-                              </div>
-                            </div>
-                          )}
-                          <div className="site-sheen" aria-hidden="true" />
-                        </div>
-                        <div className="p-7">
-                          <h4 className="font-display text-2xl font-bold text-site-ink">
-                            {c.name}
-                          </h4>
-                          {c.description && (
-                            <p className="mt-2 text-sm leading-relaxed text-site-muted">
-                              {c.description}
-                            </p>
-                          )}
-                          <div className="mt-4 space-y-1.5 text-xs font-medium text-site-muted">
-                            {c.leader && (
-                              <p className="flex items-center gap-2">
-                                <User className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
-                                {c.leader}
-                              </p>
-                            )}
-                            {c.meetingDay && c.meetingTime && (
-                              <p className="flex items-center gap-2">
-                                <Clock className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
-                                {c.meetingDay} · {c.meetingTime}
-                              </p>
-                            )}
-                            {c.address && (
-                              <p className="flex items-center gap-2">
-                                <MapPin className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
-                                {c.address}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </article>
-                    </Reveal>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      <section className="relative overflow-hidden bg-site-cream">
-        <div className="site-aurora" aria-hidden="true" />
-        <div className="site-orb right-[-130px] bottom-[-120px]" aria-hidden="true" />
+      <section className="relative overflow-hidden bg-site-ink text-white">
+        <div className="site-aurora-ink" aria-hidden="true" />
+        <div className="site-orb right-[-130px] top-[-120px]" aria-hidden="true" />
 
         <div className="relative mx-auto w-full max-w-[76rem] px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
           <Reveal>
-            <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
-              Pastoral
-            </p>
-            {leadersList.length > 0 ? (
-              <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {leadersList.map((leader) => (
-                  <article
-                    key={leader.id}
-                    className="site-card-glow rounded-3xl border border-site-line bg-site-paper p-8 text-center"
-                  >
-                    {leader.imageUrl && (
-                      <div className="relative mx-auto aspect-square w-28 overflow-hidden bg-site-ink rounded-full">
-                        <BereaImage src={leader.imageUrl} alt={leader.name} fill sizes="112px" />
-                      </div>
-                    )}
-                    <h3 className="mt-5 font-display text-2xl font-bold text-site-ink">
-                      {leader.name}
-                    </h3>
-                    <p className="mt-1 text-sm font-bold uppercase tracking-wider text-site-gold">
-                      {leader.position}
-                    </p>
-                    {leader.biography && (
-                      <p className="mt-4 text-sm leading-relaxed text-site-muted">
-                        {leader.biography}
-                      </p>
-                    )}
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <article className="relative mt-10 max-w-3xl overflow-hidden rounded-3xl bg-site-ink p-10 text-white">
-                <div className="site-aurora-ink" aria-hidden="true" />
-                <div className="relative">
-                  <h3 className="font-display text-3xl font-bold">{PASTORS.name}</h3>
-                  <p className="mt-4 leading-relaxed text-white/70">{PASTORS.verse}</p>
-                </div>
-              </article>
-            )}
+            <div className="max-w-2xl">
+              <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
+                Pastoral
+              </p>
+              <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-extrabold leading-[1.05] tracking-[-0.03em]">
+                Nuestros pastores
+              </h2>
+              <p className="mt-5 max-w-xl text-pretty leading-relaxed text-white/65">
+                La familia pastoral que Dios ha puesto para servir y pastorear su rebaño con amor y
+                dedicación.
+              </p>
+            </div>
           </Reveal>
+
+          <div className="mt-14 grid gap-8 sm:grid-cols-2">
+            {PASTORAL_TEAM.map((pastor, i) => (
+              <Reveal key={pastor.name} delay={i * 140}>
+                <article className="site-card-glow rounded-3xl border border-white/10 bg-white/5 p-10 text-center">
+                  <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full border border-site-gold/30 bg-site-gold/10">
+                    <span className="font-display text-3xl font-bold text-site-gold">
+                      {pastor.initials}
+                    </span>
+                  </div>
+                  <h3 className="mt-6 font-display text-2xl font-extrabold tracking-[-0.02em]">
+                    {pastor.name}
+                  </h3>
+                  <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-site-gold">
+                    {pastor.role}
+                  </p>
+                  <p className="mt-4 text-sm leading-relaxed text-white/65">{pastor.description}</p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
     </>

@@ -115,9 +115,11 @@ export const SOCIAL_LINKS = [
   { platform: "tiktok", label: "TikTok", href: "https://www.tiktok.com/@centrocristianobe" },
 ];
 
-// Pastoral verificada en el footer actual del sitio (trabajo del propietario).
+// Pastoral verificada (trabajo del propietario).
 export const PASTORS = {
-  name: "Pastores César y Claudia Villanueva",
+  name: "Pastor Julio Cesar Villanueva",
+  wife: "Claudia Davila",
+  wifeRole: "Esposa del Pastor",
   verse:
     "«Y todo lo que hagan, háganlo de corazón, como para el Señor y no para los hombres.» — Colosenses 3:23",
 };

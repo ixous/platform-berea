@@ -36,7 +36,7 @@ export function HomeHero({
               </p>
             </div>
           )}
-          <h1 className="text-balance text-[clamp(2.6rem,6.5vw,5.8rem)] font-extrabold leading-[1.02] tracking-[-0.02em]">
+          <h1 className="font-display text-balance text-[clamp(2.7rem,6.8vw,6rem)] font-black leading-[1.02] tracking-[-0.03em]">
             {title}
           </h1>
           {subtitle && (

@@ -34,7 +34,7 @@ export function VisitStrip({ schedules, address, mapUrl, scheduleNote }: VisitSt
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-site-gold">
             Horarios y ubicación
           </p>
-          <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em] text-site-ink">
+          <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-site-ink">
             Nos reunimos cada semana
           </h2>
         </Reveal>

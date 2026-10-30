@@ -58,6 +58,9 @@ export function SiteFooter() {
               <p className="text-base font-semibold">Centro Cristiano Berea</p>
             </div>
             <p className="mt-6 text-sm leading-relaxed text-white/60">{PASTORS.name}</p>
+            <p className="mt-1 text-sm leading-relaxed text-white/60">
+              {PASTORS.wifeRole} {PASTORS.wife}
+            </p>
             <p className="mt-4 text-sm leading-relaxed text-white/50">{PASTORS.verse}</p>
           </div>
 

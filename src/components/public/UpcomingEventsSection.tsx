@@ -31,7 +31,7 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
               <p className="site-gold-pulse text-xs font-semibold uppercase tracking-[0.22em] text-site-gold">
                 Lo que viene
               </p>
-              <h2 className="mt-5 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-bold leading-[1.05] tracking-[-0.03em] text-site-ink">
+              <h2 className="mt-5 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-site-ink">
                 Próximos eventos
               </h2>
             </div>
@@ -58,7 +58,7 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-site-gold">
                   {event.eventType || "Evento"}
                 </p>
-                <h3 className="mt-4 font-display text-xl font-bold leading-snug text-site-ink transition-colors group-hover:text-site-gold">
+                <h3 className="mt-4 font-display text-xl font-extrabold leading-snug text-site-ink transition-colors group-hover:text-site-gold">
                   {event.title}
                 </h3>
                 <div className="mt-auto pt-6 text-sm text-site-muted">
