@@ -1,13 +1,27 @@
 import { Reveal } from "./Reveal";
+import { BereaImage } from "./BereaImage";
 
 interface PageIntroProps {
   title: string;
   subtitle?: string;
+  backgroundImage?: string;
 }
 
-export function PageIntro({ title, subtitle }: PageIntroProps) {
+export function PageIntro({ title, subtitle, backgroundImage }: PageIntroProps) {
   return (
     <section className="relative overflow-hidden bg-site-ink text-white">
+      {backgroundImage && (
+        <div className="absolute inset-0" aria-hidden="true">
+          <BereaImage
+            src={backgroundImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-site-ink/45 via-site-ink/80 to-site-ink" />
+        </div>
+      )}
       <div className="site-aurora-ink" aria-hidden="true" />
       <div className="site-orb right-[-140px] top-[-120px]" aria-hidden="true" />
 

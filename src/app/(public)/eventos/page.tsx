@@ -66,6 +66,7 @@ export default async function EventosPage() {
       <PageIntro
         title={page?.bannerTitle || "Eventos"}
         subtitle={page?.bannerSubtitle || "Mantente al día con nuestras actividades."}
+        backgroundImage={page?.bannerImage || "/images/banner-eventos.png"}
       />
 
       <section className="relative overflow-hidden bg-site-paper">

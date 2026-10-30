@@ -58,7 +58,11 @@ export default async function ConocenosPage() {
 
   return (
     <>
-      <PageIntro title={KNOW_INTRO.title} subtitle={KNOW_INTRO.subtitle} />
+      <PageIntro
+        title={KNOW_INTRO.title}
+        subtitle={KNOW_INTRO.subtitle}
+        backgroundImage="/images/banner-quienes-somos.png"
+      />
 
       {sections.length > 0 && (
         <section className="relative overflow-hidden bg-site-paper">

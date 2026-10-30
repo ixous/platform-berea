@@ -32,7 +32,11 @@ export default async function VisitaPage() {
 
   return (
     <>
-      <PageIntro title={VISIT_INTRO.title} subtitle={VISIT_INTRO.subtitle} />
+      <PageIntro
+        title={VISIT_INTRO.title}
+        subtitle={VISIT_INTRO.subtitle}
+        backgroundImage="/images/banner-berea.png"
+      />
 
       <section className="relative overflow-hidden bg-site-cream">
         <div className="site-aurora" aria-hidden="true" />

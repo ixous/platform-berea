@@ -70,6 +70,7 @@ export default async function ContactoPage() {
       <PageIntro
         title={page.bannerTitle || "Contacto"}
         subtitle={page.bannerSubtitle || "Nos encantaría saber de ti."}
+        backgroundImage={page.bannerImage || "/images/banner-contacto.png"}
       />
 
       <VisitStrip
