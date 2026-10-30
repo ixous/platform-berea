@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { BereaImage } from "./BereaImage";
+import { Reveal } from "./Reveal";
 import { EDITORIAL_IMAGE } from "@/lib/public/site-navigation";
 
 interface EditorialIntroProps {
@@ -11,19 +12,27 @@ interface EditorialIntroProps {
 
 export function EditorialIntro({ title, description, cta }: EditorialIntroProps) {
   return (
-    <section className="bg-site-paper">
-      <div className="mx-auto grid w-full max-w-[76rem] items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-8 lg:py-28">
-        <div className="relative order-2 aspect-[4/3] overflow-hidden rounded-3xl lg:order-1 lg:aspect-[4/5]">
-          <BereaImage
-            src={EDITORIAL_IMAGE.src}
-            alt={EDITORIAL_IMAGE.alt}
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-        </div>
+    <section className="relative overflow-hidden bg-site-paper">
+      <div className="site-aurora" aria-hidden="true" />
+      <div className="site-orb site-orb-blue right-[-140px] top-[-120px]" aria-hidden="true" />
 
-        <div className="order-1 lg:order-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-site-gold">
+      <div className="relative mx-auto grid w-full max-w-[76rem] items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-8 lg:py-28">
+        <Reveal className="order-2 lg:order-1">
+          <div className="group relative aspect-[4/3] overflow-hidden rounded-3xl lg:aspect-[4/5]">
+            <BereaImage
+              src={EDITORIAL_IMAGE.src}
+              alt={EDITORIAL_IMAGE.alt}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+            />
+            <div className="site-sheen" aria-hidden="true" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-site-ink/20 to-transparent" />
+          </div>
+        </Reveal>
+
+        <Reveal delay={150} className="order-1 lg:order-2">
+          <p className="site-gold-pulse text-xs font-semibold uppercase tracking-[0.22em] text-site-gold">
             Comunidad
           </p>
           <h2 className="mt-5 font-display text-balance text-[clamp(1.9rem,4vw,3.1rem)] font-medium leading-tight tracking-[-0.02em] text-site-ink">
@@ -44,7 +53,7 @@ export function EditorialIntro({ title, description, cta }: EditorialIntroProps)
               />
             </Link>
           )}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

@@ -83,9 +83,10 @@ export function SiteHeaderClient() {
         <div className="flex items-center gap-2">
           <Link
             href={SITE_CTA.href}
-            className="hidden rounded-full bg-site-gold px-5 py-2.5 text-sm font-semibold text-site-ink transition-colors hover:bg-site-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold focus-visible:ring-offset-2 focus-visible:ring-offset-site-paper lg:inline-flex"
+            className="relative hidden overflow-hidden rounded-full bg-site-gold px-5 py-2.5 text-sm font-semibold text-site-ink transition-colors hover:bg-site-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold focus-visible:ring-offset-2 focus-visible:ring-offset-site-paper lg:inline-flex"
           >
-            {SITE_CTA.label}
+            <span className="site-sheen" aria-hidden="true" />
+            <span className="relative z-10">{SITE_CTA.label}</span>
           </Link>
 
           <button

@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { contact, institutionalPages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { PageIntro } from "@/components/public/PageIntro";
+import { Reveal } from "@/components/public/Reveal";
 import { ContactForm } from "@/components/public/ContactForm";
 import { MapPin, Clock, Phone, Mail, Globe, Camera, Music, Video } from "lucide-react";
 import Link from "next/link";
@@ -71,10 +72,14 @@ export default async function ContactoPage() {
         subtitle={page.bannerSubtitle || "Nos encantaría saber de ti."}
       />
 
-      <section className="bg-site-cream">
-        <div className="mx-auto w-full max-w-[76rem] px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+      <section className="relative overflow-hidden bg-site-cream">
+        <div className="site-aurora" aria-hidden="true" />
+        <div className="site-orb left-[-130px] top-[-100px]" aria-hidden="true" />
+        <div className="site-orb site-orb-blue bottom-[-140px] right-[-120px]" aria-hidden="true" />
+
+        <div className="relative mx-auto w-full max-w-[76rem] px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
-            <div>
+            <Reveal>
               <h2 className="font-display text-3xl font-medium tracking-[-0.01em] text-site-ink">
                 {info?.churchName || "Información de contacto"}
               </h2>
@@ -185,22 +190,24 @@ export default async function ContactoPage() {
                   </Link>
                 </div>
               )}
-            </div>
+            </Reveal>
 
-            <div
-              className="h-fit rounded-3xl border border-site-line bg-site-paper p-8 shadow-sm sm:p-10"
-              id="contact-form"
-            >
-              <h2 className="font-display text-2xl font-medium text-site-ink">
-                {info?.ctaTitle || "Envíanos un mensaje"}
-              </h2>
-              {info?.ctaDescription && (
-                <p className="mt-2 text-sm text-site-muted">{info.ctaDescription}</p>
-              )}
-              <div className="mt-8">
-                <ContactForm />
+            <Reveal delay={150}>
+              <div
+                className="site-card-glow h-fit rounded-3xl border border-site-line bg-site-paper p-8 shadow-sm sm:p-10"
+                id="contact-form"
+              >
+                <h2 className="font-display text-2xl font-medium text-site-ink">
+                  {info?.ctaTitle || "Envíanos un mensaje"}
+                </h2>
+                {info?.ctaDescription && (
+                  <p className="mt-2 text-sm text-site-muted">{info.ctaDescription}</p>
+                )}
+                <div className="mt-8">
+                  <ContactForm />
+                </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>

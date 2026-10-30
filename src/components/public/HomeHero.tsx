@@ -24,6 +24,7 @@ export function HomeHero({
   return (
     <section className="relative isolate flex min-h-[78svh] items-end overflow-hidden bg-site-ink text-white md:min-h-[500px] lg:aspect-[1297/456]">
       <HeroBackdrop clips={clips} poster={poster} />
+      <div className="site-aurora-ink" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto w-full max-w-[76rem] px-4 pb-12 pt-32 sm:px-6 md:pb-16 lg:px-8">
         <div className="max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -48,10 +49,13 @@ export function HomeHero({
         <div className="mt-8 flex flex-wrap items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
           <Link
             href={primaryCta.href}
-            className="inline-flex items-center gap-2 rounded-full bg-site-gold px-7 py-3.5 text-base font-bold text-site-ink transition-colors hover:bg-site-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold focus-visible:ring-offset-2 focus-visible:ring-offset-site-ink"
+            className="relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-site-gold px-7 py-3.5 text-base font-bold text-site-ink transition-colors hover:bg-site-gold-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold focus-visible:ring-offset-2 focus-visible:ring-offset-site-ink"
           >
-            {primaryCta.label}
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <span className="site-sheen" aria-hidden="true" />
+            <span className="relative z-10 inline-flex items-center gap-2">
+              {primaryCta.label}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </span>
           </Link>
           {secondaryCta && (
             <Link
