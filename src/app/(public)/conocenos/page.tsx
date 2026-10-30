@@ -14,12 +14,14 @@ const PASTORAL_TEAM = [
     name: "Julio Cesar Villanueva",
     role: "Pastor",
     initials: "JV",
+    photo: "/images/pastoral-julio.png",
     description: "Liderando la iglesia con dedicación y amor desde su fundación.",
   },
   {
     name: "Claudia Davila",
     role: "Esposa del Pastor",
     initials: "CD",
+    photo: "/images/pastoral-claudia.png",
     description: "Apoyando el crecimiento espiritual y la vida en comunidad de la congregación.",
   },
 ];
@@ -240,10 +242,14 @@ export default async function ConocenosPage() {
             {PASTORAL_TEAM.map((pastor, i) => (
               <Reveal key={pastor.name} delay={i * 140}>
                 <article className="site-card-glow rounded-3xl border border-white/10 bg-white/5 p-10 text-center">
-                  <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full border border-site-gold/30 bg-site-gold/10">
-                    <span className="font-display text-3xl font-bold text-site-gold">
-                      {pastor.initials}
-                    </span>
+                  <div className="relative mx-auto h-36 w-36 overflow-hidden rounded-full border border-site-gold/30 bg-site-gold/10">
+                    {pastor.photo ? (
+                      <BereaImage src={pastor.photo} alt={pastor.name} fill sizes="144px" />
+                    ) : (
+                      <span className="absolute inset-0 flex items-center justify-center font-display text-3xl font-bold text-site-gold">
+                        {pastor.initials}
+                      </span>
+                    )}
                   </div>
                   <h3 className="mt-6 font-display text-2xl font-extrabold tracking-[-0.02em]">
                     {pastor.name}
