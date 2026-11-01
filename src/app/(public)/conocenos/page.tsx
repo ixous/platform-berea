@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { institutionalSections, historyMilestones, doctrines } from "@/lib/db/schema";
+import { institutionalSections, doctrines } from "@/lib/db/schema";
 import { and, eq, isNull, asc } from "drizzle-orm";
 import { PageIntro } from "@/components/public/PageIntro";
 import { BereaImage } from "@/components/public/BereaImage";
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ConocenosPage() {
-  const [sections, milestones, doctrinalPoints] = await Promise.all([
+  const [sections, doctrinalPoints] = await Promise.all([
     db
       .select()
       .from(institutionalSections)
@@ -46,11 +46,6 @@ export default async function ConocenosPage() {
         and(eq(institutionalSections.visible, true), eq(institutionalSections.status, "published"))
       )
       .orderBy(asc(institutionalSections.displayOrder)),
-    db
-      .select()
-      .from(historyMilestones)
-      .where(and(eq(historyMilestones.status, "published"), isNull(historyMilestones.deletedAt)))
-      .orderBy(asc(historyMilestones.displayOrder)),
     db
       .select()
       .from(doctrines)
@@ -180,47 +175,9 @@ export default async function ConocenosPage() {
         </section>
       )}
 
-      {milestones.length > 0 && (
-        <section id="historia" className="relative scroll-mt-24 overflow-hidden bg-site-cream">
-          <div className="site-aurora" aria-hidden="true" />
-          <div className="site-orb right-[-130px] top-[-100px]" aria-hidden="true" />
-
-          <div className="relative mx-auto w-full max-w-[76rem] px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-            <Reveal>
-              <div className="max-w-2xl">
-                <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
-                  Nuestra historia
-                </p>
-                <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-site-ink">
-                  Caminando con Dios
-                </h2>
-              </div>
-            </Reveal>
-
-            <ol className="mt-14 grid gap-10 md:grid-cols-3">
-              {milestones.map((m, i) => (
-                <Reveal key={m.id} delay={i * 130}>
-                  <li className="site-card-glow border-t-2 border-site-gold/40 pt-6">
-                    <p className="font-display text-6xl font-medium leading-none text-site-ink">
-                      {m.year}
-                    </p>
-                    <h3 className="mt-4 text-lg font-bold text-site-ink">{m.title}</h3>
-                    {m.description && (
-                      <p className="mt-3 text-sm leading-relaxed text-site-muted">
-                        {m.description}
-                      </p>
-                    )}
-                  </li>
-                </Reveal>
-              ))}
-            </ol>
-          </div>
-        </section>
-      )}
-
-      <section className="relative overflow-hidden bg-site-ink text-white">
-        <div className="site-aurora-ink" aria-hidden="true" />
-        <div className="site-orb right-[-130px] top-[-120px]" aria-hidden="true" />
+      <section className="relative overflow-hidden bg-site-cream">
+        <div className="site-aurora" aria-hidden="true" />
+        <div className="site-orb right-[-130px] top-[-100px]" aria-hidden="true" />
 
         <div className="relative mx-auto w-full max-w-[76rem] px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
           <Reveal>
@@ -228,10 +185,10 @@ export default async function ConocenosPage() {
               <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
                 Pastoral
               </p>
-              <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-extrabold leading-[1.05] tracking-[-0.03em]">
+              <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.8vw,3.9rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-site-ink">
                 Nuestros pastores
               </h2>
-              <p className="mt-5 max-w-xl text-pretty leading-relaxed text-white/65">
+              <p className="mt-5 max-w-xl text-pretty leading-relaxed text-site-muted">
                 La familia pastoral que Dios ha puesto para servir y pastorear su rebaño con amor y
                 dedicación.
               </p>
@@ -241,7 +198,7 @@ export default async function ConocenosPage() {
           <div className="mt-14 grid gap-8 sm:grid-cols-2">
             {PASTORAL_TEAM.map((pastor, i) => (
               <Reveal key={pastor.name} delay={i * 140}>
-                <article className="site-card-glow rounded-3xl border border-white/10 bg-white/5 p-10 text-center">
+                <article className="site-card-glow rounded-3xl border border-site-line bg-site-paper p-10 text-center shadow-sm">
                   <div className="relative mx-auto h-36 w-36 overflow-hidden rounded-full border border-site-gold/30 bg-site-gold/10">
                     {pastor.photo ? (
                       <BereaImage src={pastor.photo} alt={pastor.name} fill sizes="144px" />
@@ -251,13 +208,15 @@ export default async function ConocenosPage() {
                       </span>
                     )}
                   </div>
-                  <h3 className="mt-6 font-display text-2xl font-extrabold tracking-[-0.02em]">
+                  <h3 className="mt-6 font-display text-2xl font-extrabold tracking-[-0.02em] text-site-ink">
                     {pastor.name}
                   </h3>
                   <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-site-gold">
                     {pastor.role}
                   </p>
-                  <p className="mt-4 text-sm leading-relaxed text-white/65">{pastor.description}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-site-muted">
+                    {pastor.description}
+                  </p>
                 </article>
               </Reveal>
             ))}
