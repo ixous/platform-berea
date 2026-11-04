@@ -45,7 +45,7 @@ export function PublicFooter() {
               <h3 className="text-lg font-bold">Centro Cristiano Berea</h3>
             </div>
             <p className="mt-6 text-sm leading-relaxed text-white/60">
-              Pastores C&eacute;sar y Claudia Villanueva
+              Pastor Julio Cesar Villanueva
             </p>
             <p className="mt-6 text-sm leading-relaxed text-white/60">
               &ldquo;Y todo lo que hagan, h&aacute;ganlo de coraz&oacute;n,

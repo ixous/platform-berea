@@ -77,9 +77,6 @@ export function SiteFooter() {
             <p className="mt-6 font-display text-xl font-bold tracking-[-0.02em] text-white/90">
               {PASTORS.name}
             </p>
-            <p className="mt-1.5 text-sm font-medium text-white/60">
-              {PASTORS.wifeRole} {PASTORS.wife}
-            </p>
             <p className="mt-5 font-display text-sm italic leading-relaxed text-site-gold/80">
               {PASTORS.verse}
             </p>

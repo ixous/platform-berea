@@ -117,8 +117,6 @@ export const SOCIAL_LINKS = [
 // Pastoral verificada (trabajo del propietario).
 export const PASTORS = {
   name: "Pastor Julio Cesar Villanueva",
-  wife: "Claudia Davila",
-  wifeRole: "Esposa del Pastor",
   verse:
     "«Y todo lo que hagan, háganlo de corazón, como para el Señor y no para los hombres.» — Colosenses 3:23",
 };
