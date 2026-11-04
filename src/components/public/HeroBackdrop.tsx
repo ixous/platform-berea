@@ -93,6 +93,7 @@ export function HeroBackdrop({ clips, poster }: HeroBackdropProps) {
           alt=""
           fill
           priority
+          quality={95}
           className="object-cover"
           sizes="100vw"
           placeholder="blur"

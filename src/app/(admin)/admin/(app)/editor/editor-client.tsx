@@ -261,7 +261,7 @@ function renderHomepage(getVal: (key: string) => string, data: Record<string, un
                 {getVal("heroTagline")}
               </p>
             )}
-            <h1 className="text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-7xl">
+            <h1 className="text-2xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl sm:whitespace-nowrap">
               {getVal("heroTitle")}
             </h1>
             {getVal("heroSubtitle") && (

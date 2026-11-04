@@ -27,7 +27,7 @@ export function HomeHero({
       <div className="site-aurora-ink" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto w-full max-w-[76rem] px-4 pb-12 pt-32 sm:px-6 md:pb-16 lg:px-8">
-        <div className="max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="w-full max-w-5xl animate-in fade-in slide-in-from-bottom-4 duration-700">
           {tagline && (
             <div className="mb-6 flex items-center gap-4">
               <span className="h-px w-10 bg-site-gold" aria-hidden="true" />
@@ -36,7 +36,7 @@ export function HomeHero({
               </p>
             </div>
           )}
-          <h1 className="font-display text-balance text-[clamp(2.7rem,6.8vw,6rem)] font-black leading-[1.02] tracking-[-0.03em]">
+          <h1 className="font-display text-[clamp(1.5rem,4.6vw,4.5rem)] font-black leading-[1.08] tracking-[-0.03em] whitespace-nowrap">
             {title}
           </h1>
           {subtitle && (

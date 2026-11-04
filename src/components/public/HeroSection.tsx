@@ -59,7 +59,7 @@ export function HeroSection({
               <span className="h-px w-8 bg-berea-gold/40" />
             </div>
           )}
-          <h1 className="text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-7xl">
+          <h1 className="text-2xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl sm:whitespace-nowrap">
             {title}
           </h1>
           {subtitle && (
