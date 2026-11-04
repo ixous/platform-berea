@@ -76,10 +76,9 @@ export const CONNECT_ITEMS: ConnectItem[] = [
   },
 ];
 
-// TODO(media): reemplazar por fotografía real de la congregación.
 export const CONNECT_IMAGE = {
-  src: "/images/simbolicas/comunidad.png",
-  alt: "Comunidad de Centro Cristiano Berea",
+  src: "/images/Ven a la Iglesia_ Somos Hermanos en Cristo.png",
+  alt: "Ven a la Iglesia, Somos Hermanos en Cristo",
 };
 
 // TODO(media): reemplazar por fotografía real de la congregación.
