@@ -14,6 +14,14 @@ interface EventRow {
   eventType: string | null;
 }
 
+const EVENT_POSITIONS: Record<string, string> = {
+  "posada-navidena": "!object-[50%_72%]",
+  "cross-fest": "!object-[50%_12%]",
+  bautizos: "!object-[50%_35%]",
+  bautizmos: "!object-[50%_35%]",
+  "encuentro-mixto": "!object-[50%_25%]",
+};
+
 function formatDate(date: Date) {
   return date.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
 }
@@ -69,13 +77,15 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
                   href={`/eventos/${event.slug}`}
                   className="site-card-glow group flex h-full flex-col overflow-hidden rounded-2xl border border-site-line bg-white shadow-sm transition-colors hover:border-site-gold/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold"
                 >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-site-ink">
+                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-site-ink">
                     <BereaImage
                       src={imageSrc}
                       alt={event.title}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+                      className={`transition-transform duration-[1200ms] ease-out group-hover:scale-105 ${
+                        EVENT_POSITIONS[event.slug] || "object-center"
+                      }`}
                     />
                     <div className="site-sheen" aria-hidden="true" />
                   </div>

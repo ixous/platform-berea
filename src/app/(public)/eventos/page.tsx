@@ -44,6 +44,14 @@ function formatDate(date: Date) {
   });
 }
 
+const EVENT_POSITIONS: Record<string, string> = {
+  "posada-navidena": "!object-[50%_72%]",
+  "cross-fest": "!object-[50%_12%]",
+  bautizos: "!object-[50%_35%]",
+  bautizmos: "!object-[50%_35%]",
+  "encuentro-mixto": "!object-[50%_25%]",
+};
+
 export default async function EventosPage() {
   const [items, [info]] = await Promise.all([
     getUpcomingEvents(),
@@ -100,12 +108,14 @@ export default async function EventosPage() {
                       href={`/eventos/${event.slug}`}
                       className="site-card-glow group block overflow-hidden rounded-3xl border border-site-line bg-white transition-colors hover:border-site-gold/50"
                     >
-                      <div className="relative aspect-[16/9] overflow-hidden bg-site-ink">
+                      <div className="relative aspect-[4/5] overflow-hidden bg-site-ink">
                         <BereaImage
                           src={imageSrc}
                           alt={event.title}
                           fill
-                          className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+                          className={`transition-transform duration-[1200ms] ease-out group-hover:scale-105 ${
+                            EVENT_POSITIONS[event.slug] || "object-center"
+                          }`}
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         />
                         <div className="site-sheen" aria-hidden="true" />
