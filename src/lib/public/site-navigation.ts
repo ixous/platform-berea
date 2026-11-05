@@ -81,10 +81,9 @@ export const CONNECT_IMAGE = {
   alt: "Invitación a la Iglesia - Centro Cristiano Berea",
 };
 
-// TODO(media): reemplazar por fotografía real de la congregación.
 export const EDITORIAL_IMAGE = {
-  src: "/images/banner-quienes-somos.png",
-  alt: "Centro Cristiano Berea",
+  src: "/images/Comunidad unida alrededor de la fe.png",
+  alt: "Comunidad unida alrededor de la fe - Centro Cristiano Berea",
 };
 
 // ----------------------------------------------------------------------------
