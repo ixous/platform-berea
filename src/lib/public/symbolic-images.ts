@@ -45,6 +45,7 @@ export const EVENT_IMAGES: Record<string, string> = {
   "posada-navidena": "/images/eventos/posada-navidena.png",
   "encuentro-mixto": "/images/eventos/encuentro-mixto.png",
   "cross-fest": "/images/eventos/cross-fest.png",
+  "marcha-por-jesus": "/images/marcha-por-jesus.png",
 };
 
 export const EVENT_FALLBACK = `${BASE}/celebracion.png`;

@@ -33,7 +33,7 @@ async function getUpcomingEvents() {
       )
     )
     .orderBy(events.startDate)
-    .limit(4);
+    .limit(6);
 }
 
 async function getHomepageData() {

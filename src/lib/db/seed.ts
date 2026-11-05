@@ -1081,6 +1081,19 @@ async function seedEvents() {
       featuredOrder: 3,
     },
     {
+      title: "Marcha por Jesús",
+      slug: "marcha-por-jesus",
+      description:
+        "Convocatoria unida organizada por COPASEM (Confraternidad de Pastores Evangélicos de Mexicali). Salida desde el Parque Vicente Guerrero y meta en la Plaza de los Tres Poderes. ¡Por amor, por fe, por Jesús!",
+      startDate: new Date("2026-11-15T17:00:00Z"),
+      time: null,
+      location: "Parque Vicente Guerrero",
+      eventType: "Convocatoria",
+      status: "published",
+      featured: true,
+      featuredOrder: 4,
+    },
+    {
       title: "Posada Navideña",
       slug: "posada-navidena",
       description:
@@ -1091,7 +1104,7 @@ async function seedEvents() {
       eventType: "Celebración",
       status: "published",
       featured: true,
-      featuredOrder: 4,
+      featuredOrder: 5,
     },
   ];
 

@@ -20,6 +20,7 @@ const EVENT_POSITIONS: Record<string, string> = {
   bautizos: "!object-[50%_35%]",
   bautizmos: "!object-[50%_35%]",
   "encuentro-mixto": "!object-[50%_25%]",
+  "marcha-por-jesus": "!object-center",
 };
 
 function formatDate(date: Date) {
@@ -64,7 +65,7 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
               ? "sm:grid-cols-2 lg:grid-cols-4"
               : events.length === 2
                 ? "sm:grid-cols-2"
-                : "md:grid-cols-3"
+                : "sm:grid-cols-2 lg:grid-cols-3"
           }`}
         >
           {events.map((event, i) => {

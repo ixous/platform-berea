@@ -50,6 +50,7 @@ const EVENT_POSITIONS: Record<string, string> = {
   bautizos: "!object-[50%_35%]",
   bautizmos: "!object-[50%_35%]",
   "encuentro-mixto": "!object-[50%_25%]",
+  "marcha-por-jesus": "!object-center",
 };
 
 export default async function EventosPage() {
