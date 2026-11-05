@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { events, contact, homepageSettings, homepageSections } from "@/lib/db/schema";
+import { events, contact, homepageSettings, homepageSections, annualVision } from "@/lib/db/schema";
 import { eq, and, isNull, gte } from "drizzle-orm";
 import { HomeHero } from "@/components/public/HomeHero";
 import { VisitStrip } from "@/components/public/VisitStrip";
@@ -32,14 +32,19 @@ async function getUpcomingEvents() {
       )
     )
     .orderBy(events.startDate)
-    .limit(3);
+    .limit(4);
 }
 
 async function getHomepageData() {
   const [settings] = await db.select().from(homepageSettings).limit(1);
   const [info] = await db.select().from(contact).limit(1);
   const sections = await db.select().from(homepageSections);
-  return { settings, info, sections };
+  const [vision] = await db
+    .select()
+    .from(annualVision)
+    .where(and(eq(annualVision.status, "published"), eq(annualVision.year, 2026)))
+    .limit(1);
+  return { settings, info, sections, vision };
 }
 
 type SectionRow = { sectionKey: string; visible: boolean | null };
@@ -51,7 +56,7 @@ function isSectionVisible(sections: SectionRow[], key: string): boolean {
 }
 
 export default async function HomePage() {
-  const [upcomingEvents, { settings, info, sections }] = await Promise.all([
+  const [upcomingEvents, { settings, info, sections, vision }] = await Promise.all([
     getUpcomingEvents(),
     getHomepageData(),
   ]);
@@ -70,6 +75,9 @@ export default async function HomePage() {
         primaryCta={HERO_PRIMARY_CTA}
         clips={HERO_CLIPS}
         poster={settings?.heroBackgroundImage || HERO_POSTER_FALLBACK}
+        visionBadge={
+          vision?.name ? `Visión ${vision.year} · ${vision.name}` : "Visión 2026 · RHEMA"
+        }
       />
 
       <VisitStrip

@@ -48,7 +48,15 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
           </div>
         </Reveal>
 
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
+        <div
+          className={`mt-12 grid gap-5 ${
+            events.length === 4
+              ? "sm:grid-cols-2 lg:grid-cols-4"
+              : events.length === 2
+                ? "sm:grid-cols-2"
+                : "md:grid-cols-3"
+          }`}
+        >
           {events.map((event, i) => (
             <Reveal key={event.id} delay={i * 120}>
               <Link

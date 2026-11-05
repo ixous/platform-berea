@@ -10,6 +10,7 @@ interface HomeHeroProps {
   secondaryCta?: { label: string; href: string };
   clips?: string[];
   poster: string;
+  visionBadge?: string;
 }
 
 export function HomeHero({
@@ -20,6 +21,7 @@ export function HomeHero({
   secondaryCta,
   clips,
   poster,
+  visionBadge = "Visión 2026 · RHEMA",
 }: HomeHeroProps) {
   return (
     <section className="relative isolate flex min-h-[78svh] items-center justify-center overflow-hidden bg-site-ink text-white md:min-h-[500px] lg:aspect-[1297/456]">
@@ -28,6 +30,14 @@ export function HomeHero({
 
       <div className="relative z-10 mx-auto flex w-full max-w-[76rem] flex-col items-center px-4 pb-12 pt-28 text-center sm:px-6 md:pb-16 md:pt-32 lg:px-8">
         <div className="flex w-full max-w-5xl flex-col items-center text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+          {visionBadge && (
+            <div className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-site-gold/40 bg-site-gold/15 px-4 py-1.5 shadow-sm backdrop-blur-md">
+              <span className="h-2 w-2 rounded-full bg-site-gold animate-pulse" />
+              <span className="text-xs font-bold uppercase tracking-[0.22em] text-site-gold">
+                {visionBadge}
+              </span>
+            </div>
+          )}
           {tagline && (
             <div className="mb-6 flex items-center justify-center gap-4">
               <span className="h-px w-10 bg-site-gold" aria-hidden="true" />

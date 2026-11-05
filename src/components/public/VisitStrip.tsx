@@ -85,9 +85,6 @@ export function VisitStrip({ schedules, address, mapUrl, scheduleNote }: VisitSt
                   Nos encantaría recibirte en nuestra iglesia. Ven tal como eres y descubre una
                   comunidad que te amará y te apoyará en tu caminar con Cristo.
                 </p>
-                {resolvedNote && (
-                  <p className="mt-4 text-sm italic text-white/55">{resolvedNote}</p>
-                )}
               </div>
               <a
                 href="/visita"
