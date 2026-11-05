@@ -77,8 +77,8 @@ export const CONNECT_ITEMS: ConnectItem[] = [
 ];
 
 export const CONNECT_IMAGE = {
-  src: "/images/Ven a la Iglesia_ Somos Hermanos en Cristo.png",
-  alt: "Ven a la Iglesia, Somos Hermanos en Cristo",
+  src: "/images/invitacion-a-la-iglesia.png",
+  alt: "Invitación a la Iglesia - Centro Cristiano Berea",
 };
 
 // TODO(media): reemplazar por fotografía real de la congregación.

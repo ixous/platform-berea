@@ -27,33 +27,33 @@ export function ConnectWithBerea() {
           </div>
         </Reveal>
 
-        <div className="mt-14 flex flex-col gap-8 lg:gap-10">
+        <div className="mt-14 grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
           <Reveal>
-            <div className="group relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-site-ink shadow-sm sm:aspect-[16/10] lg:aspect-[16/9]">
+            <div className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-site-ink sm:aspect-[4/5] lg:aspect-auto lg:min-h-full">
               <BereaImage
                 src={CONNECT_IMAGE.src}
                 alt={CONNECT_IMAGE.alt}
                 fill
-                sizes="(max-width: 1024px) 100vw, 1200px"
+                sizes="(max-width: 1024px) 100vw, 45vw"
                 className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
               />
               <div className="site-sheen" aria-hidden="true" />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-site-ink/30 via-transparent to-transparent" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-site-ink/25 to-transparent" />
             </div>
           </Reveal>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="flex flex-col gap-4">
             {CONNECT_ITEMS.map((item, i) => (
               <Reveal key={item.title} delay={i * 120}>
                 <Link
                   href={item.href}
-                  className="site-card-glow group flex h-full flex-col justify-between gap-6 rounded-2xl border border-site-line bg-site-paper p-7 shadow-sm transition-colors hover:border-site-gold/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold sm:p-8"
+                  className="site-card-glow group flex flex-1 flex-col justify-between gap-6 rounded-2xl border border-site-line bg-site-paper p-7 shadow-sm transition-colors hover:border-site-gold/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold sm:p-9"
                 >
                   <div>
-                    <h3 className="font-display text-xl font-extrabold tracking-[-0.02em] text-site-ink transition-colors group-hover:text-site-gold sm:text-2xl">
+                    <h3 className="font-display text-2xl font-extrabold tracking-[-0.02em] text-site-ink transition-colors group-hover:text-site-gold">
                       {item.title}
                     </h3>
-                    <p className="mt-3 text-pretty leading-relaxed text-site-muted">
+                    <p className="mt-3 max-w-lg text-pretty leading-relaxed text-site-muted">
                       {item.text}
                     </p>
                   </div>
