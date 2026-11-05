@@ -15,11 +15,11 @@ export function FacebookFeedSection() {
                 <Radio className="h-4 w-4 animate-pulse" />
               </span>
               <p className="site-gold-pulse text-xs font-bold uppercase tracking-[0.24em] text-site-gold">
-                Comunidad en Vivo · Multimedia Berea
+                Comunidad en Vivo
               </p>
             </div>
             <h2 className="mt-4 font-display text-balance text-[clamp(2.2rem,4.4vw,3.6rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-site-ink">
-              Al día con Centro Cristiano Berea
+              Lo que sucede en casa
             </h2>
             <p className="mt-5 text-pretty text-lg leading-relaxed text-site-muted">
               Sigue las publicaciones, fotos de eventos, avisos de actividades y transmisiones de cultos
