@@ -56,11 +56,11 @@ export function FacebookFeedSection() {
                 </div>
 
                 {/* Contenedor del Plugin Oficial de Facebook */}
-                <div className="relative min-h-[550px] w-full overflow-hidden bg-white p-2 sm:p-4">
+                <div className="relative min-h-[580px] w-full overflow-hidden bg-white p-2 sm:p-4">
                   <iframe
-                    src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fcentrocristianobereamxli&tabs=timeline&width=500&height=600&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true"
+                    src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fcentrocristianobereamxli&tabs=timeline%2Cevents&width=500&height=650&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true"
                     width="100%"
-                    height="600"
+                    height="650"
                     style={{ border: "none", overflow: "hidden" }}
                     scrolling="no"
                     frameBorder="0"
