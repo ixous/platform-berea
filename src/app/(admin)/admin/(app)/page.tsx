@@ -12,6 +12,7 @@ import {
   ArrowUpRight,
   ClipboardList,
   Mail,
+  BookOpen,
 } from "lucide-react";
 
 interface AccessCard {
@@ -22,6 +23,13 @@ interface AccessCard {
 }
 
 const cards: AccessCard[] = [
+  {
+    title: "Devocionales Berea",
+    description:
+      "Crea, redacta y publica devocionales y reflexiones bíblicas para la congregación.",
+    href: "/admin/devotionals",
+    icon: <BookOpen className="h-5 w-5" />,
+  },
   {
     title: "Registros a Eventos",
     description:

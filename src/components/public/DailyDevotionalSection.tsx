@@ -3,13 +3,16 @@ import { Sparkles, ExternalLink, Share2, BookOpen } from "lucide-react";
 import { BereaImage } from "./BereaImage";
 import { Reveal } from "./Reveal";
 import { DevotionalAudioPlayer } from "./DevotionalAudioPlayer";
+import { DevotionalReader } from "./DevotionalReader";
 import type { DailyDevotional } from "@/lib/public/daily-devotional";
 
 interface Props {
   devotional: DailyDevotional | null;
+  verse?: string | null;
+  fullContent?: string | null;
 }
 
-export function DailyDevotionalSection({ devotional }: Props) {
+export function DailyDevotionalSection({ devotional, verse, fullContent }: Props) {
   if (!devotional) return null;
 
   const whatsappMessage = encodeURIComponent(
@@ -70,6 +73,12 @@ export function DailyDevotionalSection({ devotional }: Props) {
 
             <Reveal delay={250}>
               <div className="flex flex-wrap items-center gap-3 pt-2">
+                <DevotionalReader
+                  devotional={devotional}
+                  verse={verse}
+                  fullContent={fullContent}
+                />
+
                 <a
                   href={devotional.sourceUrl}
                   target="_blank"

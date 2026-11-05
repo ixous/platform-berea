@@ -10,6 +10,7 @@ import {
   Settings,
   ClipboardList,
   Mail,
+  BookOpen,
   type LucideIcon,
 } from "lucide-react";
 
@@ -27,6 +28,12 @@ const items: SidebarItem[] = [
     href: "/admin/editor",
     icon: Eye,
     permission: "homepage.manage",
+  },
+  {
+    label: "Devocionales",
+    href: "/admin/devotionals",
+    icon: BookOpen,
+    permission: "devotionals.manage",
   },
   {
     label: "Registros a Eventos",

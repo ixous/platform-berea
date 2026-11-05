@@ -110,7 +110,11 @@ export default async function HomePage() {
       )}
 
       {isSectionVisible(sections, "devotional") && (
-        <DailyDevotionalSection devotional={dailyDevotional} />
+        <DailyDevotionalSection
+          devotional={dailyDevotional}
+          verse={dailyDevotional?.verse}
+          fullContent={dailyDevotional?.fullContent}
+        />
       )}
 
       <ConnectWithBerea />
