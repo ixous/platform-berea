@@ -171,11 +171,29 @@ export async function registerForEvent(
       referenceId: inserted.id,
     });
 
-    const adminEmail = process.env.CONTACT_TO_EMAIL;
-    if (adminEmail) {
+    const churchEmail = process.env.CONTACT_TO_EMAIL || "centrocristianobereamxli@gmail.com";
+
+    sendEmail({
+      to: churchEmail,
+      subject: `Nuevo registro a evento: ${name} — ${eventTitle}`,
+      html: adminRegistrationNotificationTemplate(
+        name,
+        email,
+        phone || null,
+        guests,
+        notes || null,
+        eventTitle,
+        eventDateStr
+      ),
+      type: "admin_event_alert",
+      referenceType: "event_registration",
+      referenceId: inserted.id,
+    });
+
+    if (churchEmail !== "centrocristianobereamxli@gmail.com") {
       sendEmail({
-        to: adminEmail,
-        subject: `Nuevo registro: ${name} — ${eventTitle}`,
+        to: "centrocristianobereamxli@gmail.com",
+        subject: `Nuevo registro a evento: ${name} — ${eventTitle}`,
         html: adminRegistrationNotificationTemplate(
           name,
           email,

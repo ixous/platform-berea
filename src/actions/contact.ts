@@ -103,10 +103,26 @@ export async function submitContact(
       referenceId: inserted.id,
     });
 
-    const adminEmail = process.env.CONTACT_TO_EMAIL;
-    if (adminEmail) {
+    const churchEmail = process.env.CONTACT_TO_EMAIL || "centrocristianobereamxli@gmail.com";
+
+    sendEmail({
+      to: churchEmail,
+      subject: `Nueva solicitud de contacto: ${sanitizedSubject}`,
+      html: adminNotificationTemplate(
+        sanitizedName,
+        email,
+        phone || null,
+        sanitizedSubject,
+        sanitizedMessage
+      ),
+      type: "admin_contact_alert",
+      referenceType: "contact_submission",
+      referenceId: inserted.id,
+    });
+
+    if (churchEmail !== "centrocristianobereamxli@gmail.com") {
       sendEmail({
-        to: adminEmail,
+        to: "centrocristianobereamxli@gmail.com",
         subject: `Nueva solicitud de contacto: ${sanitizedSubject}`,
         html: adminNotificationTemplate(
           sanitizedName,

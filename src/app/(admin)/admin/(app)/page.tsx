@@ -4,7 +4,15 @@ import { db } from "@/lib/db";
 import { roles } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { Eye, ImageIcon, Settings, BarChart3, ArrowUpRight } from "lucide-react";
+import {
+  Eye,
+  ImageIcon,
+  Settings,
+  BarChart3,
+  ArrowUpRight,
+  ClipboardList,
+  Mail,
+} from "lucide-react";
 
 interface AccessCard {
   title: string;
@@ -14,6 +22,20 @@ interface AccessCard {
 }
 
 const cards: AccessCard[] = [
+  {
+    title: "Registros a Eventos",
+    description:
+      "Lista de personas registradas por evento, datos de contacto, cupos y exportación a Excel / CSV.",
+    href: "/admin/registrations",
+    icon: <ClipboardList className="h-5 w-5" />,
+  },
+  {
+    title: "Mensajes de Contacto",
+    description:
+      "Buzón de peticiones de oración y mensajes recibidos a través del formulario de contacto.",
+    href: "/admin/contact",
+    icon: <Mail className="h-5 w-5" />,
+  },
   {
     title: "Editor Visual",
     description:

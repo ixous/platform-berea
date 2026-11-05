@@ -3,7 +3,15 @@ import { auth } from "@/lib/auth";
 import { hasPermission } from "@/lib/auth/rbac";
 import { AdminSidebarShell } from "./AdminSidebarShell";
 import { SidebarNavLink } from "./SidebarNavLink";
-import { LayoutDashboard, Eye, ImageIcon, Settings, type LucideIcon } from "lucide-react";
+import {
+  LayoutDashboard,
+  Eye,
+  ImageIcon,
+  Settings,
+  ClipboardList,
+  Mail,
+  type LucideIcon,
+} from "lucide-react";
 
 interface SidebarItem {
   label: string;
@@ -19,6 +27,18 @@ const items: SidebarItem[] = [
     href: "/admin/editor",
     icon: Eye,
     permission: "homepage.manage",
+  },
+  {
+    label: "Registros a Eventos",
+    href: "/admin/registrations",
+    icon: ClipboardList,
+    permission: "event-registrations.manage",
+  },
+  {
+    label: "Mensajes de Contacto",
+    href: "/admin/contact",
+    icon: Mail,
+    permission: "contact-submissions.manage",
   },
   {
     label: "Biblioteca de Medios",

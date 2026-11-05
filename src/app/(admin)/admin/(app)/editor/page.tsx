@@ -33,43 +33,11 @@ const ALL_PAGES: PageEntry[] = [
     entityType: "institutionalPage",
     category: "Institucional",
   },
-  {
-    slug: "nuestra-doctrina",
-    label: "Nuestra Doctrina",
-    entityType: "doctrines-list",
-    category: "Institucional",
-  },
-  {
-    slug: "ministerios-de-servicio",
-    label: "Ministerios de Servicio",
-    entityType: "service-ministries-list",
-    category: "Ministerios",
-  },
-  {
-    slug: "ministerios-activos",
-    label: "Ministerios Activos",
-    entityType: "ministries-list",
-    category: "Ministerios",
-  },
-  { slug: "celulas", label: "Células", entityType: "cells-list", category: "Comunidad" },
-  {
-    slug: "formacion-biblica",
-    label: "Formación Bíblica",
-    entityType: "biblical-programs-list",
-    category: "Comunidad",
-  },
-  {
-    slug: "devocionales",
-    label: "Devocionales",
-    entityType: "devotionals-list",
-    category: "Contenido",
-  },
   { slug: "eventos", label: "Eventos", entityType: "events-list", category: "Contenido" },
   { slug: "contacto", label: "Contacto", entityType: "contact", category: "Comunidad" },
-  { slug: "donaciones", label: "Donaciones", entityType: "donations", category: "Principal" },
 ];
 
-const CATEGORIES = ["Principal", "Institucional", "Ministerios", "Comunidad", "Contenido"];
+const CATEGORIES = ["Principal", "Institucional", "Contenido", "Comunidad"];
 
 async function fetchPageData(slug: string, entityType: string) {
   switch (entityType) {
