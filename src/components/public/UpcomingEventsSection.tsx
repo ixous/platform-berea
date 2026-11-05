@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Clock, MapPin } from "lucide-react";
+import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { Reveal } from "./Reveal";
 
 interface EventRow {
@@ -71,7 +71,7 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
                 </h3>
                 <div className="mt-auto pt-6 text-sm text-site-muted">
                   <p className="flex items-center gap-2">
-                    <Clock className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
+                    <CalendarDays className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
                     {formatDate(new Date(event.startDate))}
                     {event.time ? ` · ${event.time}` : ""}
                   </p>

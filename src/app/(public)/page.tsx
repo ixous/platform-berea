@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { events, contact, homepageSettings, homepageSections, annualVision } from "@/lib/db/schema";
 import { eq, and, isNull, gte } from "drizzle-orm";
 import { HomeHero } from "@/components/public/HomeHero";
+import { VisionRhema } from "@/components/public/VisionRhema";
 import { VisitStrip } from "@/components/public/VisitStrip";
 import { EditorialIntro } from "@/components/public/EditorialIntro";
 import { ConnectWithBerea } from "@/components/public/ConnectWithBerea";
@@ -77,6 +78,15 @@ export default async function HomePage() {
         poster={settings?.heroBackgroundImage || HERO_POSTER_FALLBACK}
         visionBadge={
           vision?.name ? `Visión ${vision.year} · ${vision.name}` : "Visión 2026 · RHEMA"
+        }
+      />
+
+      <VisionRhema
+        title={vision?.name || "RHEMA"}
+        tagline={`Visión ${vision?.year || 2026}`}
+        description={
+          vision?.description ||
+          "Una palabra viva, revelada y eficaz de Dios para nuestra congregación en este nuevo tiempo."
         }
       />
 

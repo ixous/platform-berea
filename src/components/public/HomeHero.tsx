@@ -31,12 +31,15 @@ export function HomeHero({
       <div className="relative z-10 mx-auto flex w-full max-w-[76rem] flex-col items-center px-4 pb-12 pt-28 text-center sm:px-6 md:pb-16 md:pt-32 lg:px-8">
         <div className="flex w-full max-w-5xl flex-col items-center text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
           {visionBadge && (
-            <div className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-site-gold/40 bg-site-gold/15 px-4 py-1.5 shadow-sm backdrop-blur-md">
+            <a
+              href="#vision"
+              className="group mb-5 inline-flex items-center gap-2.5 rounded-full border border-site-gold/40 bg-site-gold/15 px-4 py-1.5 shadow-sm backdrop-blur-md transition-colors hover:border-site-gold hover:bg-site-gold/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold"
+            >
               <span className="h-2 w-2 rounded-full bg-site-gold animate-pulse" />
               <span className="text-xs font-bold uppercase tracking-[0.22em] text-site-gold">
                 {visionBadge}
               </span>
-            </div>
+            </a>
           )}
           {tagline && (
             <div className="mb-6 flex items-center justify-center gap-4">

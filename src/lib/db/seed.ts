@@ -1047,7 +1047,7 @@ async function seedEvents() {
       description:
         "Un tiempo especial de búsqueda de Dios, renovación espiritual y comunión para toda la congregación.",
       startDate: new Date("2026-11-07T09:00:00Z"),
-      time: "Por confirmar",
+      time: null,
       location: "Centro Cristiano Berea",
       eventType: "Encuentro",
       status: "published",
@@ -1060,7 +1060,7 @@ async function seedEvents() {
       description:
         "Un día especial para celebrar la decisión de fe de aquellos que han decidido seguir a Cristo mediante el bautismo en agua.",
       startDate: new Date("2026-11-08T11:00:00Z"),
-      time: "11:00 AM",
+      time: null,
       location: "Centro Cristiano Berea",
       eventType: "Servicio Especial",
       status: "published",
@@ -1073,7 +1073,7 @@ async function seedEvents() {
       description:
         "Encuentro juvenil lleno de alabanza, adoración, palabra inspiradora y actividades dinámicas para inspirar y conectar a los jóvenes con Cristo.",
       startDate: new Date("2026-11-14T18:00:00Z"),
-      time: "6:00 PM",
+      time: null,
       location: "Centro Cristiano Berea",
       eventType: "Jóvenes",
       status: "published",
@@ -1086,7 +1086,7 @@ async function seedEvents() {
       description:
         "Cerramos el año con una posada llena de alegría, amor y el verdadero espíritu navideño. Habrá piñatas, aguinaldos, ponche caliente, dulces típicos y un ambiente de confraternidad.",
       startDate: new Date("2026-12-19T18:00:00Z"),
-      time: "6:00 PM (Por confirmar)",
+      time: null,
       location: "Centro Cristiano Berea",
       eventType: "Celebración",
       status: "published",
