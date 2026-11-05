@@ -1,6 +1,7 @@
 import { Bodoni_Moda, Manrope } from "next/font/google";
 import { SiteHeader } from "@/components/public/SiteHeader";
 import { SiteFooter } from "@/components/public/SiteFooter";
+import { LiveCounselingChat } from "@/components/public/LiveCounselingChat";
 
 const bodoni = Bodoni_Moda({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         {children}
       </main>
       <SiteFooter />
+      <LiveCounselingChat />
     </div>
   );
 }
