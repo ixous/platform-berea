@@ -7,6 +7,8 @@ import { VisitStrip } from "@/components/public/VisitStrip";
 import { EditorialIntro } from "@/components/public/EditorialIntro";
 import { ConnectWithBerea } from "@/components/public/ConnectWithBerea";
 import { UpcomingEventsSection } from "@/components/public/UpcomingEventsSection";
+import { DailyDevotionalSection } from "@/components/public/DailyDevotionalSection";
+import { getDailyDevotional } from "@/lib/public/daily-devotional";
 import { HERO_PRIMARY_CTA, HERO_CLIPS, HERO_POSTER_FALLBACK } from "@/lib/public/site-navigation";
 import type { Metadata } from "next";
 
@@ -57,10 +59,9 @@ function isSectionVisible(sections: SectionRow[], key: string): boolean {
 }
 
 export default async function HomePage() {
-  const [upcomingEvents, { settings, info, sections, vision }] = await Promise.all([
-    getUpcomingEvents(),
-    getHomepageData(),
-  ]);
+  const [upcomingEvents, { settings, info, sections, vision }, dailyDevotional] = await Promise.all(
+    [getUpcomingEvents(), getHomepageData(), getDailyDevotional()]
+  );
 
   const schedules = (info?.schedules as { day?: string; time?: string }[] | null) ?? null;
 
@@ -106,6 +107,10 @@ export default async function HomePage() {
           }
           cta={{ label: settings?.welcomeCtaText || "Conócenos", href: "/conocenos" }}
         />
+      )}
+
+      {isSectionVisible(sections, "devotional") && (
+        <DailyDevotionalSection devotional={dailyDevotional} />
       )}
 
       <ConnectWithBerea />
