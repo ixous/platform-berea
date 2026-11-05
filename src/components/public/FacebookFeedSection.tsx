@@ -85,16 +85,12 @@ export function FacebookFeedSection() {
                   Transmisiones de Cultos en Vivo
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-site-muted">
-                  Conéctate a nuestras reuniones en tiempo real cada semana:
+                  Conéctate a nuestro servicio en tiempo real cada domingo:
                 </p>
                 <div className="mt-4 space-y-2 rounded-2xl bg-site-paper p-4 text-xs font-semibold text-site-ink">
                   <div className="flex items-center justify-between">
                     <span>Culto Dominical:</span>
                     <span className="text-site-gold">Domingos 11:00 AM</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Reunión de Oración y Doctrina:</span>
-                    <span className="text-site-gold">Miércoles 7:00 PM</span>
                   </div>
                 </div>
                 <a
