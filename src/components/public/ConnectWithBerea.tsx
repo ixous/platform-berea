@@ -27,18 +27,17 @@ export function ConnectWithBerea() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+        <div className="mt-14 grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:items-center lg:gap-16">
           <Reveal>
-            <div className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-site-ink sm:aspect-[4/5] lg:aspect-auto lg:min-h-full">
+            <div className="group relative aspect-[2/3] w-full max-w-[420px] mx-auto overflow-hidden rounded-3xl border border-site-line bg-site-paper shadow-sm lg:mx-0 lg:max-w-[430px]">
               <BereaImage
                 src={CONNECT_IMAGE.src}
                 alt={CONNECT_IMAGE.alt}
                 fill
-                sizes="(max-width: 1024px) 100vw, 45vw"
-                className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 430px"
+                className="!object-top transition-transform duration-[1200ms] ease-out group-hover:scale-105"
               />
               <div className="site-sheen" aria-hidden="true" />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-site-ink/25 to-transparent" />
             </div>
           </Reveal>
 
