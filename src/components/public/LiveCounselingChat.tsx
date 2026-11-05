@@ -21,7 +21,7 @@ declare global {
 export function LiveCounselingChat() {
   const propertyId =
     process.env.NEXT_PUBLIC_TAWKTO_PROPERTY_ID || "6aed048b44898b3c338fea2c";
-  const widgetId = process.env.NEXT_PUBLIC_TAWKTO_WIDGET_ID || "1k6mtjg32";
+  const widgetId = process.env.NEXT_PUBLIC_TAWKTO_WIDGET_ID || "1k6n0vj5a";
 
   useEffect(() => {
     if (!propertyId) return;
