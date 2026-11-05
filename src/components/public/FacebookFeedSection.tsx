@@ -1,5 +1,6 @@
 import { Reveal } from "./Reveal";
 import { ExternalLink, Radio, MessageCircle, Heart, Bell } from "lucide-react";
+import { FacebookPagePlugin } from "./FacebookPagePlugin";
 
 export function FacebookFeedSection() {
   return (
@@ -29,13 +30,13 @@ export function FacebookFeedSection() {
         </Reveal>
 
         <div className="mt-14 grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-12">
-          {/* Columna Izquierda: Feed Oficial de Facebook Embebido */}
-          <div className="lg:col-span-7">
+          {/* Columna Izquierda: Feed Oficial de Facebook Embebido y 100% Responsivo */}
+          <div className="w-full lg:col-span-7">
             <Reveal delay={120}>
-              <div className="overflow-hidden rounded-3xl border border-site-line bg-white shadow-xl">
-                <div className="border-b border-site-line bg-site-paper px-6 py-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1877F2] text-white font-bold text-sm shadow-sm">
+              <div className="w-full overflow-hidden rounded-3xl border border-site-line bg-white shadow-xl">
+                <div className="flex items-center justify-between border-b border-site-line bg-site-paper px-4 py-3 sm:px-6 sm:py-4">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1877F2] text-sm font-bold text-white shadow-sm">
                       f
                     </div>
                     <div>
@@ -48,27 +49,16 @@ export function FacebookFeedSection() {
                     href="https://www.facebook.com/centrocristianobereamxli"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-[#1877F2]/10 px-3.5 py-1 text-xs font-semibold text-[#1877F2] transition-colors hover:bg-[#1877F2] hover:text-white"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-[#1877F2]/10 px-3 py-1 text-xs font-semibold text-[#1877F2] transition-colors hover:bg-[#1877F2] hover:text-white sm:px-3.5"
                   >
                     <span>Seguir página</span>
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 </div>
 
-                {/* Contenedor del Plugin Oficial de Facebook */}
-                <div className="relative min-h-[580px] w-full overflow-hidden bg-white p-2 sm:p-4">
-                  <iframe
-                    src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fcentrocristianobereamxli&tabs=timeline%2Cevents&width=500&height=650&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true"
-                    width="100%"
-                    height="650"
-                    style={{ border: "none", overflow: "hidden" }}
-                    scrolling="no"
-                    frameBorder="0"
-                    allowFullScreen={true}
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                    title="Muro en vivo de Facebook de Centro Cristiano Berea"
-                    className="w-full rounded-2xl"
-                  />
+                {/* Contenedor del Plugin Oficial de Facebook que calcula el ancho dinámicamente */}
+                <div className="relative min-h-[580px] w-full overflow-hidden bg-white p-1 sm:p-4">
+                  <FacebookPagePlugin />
                 </div>
               </div>
             </Reveal>
