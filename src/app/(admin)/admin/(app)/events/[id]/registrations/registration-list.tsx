@@ -5,7 +5,7 @@ import { hasPermission } from "@/lib/auth/rbac";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { eq, and, desc, ilike, or, type SQL, count } from "drizzle-orm";
-import { ArrowLeft, Mail, Phone, UserCheck, Users, Download } from "lucide-react";
+import { ArrowLeft, Mail, Phone, UserCheck, Users, Download, FileText } from "lucide-react";
 import { RegistrationActions } from "./registration-actions";
 
 const ITEMS_PER_PAGE = 20;
@@ -99,6 +99,15 @@ export async function RegistrationList({ params, searchParams }: Props) {
               <span>Capacidad: {event.capacity}</span>
             </div>
           )}
+          <a
+            href={`/admin/events/${eventId}/registrations/pdf`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 transition-colors hover:bg-amber-100 shadow-xs"
+          >
+            <FileText className="h-4 w-4 text-amber-600" />
+            Descargar PDF Oficial
+          </a>
           <a
             href={`/api/events/${eventId}/registrations/export`}
             className="inline-flex items-center gap-1.5 rounded-lg border border-berea-border bg-white px-3 py-2 text-sm font-medium text-berea-navy transition-colors hover:bg-berea-light"
