@@ -8,7 +8,7 @@ const CSP_DIRECTIVES = [
   "font-src 'self'",
   "connect-src 'self' https://traffic.omny.fm https://*.omny.fm https://*.tritondigital.com",
   "media-src 'self' https://media.centrocristianoberea.org https://*.r2.dev https://*.omny.fm https://traffic.omny.fm https://*.omnycontent.com https://*.tritondigital.com https://*.cloudfront.net",
-  "frame-src https://challenges.cloudflare.com",
+  "frame-src https://challenges.cloudflare.com https://www.facebook.com https://web.facebook.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

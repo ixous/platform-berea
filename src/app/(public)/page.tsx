@@ -6,6 +6,7 @@ import { VisionRhema } from "@/components/public/VisionRhema";
 import { VisitStrip } from "@/components/public/VisitStrip";
 import { EditorialIntro } from "@/components/public/EditorialIntro";
 import { ConnectWithBerea } from "@/components/public/ConnectWithBerea";
+import { FacebookFeedSection } from "@/components/public/FacebookFeedSection";
 import { UpcomingEventsSection } from "@/components/public/UpcomingEventsSection";
 import { DailyDevotionalSection } from "@/components/public/DailyDevotionalSection";
 import { getDailyDevotional } from "@/lib/public/daily-devotional";
@@ -118,6 +119,8 @@ export default async function HomePage() {
       )}
 
       <ConnectWithBerea />
+
+      <FacebookFeedSection />
 
       {isSectionVisible(sections, "events") && upcomingEvents.length > 0 && (
         <UpcomingEventsSection events={upcomingEvents} />
