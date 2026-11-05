@@ -5,22 +5,8 @@ import { PageIntro } from "@/components/public/PageIntro";
 import { VisitStrip } from "@/components/public/VisitStrip";
 import { Reveal } from "@/components/public/Reveal";
 import { ContactForm } from "@/components/public/ContactForm";
-import { MapPin, Phone, Mail, Globe, Camera, Music, Video } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 import type { Metadata } from "next";
-
-const socialIcons: Record<string, typeof Globe> = {
-  facebook: Globe,
-  instagram: Camera,
-  youtube: Video,
-  tiktok: Music,
-  spotify: Music,
-  website: Globe,
-};
-
-function SocialIcon({ platform }: { platform: string }) {
-  const Icon = socialIcons[platform] || Globe;
-  return <Icon className="h-4 w-4" />;
-}
 
 export async function generateMetadata(): Promise<Metadata> {
   const [page] = await db
@@ -62,8 +48,6 @@ export default async function ContactoPage() {
   }
 
   const schedules = (info?.schedules as { day?: string; time?: string }[] | null) ?? [];
-  const socialMedia =
-    (info?.socialMedia as { platform?: string; url?: string; label?: string }[] | null) ?? [];
 
   return (
     <>
@@ -153,28 +137,6 @@ export default async function ContactoPage() {
                   </div>
                 )}
               </div>
-
-              {socialMedia.length > 0 && (
-                <div className="mt-10">
-                  <h3 className="text-lg font-semibold text-site-ink">Síguenos</h3>
-                  <div className="mt-4 flex flex-wrap gap-3">
-                    {socialMedia.map((s, i) =>
-                      s.url ? (
-                        <a
-                          key={i}
-                          href={s.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 rounded-full border border-site-line bg-white px-4 py-2 text-sm text-site-muted transition-colors hover:border-site-gold/50 hover:text-site-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold"
-                        >
-                          <SocialIcon platform={s.platform || ""} />
-                          {s.label || s.platform}
-                        </a>
-                      ) : null
-                    )}
-                  </div>
-                </div>
-              )}
             </Reveal>
 
             <Reveal delay={150}>
