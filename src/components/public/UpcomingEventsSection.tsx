@@ -16,9 +16,9 @@ interface EventRow {
 
 const EVENT_POSITIONS: Record<string, string> = {
   "posada-navidena": "!object-[50%_72%]",
-  "cross-fest": "!object-[50%_12%]",
-  bautizos: "!object-[50%_35%]",
-  bautizmos: "!object-[50%_35%]",
+  "cross-fest": "!object-center",
+  bautizos: "!object-center",
+  bautizmos: "!object-center",
   "encuentro-mixto": "!object-[50%_25%]",
   "marcha-por-jesus": "!object-center",
 };
