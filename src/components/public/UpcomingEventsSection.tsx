@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
+import { BereaImage } from "./BereaImage";
 import { Reveal } from "./Reveal";
+import { EVENT_IMAGES, EVENT_FALLBACK } from "@/lib/public/symbolic-images";
 
 interface EventRow {
   id: string;
@@ -57,34 +59,50 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
                 : "md:grid-cols-3"
           }`}
         >
-          {events.map((event, i) => (
-            <Reveal key={event.id} delay={i * 120}>
-              <Link
-                href={`/eventos/${event.slug}`}
-                className="site-card-glow group flex h-full flex-col rounded-2xl border border-site-line bg-white p-7 shadow-sm transition-colors hover:border-site-gold/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold"
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-site-gold">
-                  {event.eventType || "Evento"}
-                </p>
-                <h3 className="mt-4 font-display text-xl font-extrabold leading-snug text-site-ink transition-colors group-hover:text-site-gold">
-                  {event.title}
-                </h3>
-                <div className="mt-auto pt-6 text-sm text-site-muted">
-                  <p className="flex items-center gap-2">
-                    <CalendarDays className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
-                    {formatDate(new Date(event.startDate))}
-                    {event.time ? ` · ${event.time}` : ""}
-                  </p>
-                  {event.location && (
-                    <p className="mt-2 flex items-center gap-2">
-                      <MapPin className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
-                      {event.location}
+          {events.map((event, i) => {
+            const imageSrc = EVENT_IMAGES[event.slug] || EVENT_FALLBACK;
+            const isPosada = event.slug === "posada-navidena";
+
+            return (
+              <Reveal key={event.id} delay={i * 120}>
+                <Link
+                  href={`/eventos/${event.slug}`}
+                  className="site-card-glow group flex h-full flex-col overflow-hidden rounded-2xl border border-site-line bg-white shadow-sm transition-colors hover:border-site-gold/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-gold"
+                >
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-site-ink">
+                    <BereaImage
+                      src={imageSrc}
+                      alt={event.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+                    />
+                    <div className="site-sheen" aria-hidden="true" />
+                  </div>
+                  <div className="flex flex-1 flex-col p-6 sm:p-7">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-site-gold">
+                      {event.eventType || "Evento"}
                     </p>
-                  )}
-                </div>
-              </Link>
-            </Reveal>
-          ))}
+                    <h3 className="mt-3 font-display text-xl font-extrabold leading-snug text-site-ink transition-colors group-hover:text-site-gold">
+                      {event.title}
+                    </h3>
+                    <div className="mt-auto pt-6 text-sm text-site-muted">
+                      <p className="flex items-center gap-2">
+                        <CalendarDays className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
+                        {isPosada ? "Fecha por confirmar" : formatDate(new Date(event.startDate))}
+                      </p>
+                      {event.location && (
+                        <p className="mt-2 flex items-center gap-2">
+                          <MapPin className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
+                          {event.location}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

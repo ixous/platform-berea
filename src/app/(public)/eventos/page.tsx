@@ -128,7 +128,9 @@ export default async function EventosPage() {
                               className="h-4 w-4 shrink-0 text-site-gold"
                               aria-hidden="true"
                             />
-                            {formatDate(new Date(event.startDate))}
+                            {event.slug === "posada-navidena"
+                              ? "Fecha por confirmar"
+                              : formatDate(new Date(event.startDate))}
                           </p>
                           {event.time && (
                             <p className="flex items-center gap-2">

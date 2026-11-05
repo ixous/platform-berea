@@ -1084,7 +1084,7 @@ async function seedEvents() {
       title: "Posada Navideña",
       slug: "posada-navidena",
       description:
-        "Cerramos el año con una posada llena de alegría, amor y el verdadero espíritu navideño. Habrá piñatas, aguinaldos, ponche caliente, dulces típicos y un ambiente de confraternidad.",
+        "Un ambiente de confraternidad que recordará a grandes y pequeños el verdadero significado de la Navidad: el nacimiento de nuestro Salvador Jesucristo.",
       startDate: new Date("2026-12-19T18:00:00Z"),
       time: null,
       location: "Centro Cristiano Berea",

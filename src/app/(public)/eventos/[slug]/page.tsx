@@ -72,12 +72,14 @@ export default async function EventoDetallePage({ params }: Props) {
             <CalendarDays className="h-4 w-4 text-berea-gold" />
           </div>
           <span>
-            {new Date(item.startDate).toLocaleDateString("es-MX", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
+            {item.slug === "posada-navidena"
+              ? "Fecha por confirmar"
+              : new Date(item.startDate).toLocaleDateString("es-MX", {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
           </span>
         </div>
         {item.time && (
