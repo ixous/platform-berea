@@ -71,6 +71,8 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
           {events.map((event, i) => {
             const imageSrc = EVENT_IMAGES[event.slug] || EVENT_FALLBACK;
             const isPosada = event.slug === "posada-navidena";
+            const isToday =
+              new Date(event.startDate).toDateString() === new Date().toDateString();
 
             return (
               <Reveal key={event.id} delay={i * 120}>
@@ -100,7 +102,15 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
                     <div className="mt-auto pt-6 text-sm text-site-muted">
                       <p className="flex items-center gap-2">
                         <CalendarDays className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
-                        {isPosada ? "Fecha por confirmar" : formatDate(new Date(event.startDate))}
+                        {isPosada ? (
+                          "Fecha por confirmar"
+                        ) : isToday ? (
+                          <span className="font-semibold text-emerald-600">
+                            ¡Hoy! &middot; {formatDate(new Date(event.startDate))}
+                          </span>
+                        ) : (
+                          formatDate(new Date(event.startDate))
+                        )}
                       </p>
                       {event.location && (
                         <p className="mt-2 flex items-center gap-2">

@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { events, contact, homepageSettings, homepageSections, annualVision } from "@/lib/db/schema";
-import { eq, and, isNull, gte } from "drizzle-orm";
+import { eq, and, isNull, gte, or, asc } from "drizzle-orm";
 import { HomeHero } from "@/components/public/HomeHero";
 import { VisionRhema } from "@/components/public/VisionRhema";
 import { VisitStrip } from "@/components/public/VisitStrip";
@@ -25,6 +25,9 @@ export const metadata: Metadata = {
 };
 
 async function getUpcomingEvents() {
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
   return db
     .select()
     .from(events)
@@ -32,10 +35,13 @@ async function getUpcomingEvents() {
       and(
         eq(events.status, "published"),
         isNull(events.deletedAt),
-        gte(events.startDate, new Date())
+        or(
+          gte(events.endDate, new Date()),
+          and(isNull(events.endDate), gte(events.startDate, startOfToday))
+        )
       )
     )
-    .orderBy(events.startDate)
+    .orderBy(asc(events.startDate))
     .limit(6);
 }
 
