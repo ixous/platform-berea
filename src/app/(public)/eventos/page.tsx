@@ -1,8 +1,7 @@
 import { db } from "@/lib/db";
-import { institutionalPages, events, contact } from "@/lib/db/schema";
+import { institutionalPages, events } from "@/lib/db/schema";
 import { and, isNull, eq, gte, lt, or, asc, desc } from "drizzle-orm";
 import { PageIntro } from "@/components/public/PageIntro";
-import { VisitStrip } from "@/components/public/VisitStrip";
 import { BereaImage } from "@/components/public/BereaImage";
 import { Reveal } from "@/components/public/Reveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
@@ -73,11 +72,7 @@ const EVENT_POSITIONS: Record<string, string> = {
 };
 
 export default async function EventosPage() {
-  const [items, pastItems, [info]] = await Promise.all([
-    getUpcomingEvents(),
-    getPastEvents(),
-    db.select().from(contact).limit(1),
-  ]);
+  const [items, pastItems] = await Promise.all([getUpcomingEvents(), getPastEvents()]);
 
   const allEventIds = [...items.map((e) => e.id), ...pastItems.map((e) => e.id)];
   const mediaMap = await getEntityMediaMap("event", allEventIds);
@@ -87,8 +82,6 @@ export default async function EventosPage() {
     .from(institutionalPages)
     .where(eq(institutionalPages.slug, "eventos"))
     .limit(1);
-
-  const schedules = (info?.schedules as { day?: string; time?: string }[] | null) ?? null;
 
   return (
     <>
@@ -310,13 +303,6 @@ export default async function EventosPage() {
           )}
         </div>
       </section>
-
-      <VisitStrip
-        schedules={schedules}
-        address={info?.address}
-        mapUrl={info?.mapUrl}
-        scheduleNote={info?.scheduleNote}
-      />
     </>
   );
 }
