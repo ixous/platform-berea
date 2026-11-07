@@ -8,7 +8,7 @@ import { MediaCard } from "@/components/public/MediaCard";
 import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
 import { CELL_IMAGES } from "@/lib/public/symbolic-images";
-import { MapPin, Clock, User, Home } from "lucide-react";
+import { Home } from "lucide-react";
 import { CellConnectionFunnel } from "@/components/public/CellConnectionFunnel";
 import type { Metadata } from "next";
 
@@ -74,37 +74,26 @@ export default async function CelulasPage() {
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((c) => {
                 const img = mediaMap.get(c.id);
+                const isMujeres =
+                  c.slug?.toLowerCase().includes("mujeres") ||
+                  c.type?.toLowerCase().includes("mujeres") ||
+                  c.name?.toLowerCase().includes("mujeres");
+
+                const imageUrl = isMujeres
+                  ? "/images/mujeres.png"
+                  : c.imageUrl ||
+                    img?.mediaUrl ||
+                    img?.thumbnailUrl ||
+                    CELL_IMAGES[c.slug] ||
+                    "/images/simbolicas/comunidad.png";
+
                 return (
                   <MediaCard
                     key={c.id}
                     title={c.name}
                     description={c.description}
-                    imageUrl={
-                      c.imageUrl || img?.mediaUrl || img?.thumbnailUrl || CELL_IMAGES[c.slug]
-                    }
+                    imageUrl={imageUrl}
                     category={c.type || null}
-                    meta={
-                      <div className="space-y-1.5 text-xs text-berea-muted">
-                        {c.leader && (
-                          <p className="flex items-center gap-1.5">
-                            <User className="h-3.5 w-3.5 text-berea-gold/60" />
-                            {c.leader}
-                          </p>
-                        )}
-                        {c.meetingDay && c.meetingTime && (
-                          <p className="flex items-center gap-1.5">
-                            <Clock className="h-3.5 w-3.5 text-berea-gold/60" />
-                            {c.meetingDay} &middot; {c.meetingTime}
-                          </p>
-                        )}
-                        {c.address && (
-                          <p className="flex items-center gap-1.5">
-                            <MapPin className="h-3.5 w-3.5 text-berea-gold/60" />
-                            {c.address}
-                          </p>
-                        )}
-                      </div>
-                    }
                   />
                 );
               })}

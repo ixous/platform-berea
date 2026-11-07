@@ -2,7 +2,8 @@ const BASE = "/images/simbolicas";
 
 export const CELL_IMAGES: Record<string, string> = {
   "celula-fe-esperanza": `${BASE}/comunidad.png`,
-  "mujeres-proposito": `${BASE}/comunidad.png`,
+  "mujeres-proposito": "/images/mujeres.png",
+  "mujeres-de-proposito": "/images/mujeres.png",
   "varones-valor": `${BASE}/comunidad.png`,
 };
 
