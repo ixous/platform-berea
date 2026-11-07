@@ -22,6 +22,7 @@ const EVENT_POSITIONS: Record<string, string> = {
   bautizmos: "!object-center",
   "encuentro-mixto": "!object-[50%_25%]",
   "marcha-por-jesus": "!object-center",
+  "noche-mexicana": "!object-center",
 };
 
 export function UpcomingEventsSection({ events }: { events: EventRow[] }) {

@@ -40,7 +40,7 @@ export const DEVOTIONAL_IMAGES: Record<string, string> = {
 export const DEVOTIONAL_FALLBACK = `${BASE}/devocional.png`;
 
 export const EVENT_IMAGES: Record<string, string> = {
-  "noche-mexicana": `${BASE}/celebracion.png`,
+  "noche-mexicana": "/images/noche-mexicana-2026.png",
   bautizmos: "/images/eventos/bautizos.png",
   bautizos: "/images/eventos/bautizos.png",
   "posada-navidena": "/images/eventos/posada-navidena.png",
