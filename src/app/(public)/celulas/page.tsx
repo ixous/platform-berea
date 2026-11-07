@@ -9,6 +9,7 @@ import { ScrollReveal } from "@/components/public/ScrollReveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
 import { CELL_IMAGES } from "@/lib/public/symbolic-images";
 import { MapPin, Clock, User, Home } from "lucide-react";
+import { CellConnectionFunnel } from "@/components/public/CellConnectionFunnel";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -49,6 +50,12 @@ export default async function CelulasPage() {
         subtitle={page?.bannerSubtitle || "Encuentra una célula cercana y crece en comunidad."}
         backgroundImage={page?.bannerImage || "/images/banner-celulas.png"}
       />
+
+      <section className="relative -mt-10 mb-16 px-4 sm:px-6 lg:px-8 z-10">
+        <div className="mx-auto max-w-4xl">
+          <CellConnectionFunnel />
+        </div>
+      </section>
 
       {items.length > 0 ? (
         <ContentBlock variant="gold-mist">

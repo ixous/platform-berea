@@ -13,6 +13,7 @@ import {
   ClipboardList,
   Mail,
   BookOpen,
+  Users,
 } from "lucide-react";
 
 interface AccessCard {
@@ -36,6 +37,13 @@ const cards: AccessCard[] = [
       "Lista de personas registradas por evento, datos de contacto, cupos y exportación a Excel / CSV.",
     href: "/admin/registrations",
     icon: <ClipboardList className="h-5 w-5" />,
+  },
+  {
+    title: "Células (WhatsApp)",
+    description:
+      "Prospectos capturados buscando integrarse a una célula, zonas de Mexicali, WhatsApp directo y exportación.",
+    href: "/admin/celulas",
+    icon: <Users className="h-5 w-5" />,
   },
   {
     title: "Mensajes de Contacto",

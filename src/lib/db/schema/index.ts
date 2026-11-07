@@ -35,3 +35,4 @@ export * from "./homepage-sections";
 export * from "./institutional-pages";
 export * from "./institutional-sections";
 export * from "./doctrines";
+export * from "./cell-requests";

@@ -11,6 +11,7 @@ import {
   ClipboardList,
   Mail,
   BookOpen,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 
@@ -40,6 +41,11 @@ const items: SidebarItem[] = [
     href: "/admin/registrations",
     icon: ClipboardList,
     permission: "event-registrations.manage",
+  },
+  {
+    label: "Células (WhatsApp)",
+    href: "/admin/celulas",
+    icon: Users,
   },
   {
     label: "Mensajes de Contacto",

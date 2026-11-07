@@ -16,6 +16,7 @@ export interface SiteNavItem {
 // el nuevo mapa del sitio).
 export const SITE_NAV: SiteNavItem[] = [
   { label: "Conócenos", href: "/conocenos" },
+  { label: "Células", href: "/celulas" },
   { label: "Eventos", href: "/eventos" },
   { label: "Contacto", href: "/contacto" },
 ];

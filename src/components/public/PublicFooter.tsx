@@ -64,6 +64,7 @@ export function PublicFooter() {
             <nav className="mt-6 flex flex-col gap-3">
               {[
                 { href: "/quienes-somos", label: "Quienes Somos" },
+                { href: "/celulas", label: "Células en Hogares" },
                 { href: "/ministerios-activos", label: "Ministerios Activos" },
                 { href: "/devocionales", label: "Devocionales" },
                 { href: "/eventos", label: "Eventos" },
