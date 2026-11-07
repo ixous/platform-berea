@@ -3,6 +3,7 @@ import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { BereaImage } from "./BereaImage";
 import { Reveal } from "./Reveal";
 import { EVENT_IMAGES, EVENT_FALLBACK } from "@/lib/public/symbolic-images";
+import { formatBereaDate, isEventToday } from "@/lib/public/event-dates";
 
 interface EventRow {
   id: string;
@@ -22,10 +23,6 @@ const EVENT_POSITIONS: Record<string, string> = {
   "encuentro-mixto": "!object-[50%_25%]",
   "marcha-por-jesus": "!object-center",
 };
-
-function formatDate(date: Date) {
-  return date.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
-}
 
 export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
   if (events.length === 0) return null;
@@ -71,8 +68,7 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
           {events.map((event, i) => {
             const imageSrc = EVENT_IMAGES[event.slug] || EVENT_FALLBACK;
             const isPosada = event.slug === "posada-navidena";
-            const isToday =
-              new Date(event.startDate).toDateString() === new Date().toDateString();
+            const today = isEventToday(new Date(event.startDate));
 
             return (
               <Reveal key={event.id} delay={i * 120}>
@@ -104,12 +100,12 @@ export function UpcomingEventsSection({ events }: { events: EventRow[] }) {
                         <CalendarDays className="h-3.5 w-3.5 text-site-gold" aria-hidden="true" />
                         {isPosada ? (
                           "Fecha por confirmar"
-                        ) : isToday ? (
+                        ) : today ? (
                           <span className="font-semibold text-emerald-600">
-                            ¡Hoy! &middot; {formatDate(new Date(event.startDate))}
+                            ¡Hoy! &middot; {formatBereaDate(new Date(event.startDate))}
                           </span>
                         ) : (
-                          formatDate(new Date(event.startDate))
+                          formatBereaDate(new Date(event.startDate))
                         )}
                       </p>
                       {event.location && (

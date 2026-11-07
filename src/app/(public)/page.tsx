@@ -10,6 +10,7 @@ import { FacebookFeedSection } from "@/components/public/FacebookFeedSection";
 import { UpcomingEventsSection } from "@/components/public/UpcomingEventsSection";
 import { DailyDevotionalSection } from "@/components/public/DailyDevotionalSection";
 import { getDailyDevotional } from "@/lib/public/daily-devotional";
+import { getBereaStartOfToday } from "@/lib/public/event-dates";
 import { HERO_PRIMARY_CTA, HERO_CLIPS, HERO_POSTER_FALLBACK } from "@/lib/public/site-navigation";
 import type { Metadata } from "next";
 
@@ -25,8 +26,7 @@ export const metadata: Metadata = {
 };
 
 async function getUpcomingEvents() {
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
+  const startOfToday = getBereaStartOfToday();
 
   return db
     .select()

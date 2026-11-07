@@ -7,6 +7,7 @@ import { BereaImage } from "@/components/public/BereaImage";
 import { Reveal } from "@/components/public/Reveal";
 import { getEntityMediaMap } from "@/lib/db/media-helpers";
 import { EVENT_IMAGES, EVENT_FALLBACK } from "@/lib/public/symbolic-images";
+import { getBereaStartOfToday, formatBereaDate, isEventToday } from "@/lib/public/event-dates";
 import { CalendarDays, Clock, MapPin, Calendar, CheckCircle2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -23,8 +24,7 @@ export const metadata: Metadata = {
 };
 
 async function getUpcomingEvents() {
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
+  const startOfToday = getBereaStartOfToday();
 
   return db
     .select()
@@ -44,8 +44,7 @@ async function getUpcomingEvents() {
 }
 
 async function getPastEvents() {
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
+  const startOfToday = getBereaStartOfToday();
 
   return db
     .select()
@@ -62,14 +61,6 @@ async function getPastEvents() {
     )
     .orderBy(desc(events.startDate))
     .limit(6);
-}
-
-function formatDate(date: Date) {
-  return date.toLocaleDateString("es-MX", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
 }
 
 const EVENT_POSITIONS: Record<string, string> = {
@@ -132,6 +123,8 @@ export default async function EventosPage() {
                 const img = mediaMap.get(event.id);
                 const imageSrc =
                   img?.mediaUrl || img?.thumbnailUrl || EVENT_IMAGES[event.slug] || EVENT_FALLBACK;
+                const today = isEventToday(new Date(event.startDate));
+
                 return (
                   <Reveal key={event.id} delay={(i % 3) * 120}>
                     <Link
@@ -168,9 +161,15 @@ export default async function EventosPage() {
                               className="h-4 w-4 shrink-0 text-site-gold"
                               aria-hidden="true"
                             />
-                            {event.slug === "posada-navidena"
-                              ? "Fecha por confirmar"
-                              : formatDate(new Date(event.startDate))}
+                            {event.slug === "posada-navidena" ? (
+                              "Fecha por confirmar"
+                            ) : today ? (
+                              <span className="font-semibold text-emerald-600">
+                                ¡Hoy! &middot; {formatBereaDate(new Date(event.startDate))}
+                              </span>
+                            ) : (
+                              formatBereaDate(new Date(event.startDate))
+                            )}
                           </p>
                           {event.time && (
                             <p className="flex items-center gap-2">
@@ -292,7 +291,7 @@ export default async function EventosPage() {
                           <div className="mt-4 space-y-1.5 text-xs text-site-muted">
                             <p className="flex items-center gap-2">
                               <CalendarDays className="h-3.5 w-3.5 shrink-0 text-site-gold/70" />
-                              {formatDate(new Date(event.startDate))}
+                              {formatBereaDate(new Date(event.startDate))}
                             </p>
                             {event.location && (
                               <p className="flex items-center gap-2">

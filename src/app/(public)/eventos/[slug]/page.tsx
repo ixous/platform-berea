@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, CalendarDays, MapPin, Clock, Users, CheckCircle2 } from "lucide-react";
 import type { Metadata } from "next";
 import { EventRegistrationButton } from "./registration-button";
+import { getBereaDateString, formatBereaDate } from "@/lib/public/event-dates";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -47,12 +48,12 @@ export default async function EventoDetallePage({ params }: Props) {
   const currentGuests = Number(countResult?.total ?? 0);
   const confirmedCount = Number(countResult?.count ?? 0);
 
-  const eventEnd = item.endDate
-    ? new Date(item.endDate)
-    : new Date(new Date(item.startDate).setHours(23, 59, 59, 999));
+  const todayStr = getBereaDateString(new Date());
+  const eventStartStr = getBereaDateString(new Date(item.startDate));
+  const eventEndStr = item.endDate ? getBereaDateString(new Date(item.endDate)) : eventStartStr;
 
-  const isPast = eventEnd < new Date();
-  const isToday = !isPast && new Date(item.startDate) <= new Date();
+  const isToday = todayStr >= eventStartStr && todayStr <= eventEndStr;
+  const isPast = todayStr > eventEndStr;
   const isFull = item.capacity !== null && currentGuests >= item.capacity;
 
   return (
@@ -100,7 +101,7 @@ export default async function EventoDetallePage({ params }: Props) {
           <span>
             {item.slug === "posada-navidena"
               ? "Fecha por confirmar"
-              : new Date(item.startDate).toLocaleDateString("es-MX", {
+              : formatBereaDate(new Date(item.startDate), {
                   weekday: "long",
                   day: "numeric",
                   month: "long",
