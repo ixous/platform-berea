@@ -187,9 +187,10 @@ export function SiteFooter() {
           <Image
             src="/images/firma-redil99-oro.png"
             alt="RE — Redil99"
-            width={1170}
-            height={803}
+            width={80}
+            height={55}
             className="h-4 w-auto object-contain"
+            loading="lazy"
           />
         </div>
       </div>

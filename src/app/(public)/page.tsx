@@ -22,6 +22,14 @@ export const metadata: Metadata = {
     title: "Centro Cristiano Berea | Mexicali, Baja California",
     description:
       "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios.",
+    images: [
+      {
+        url: "/images/og-berea.png",
+        width: 1200,
+        height: 630,
+        alt: "Centro Cristiano Berea",
+      },
+    ],
   },
 };
 

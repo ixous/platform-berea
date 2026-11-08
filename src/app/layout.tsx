@@ -37,6 +37,12 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   const fullTitle = `${siteName} | Mexicali, Baja California`;
+  const rawBase =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "https://centrocristianoberea.org");
+  const metadataBase = new URL(rawBase.startsWith("http") ? rawBase : `https://${rawBase}`);
 
   return {
     title: {
@@ -44,22 +50,35 @@ export async function generateMetadata(): Promise<Metadata> {
       default: fullTitle,
     },
     description: siteDescription,
-    metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+    metadataBase,
     openGraph: {
       type: "website",
       locale: "es_MX",
       siteName,
       title: fullTitle,
       description: siteDescription,
+      images: [
+        {
+          url: "/images/og-berea.png",
+          width: 1200,
+          height: 630,
+          alt: siteName,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description: siteDescription,
+      images: ["/images/og-berea.png"],
     },
     icons: {
-      icon: "/images/logo.png",
-      apple: "/images/logo.png",
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icon.png", type: "image/png", sizes: "192x192" },
+      ],
+      apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+      shortcut: "/favicon.ico",
     },
     robots: {
       index: true,
