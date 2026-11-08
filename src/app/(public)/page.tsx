@@ -24,9 +24,9 @@ export const metadata: Metadata = {
       "Sitio web oficial de Centro Cristiano Berea. Una iglesia comprometida con la Palabra de Dios.",
     images: [
       {
-        url: "/images/og-berea.png",
-        width: 1200,
-        height: 630,
+        url: "/images/logo.png",
+        width: 720,
+        height: 720,
         alt: "Centro Cristiano Berea",
       },
     ],

@@ -37,11 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   const fullTitle = `${siteName} | Mexicali, Baja California`;
-  const rawBase =
-    process.env.NEXT_PUBLIC_APP_URL ||
-    (process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "https://centrocristianoberea.org");
+  const rawBase = process.env.NEXT_PUBLIC_APP_URL || "https://www.centrocristianoberea.org";
   const metadataBase = new URL(rawBase.startsWith("http") ? rawBase : `https://${rawBase}`);
 
   return {
@@ -59,18 +55,18 @@ export async function generateMetadata(): Promise<Metadata> {
       description: siteDescription,
       images: [
         {
-          url: "/images/og-berea.png",
-          width: 1200,
-          height: 630,
+          url: "/images/logo.png",
+          width: 720,
+          height: 720,
           alt: siteName,
         },
       ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title: fullTitle,
       description: siteDescription,
-      images: ["/images/og-berea.png"],
+      images: ["/images/logo.png"],
     },
     icons: {
       icon: [
